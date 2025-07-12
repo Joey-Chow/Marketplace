@@ -1,6 +1,5 @@
 const express = require("express");
 const { auth, authorize } = require("../middleware/auth");
-const { validate } = require("../middleware/validation");
 const CategoryService = require("../services/CategoryService");
 const ApiResponse = require("../utils/ApiResponse");
 const asyncHandler = require("../utils/asyncHandler");
@@ -43,7 +42,6 @@ router.post(
   "/",
   auth,
   authorize("admin"),
-  validate("createCategory"),
   asyncHandler(async (req, res) => {
     const category = await CategoryService.createCategory(req.body);
     res
@@ -59,7 +57,6 @@ router.put(
   "/:id",
   auth,
   authorize("admin"),
-  validate("updateCategory"),
   asyncHandler(async (req, res) => {
     const category = await CategoryService.updateCategory(
       req.params.id,

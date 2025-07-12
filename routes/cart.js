@@ -1,6 +1,5 @@
 const express = require("express");
 const { auth } = require("../middleware/auth");
-const { validate } = require("../middleware/validation");
 const CartService = require("../services/CartService");
 const ApiResponse = require("../utils/ApiResponse");
 const asyncHandler = require("../utils/asyncHandler");
@@ -25,7 +24,6 @@ router.get(
 router.post(
   "/add",
   auth,
-  validate("addToCart"),
   asyncHandler(async (req, res) => {
     const { productId, quantity } = req.body;
     const cart = await CartService.addToCart(req.user.id, productId, quantity);
@@ -39,7 +37,6 @@ router.post(
 router.post(
   "/items",
   auth,
-  validate("addToCart"),
   asyncHandler(async (req, res) => {
     const { productId, quantity } = req.body;
     const cart = await CartService.addToCart(req.user.id, productId, quantity);
@@ -53,7 +50,6 @@ router.post(
 router.put(
   "/update",
   auth,
-  validate("updateCart"),
   asyncHandler(async (req, res) => {
     const { productId, quantity } = req.body;
     const cart = await CartService.updateCartItem(
@@ -71,7 +67,6 @@ router.put(
 router.put(
   "/items/:productId",
   auth,
-  validate("updateCartItem"),
   asyncHandler(async (req, res) => {
     const { quantity } = req.body;
     const cart = await CartService.updateCartItem(

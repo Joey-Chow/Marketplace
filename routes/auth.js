@@ -1,6 +1,5 @@
 const express = require("express");
 const { auth } = require("../middleware/auth");
-const { validate } = require("../middleware/validation");
 const UserService = require("../services/UserService");
 const ApiResponse = require("../utils/ApiResponse");
 const asyncHandler = require("../utils/asyncHandler");
@@ -13,7 +12,6 @@ const router = express.Router();
 // @access  Public
 router.post(
   "/register",
-  validate("register"),
   asyncHandler(async (req, res) => {
     const result = await UserService.register(req.body);
     res
@@ -27,7 +25,6 @@ router.post(
 // @access  Public
 router.post(
   "/login",
-  validate("login"),
   asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     const result = await UserService.login(email, password);
@@ -53,7 +50,6 @@ router.get(
 router.put(
   "/profile",
   auth,
-  validate("updateProfile"),
   asyncHandler(async (req, res) => {
     const updatedUser = await UserService.updateProfile(req.user.id, req.body);
     res.json(

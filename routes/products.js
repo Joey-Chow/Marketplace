@@ -1,6 +1,5 @@
 const express = require("express");
 const { auth, authorize, verifySeller } = require("../middleware/auth");
-const { validate } = require("../middleware/validation");
 const ProductService = require("../services/ProductService");
 const ApiResponse = require("../utils/ApiResponse");
 const asyncHandler = require("../utils/asyncHandler");
@@ -72,7 +71,6 @@ router.post(
   "/",
   auth,
   authorize("seller", "admin"),
-  validate("createProduct"),
   asyncHandler(async (req, res) => {
     const product = await ProductService.createProduct(req.user.id, req.body);
     return ApiResponse.created(
@@ -90,7 +88,6 @@ router.put(
   "/:id",
   auth,
   authorize("seller", "admin"),
-  validate("updateProduct"),
   asyncHandler(async (req, res) => {
     const product = await ProductService.updateProduct(
       req.params.id,
@@ -126,7 +123,6 @@ router.put(
   "/:id/stock",
   auth,
   authorize("seller", "admin"),
-  validate("updateStock"),
   asyncHandler(async (req, res) => {
     const product = await ProductService.updateProductStock(
       req.params.id,
@@ -144,7 +140,6 @@ router.put(
   "/:id/status",
   auth,
   authorize("seller", "admin"),
-  validate("updateStatus"),
   asyncHandler(async (req, res) => {
     const product = await ProductService.updateProductStatus(
       req.params.id,

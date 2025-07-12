@@ -77,7 +77,6 @@ A full-stack e-commerce marketplace application built with **Node.js**, **Expres
 │   └── dataViewer.js     # Analytics data
 ├── middleware/           # Custom middleware
 │   ├── auth.js           # JWT verification
-│   ├── validation.js     # Input validation
 │   ├── errorHandler.js   # Error handling
 │   └── security.js       # Security headers
 ├── services/             # Business logic

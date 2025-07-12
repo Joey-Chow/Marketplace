@@ -1,6 +1,5 @@
 const express = require("express");
 const { auth, authorize } = require("../middleware/auth");
-const { validate } = require("../middleware/validation");
 const UserService = require("../services/UserService");
 const ApiResponse = require("../utils/ApiResponse");
 const asyncHandler = require("../utils/asyncHandler");
@@ -54,7 +53,6 @@ router.put(
   "/:id",
   auth,
   authorize("admin"),
-  validate("updateUser"),
   asyncHandler(async (req, res) => {
     const user = await UserService.updateUser(req.params.id, req.body);
     ApiResponse.success(res, { user }, "User updated successfully");
