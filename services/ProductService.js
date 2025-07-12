@@ -13,7 +13,7 @@ class ProductService {
   /**
    * Create a new product
    */
-  static async createProduct(productData, sellerId) {
+  static async createProduct(sellerId, productData) {
     // Verify category exists
     const category = await Category.findById(productData.category);
     if (!category) {
@@ -29,6 +29,7 @@ class ProductService {
       delete transformedData.stock;
     }
 
+    // Create product
     const product = await Product.create({
       ...transformedData,
       seller: sellerId,

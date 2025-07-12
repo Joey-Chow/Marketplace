@@ -117,7 +117,12 @@ const schemas = {
     name: Joi.string().max(200).required(),
     description: Joi.string().max(2000).allow(""),
     price: Joi.number().min(0).required(),
-    category: Joi.string().required(),
+    category: Joi.string()
+      .pattern(/^[0-9a-fA-F]{24}$/)
+      .required()
+      .messages({
+        "string.pattern.base": "Category must be a valid category ID",
+      }),
     images: Joi.array().items(Joi.string().uri()),
     stock: Joi.number().min(0).required(),
     sku: Joi.string().max(100),
@@ -136,7 +141,11 @@ const schemas = {
     name: Joi.string().max(200),
     description: Joi.string().max(2000).allow(""),
     price: Joi.number().min(0),
-    category: Joi.string(),
+    category: Joi.string()
+      .pattern(/^[0-9a-fA-F]{24}$/)
+      .messages({
+        "string.pattern.base": "Category must be a valid category ID",
+      }),
     images: Joi.array().items(Joi.string().uri()),
     stock: Joi.number().min(0),
     sku: Joi.string().max(100),

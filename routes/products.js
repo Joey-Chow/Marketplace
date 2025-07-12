@@ -75,9 +75,11 @@ router.post(
   validate("createProduct"),
   asyncHandler(async (req, res) => {
     const product = await ProductService.createProduct(req.user.id, req.body);
-    res
-      .status(201)
-      .json(ApiResponse.created({ product }, "Product created successfully"));
+    return ApiResponse.created(
+      res,
+      { product },
+      "Product created successfully"
+    );
   })
 );
 

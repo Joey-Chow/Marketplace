@@ -76,7 +76,7 @@ router.get("/products", async (req, res) => {
       .populate("seller", "username sellerInfo.storeName")
       .populate("category", "name icon")
       .select(
-        "name price inventory.quantity ratings.average status featured createdAt"
+        "name price inventory.quantity ratings.average status featured images createdAt"
       )
       .sort({ createdAt: -1 })
       .lean();
@@ -189,6 +189,29 @@ router.get("/categories", async (req, res) => {
     });
   } catch (error) {
     console.error("Categories endpoint error:", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Get single category by ID
+router.get("/categories/:id", async (req, res) => {
+  try {
+    const category = await Category.findById(req.params.id)
+      .select("name description icon slug")
+      .lean();
+
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        error: "Category not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      data: { category },
+    });
+  } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
 });

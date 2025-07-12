@@ -7,6 +7,10 @@ const asyncHandler = require("../utils/asyncHandler");
 
 /**
  * Authenticate user middleware
+ * Validates JWT token and sets req.user
+ * If valid: calls next()
+ * If invalid: returns 401 Unauthorized
+ * If user is not active, returns 403 Forbidden
  */
 const auth = asyncHandler(async (req, res, next) => {
   let token;

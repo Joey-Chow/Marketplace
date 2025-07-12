@@ -139,7 +139,6 @@ const products = [
     description: "Latest iPhone with advanced camera system and A17 Pro chip",
     price: 999,
     inventory: { quantity: 50, lowStockThreshold: 10 },
-    images: [{ url: "https://example.com/iphone15.jpg", alt: "iPhone 15 Pro" }],
     specifications: {
       brand: "Apple",
       model: "iPhone 15 Pro",
@@ -154,7 +153,6 @@ const products = [
     description: "Flagship Android phone with AI features",
     price: 899,
     inventory: { quantity: 45, lowStockThreshold: 10 },
-    images: [{ url: "https://example.com/galaxy-s24.jpg", alt: "Galaxy S24" }],
     specifications: {
       brand: "Samsung",
       model: "Galaxy S24",
@@ -168,9 +166,6 @@ const products = [
     description: "Ultra-thin laptop with M3 chip and all-day battery",
     price: 1299,
     inventory: { quantity: 30, lowStockThreshold: 5 },
-    images: [
-      { url: "https://example.com/macbook-air.jpg", alt: "MacBook Air" },
-    ],
     specifications: {
       brand: "Apple",
       model: "MacBook Air",
@@ -185,9 +180,6 @@ const products = [
     description: "Comfortable cotton t-shirt in various colors",
     price: 29.99,
     inventory: { quantity: 100, lowStockThreshold: 20 },
-    images: [
-      { url: "https://example.com/cotton-tshirt.jpg", alt: "Cotton T-Shirt" },
-    ],
     specifications: {
       material: "Cotton",
       brand: "FashionBrand",
@@ -200,9 +192,6 @@ const products = [
     description: "Classic fit denim jeans for everyday wear",
     price: 79.99,
     inventory: { quantity: 80, lowStockThreshold: 15 },
-    images: [
-      { url: "https://example.com/denim-jeans.jpg", alt: "Denim Jeans" },
-    ],
     specifications: {
       material: "Denim",
       brand: "JeansCo",
@@ -216,9 +205,6 @@ const products = [
     description: "Adjustable LED desk lamp with USB charging port",
     price: 49.99,
     inventory: { quantity: 60, lowStockThreshold: 12 },
-    images: [
-      { url: "https://example.com/desk-lamp.jpg", alt: "LED Desk Lamp" },
-    ],
     specifications: {
       brand: "LightTech",
       color: "Black",
@@ -237,12 +223,6 @@ const products = [
       quantity: Math.floor(Math.random() * 100) + 10,
       lowStockThreshold: Math.floor(Math.random() * 10) + 5,
     },
-    images: [
-      {
-        url: `https://example.com/product${i + 7}.jpg`,
-        alt: `Product ${i + 7}`,
-      },
-    ],
     specifications: {
       brand: `Brand${i + 7}`,
       model: `Model${i + 7}`,
@@ -315,7 +295,7 @@ async function seedDatabase() {
         productSnapshot: {
           name: product.name,
           description: product.description,
-          image: product.images[0]?.url,
+          image: "/images/products/placeholder.jpg", // Use placeholder for orders
           sku: product.inventory.sku,
         },
       }));
@@ -466,7 +446,7 @@ async function seedDatabase() {
     if (admin) {
       const adminCartProducts = createdProducts
         .sort(() => 0.5 - Math.random())
-        .slice(0, 8); // Admin gets 20 different items
+        .slice(0, 20); // Admin gets 20 different items
 
       const adminItems = adminCartProducts.map((product) => ({
         product: product._id,
