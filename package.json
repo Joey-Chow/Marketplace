@@ -1,0 +1,59 @@
+{
+  "name": "secure-marketplace",
+  "version": "1.0.0",
+  "description": "Secure Online Marketplace with MongoDB, Node.js, and Express",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "jest",
+    "seed": "node scripts/seedDatabase.js",
+    "benchmark": "node scripts/benchmarkQueries.js",
+    "db:setup": "node scripts/dbManagement.js setup",
+    "db:stats": "node scripts/dbManagement.js stats",
+    "db:queries": "node scripts/dbManagement.js queries",
+    "view:data": "node scripts/viewData.js",
+    "view:all": "node scripts/viewData.js all",
+    "view:users": "node scripts/viewData.js users",
+    "view:products": "node scripts/viewData.js products",
+    "view:orders": "node scripts/viewData.js orders",
+    "view:analytics": "node scripts/viewData.js analytics"
+  },
+  "keywords": [
+    "marketplace",
+    "mongodb",
+    "express",
+    "nodejs",
+    "ecommerce"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "chart.js": "^4.3.3",
+    "cloudinary": "^1.40.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^6.11.2",
+    "helmet": "^7.0.0",
+    "hpp": "^0.2.3",
+    "joi": "^17.9.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^7.5.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.4",
+    "redis": "^4.6.7",
+    "socket.io": "^4.7.2",
+    "stripe": "^13.2.0",
+    "winston": "^3.17.0",
+    "xss": "^1.0.14",
+    "xss-clean": "^0.1.4"
+  },
+  "devDependencies": {
+    "jest": "^29.6.2",
+    "nodemon": "^3.0.1",
+    "supertest": "^6.3.3"
+  }
+}
