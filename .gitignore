@@ -84,7 +84,6 @@ dist
 
 # Gatsby files
 .cache/
-public
 
 # Vuepress build output
 .vuepress/dist
@@ -126,7 +125,6 @@ data/
 
 # Uploads
 uploads/
-public/uploads/
 
 # Reports
 reports/

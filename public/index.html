@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <title>Marketplace Data Viewer</title>
+    <link rel="stylesheet" href="css/main.css" />
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+
+    <!-- Load hooks first -->
+    <script src="js/hooks/useAuth.js"></script>
+    <script src="js/hooks/useCart.js"></script>
+    <script src="js/hooks/useDataViewer.js"></script>
+    <script src="js/hooks/useProductCRUD.js"></script>
+
+    <!-- Load utilities -->
+    <script src="js/utils/DataUtils.js"></script>
+
+    <!-- Auth Components -->
+    <script src="js/components/LoginForm.js"></script>
+
+    <!-- Topbar Components -->
+    <script src="js/components/topbar/UserInfo.js"></script>
+    <script src="js/components/topbar/Logout.js"></script>
+    <script src="js/components/topbar/CartView.js"></script>
+    <script src="js/components/topbar/topbar.js"></script>
+
+    <!-- View Components -->
+    <script src="js/components/UsersView.js"></script>
+    <script src="js/components/OrdersView.js"></script>
+    <script src="js/components/ReviewsView.js"></script>
+
+    <!-- Product Components -->
+    <script src="js/components/products/ProductsView.js"></script>
+    <script src="js/components/products/ProductForm.js"></script>
+    <script src="js/components/products/ProductTable.js"></script>
+
+    <!-- Main Components -->
+    <script src="js/components/DataViewerComponents.js"></script>
+    <script src="js/components/DataViewer.js"></script>
+  </head>
+  <body>
+    <div id="dataviewer-root"></div>
+
+    <script>
+      // Initialize React DataViewer with error handling for Safari
+      document.addEventListener("DOMContentLoaded", () => {
+        try {
+          if (typeof DataViewer === "undefined") {
+            console.error(
+              "DataViewer not loaded. Check that all script files loaded successfully."
+            );
+            document.getElementById("dataviewer-root").innerHTML =
+              '<div style="padding: 20px; color: red;">Error: DataViewer component not loaded. Please check console for details.</div>';
+            return;
+          }
+
+          const root = ReactDOM.createRoot(
+            document.getElementById("dataviewer-root")
+          );
+          root.render(React.createElement(DataViewer));
+        } catch (error) {
+          console.error("Error initializing DataViewer:", error);
+          document.getElementById("dataviewer-root").innerHTML =
+            '<div style="padding: 20px; color: red;">Error initializing application: ' +
+            error.message +
+            "</div>";
+        }
+      });
+    </script>
+  </body>
+</html>
