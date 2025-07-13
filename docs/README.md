@@ -9,8 +9,9 @@ A full-stack e-commerce marketplace application built with **Node.js**, **Expres
 ### Prerequisites
 
 - **Node.js** (v16 or higher)
-- **MongoDB** (v4.4 or higher)
 - **npm** or **yarn**
+
+**Note:** This guide includes MongoDB installation instructions for users who don't have it installed.
 
 ### Installation
 
@@ -27,24 +28,18 @@ A full-stack e-commerce marketplace application built with **Node.js**, **Expres
    npm install
    ```
 
-3. **Set up environment variables**
+3. **Install and Set up MongoDB**
 
    ```bash
-   # Create .env file
-   MONGODB_URI=mongodb://localhost:27017/marketplace
-   JWT_SECRET=your-super-secure-jwt-secret-key
-   PORT=3000
-   NODE_ENV=development
+   brew tap mongodb/brew
+   brew install mongodb-community
    ```
 
-4. **Start MongoDB**
+4. **Start MongoDB (only if using local installation)**
 
    ```bash
-   # On macOS with Homebrew
    brew services start mongodb-community
 
-   # On Windows/Linux
-   mongod --dbpath /path/to/your/db
    ```
 
 5. **Seed the database**
