@@ -261,7 +261,7 @@ class OrderService {
       }
 
       const orders = await Order.find(query)
-        .populate("user", "name email")
+        .populate("buyer", "username email")
         .populate("items.product")
         .sort({ [sortBy]: sortOrder === "desc" ? -1 : 1 })
         .limit(limit * 1)

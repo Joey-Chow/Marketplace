@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Cart - Marketplace</title>
+    <link rel="stylesheet" href="css/main.css" />
+  </head>
+  <body>
+    <!-- Shared Topbar -->
+    <div id="shared-topbar-root">
+      <!-- Topbar will be rendered here -->
+    </div>
+
+    <div class="container">
+      <div id="cart-content">
+        <!-- Cart content will be rendered here -->
+      </div>
+    </div>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Load hooks and components for topbar -->
+    <script src="js/hooks/useCart.js"></script>
+    <script src="js/hooks/useAuth.js"></script>
+    <script src="js/components/shared/topbar/UserInfo.js"></script>
+    <script src="js/components/shared/topbar/Logout.js"></script>
+    <script src="js/components/shared/topbar/topbar.js"></script>
+    <script src="js/components/shared/topbar/CartView.js"></script>
+
+    <!-- Load shared components -->
+    <script src="js/components/shared/topbar/TopbarLoader.js"></script>
+    <script src="js/components/shared/layout.js"></script>
+    <script>
+      // Get auth token for API calls
+      function getAuthToken() {
+        return (
+          localStorage.getItem("marketplace_token") ||
+          sessionStorage.getItem("marketplace_token")
+        );
+      }
+
+      // Initialize cart functionality
+      async function initializeCart() {
+        // Initialize shared topbar first
+        const topbarResult = await window.SharedTopbar.initialize(
+          "shared-topbar-root"
+        );
+
+        if (!topbarResult.success || !topbarResult.authenticated) {
+          document.getElementById("cart-content").innerHTML =
+            '<div class="error">Please log in to view your cart. <a href="index.html">Go to Login</a></div>';
+          return;
+        }
+
+        const root = ReactDOM.createRoot(
+          document.getElementById("cart-content")
+        );
+
+        // Show loading state
+        root.render(
+          SharedLayout.render(
+            React.createElement(CartView, {
+              cart: null,
+              loading: true,
+              error: null,
+            })
+          )
+        );
+
+        try {
+          // Create a proper cart state with real-time database querying
+          let cartState = {
+            cart: null,
+            loading: true,
+            error: null,
+          };
+
+          // Function to render cart with current state
+          const renderCart = () => {
+            root.render(
+              SharedLayout.render(
+                React.createElement(CartView, {
+                  cart: cartState,
+                  loading: cartState.loading,
+                  error: cartState.error,
+                })
+              )
+            );
+          };
+
+          // Cart API methods for real-time database operations
+          const cartAPI = {
+            async loadCart() {
+              try {
+                cartState.loading = true;
+                cartState.error = null;
+                renderCart();
+
+                const token = getAuthToken();
+                console.log(
+                  "Loading cart with token:",
+                  token ? "present" : "missing"
+                );
+
+                const response = await fetch("/api/cart", {
+                  method: "GET",
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                  },
+                });
+
+                console.log("Cart API response status:", response.status);
+                if (response.ok) {
+                  const result = await response.json();
+                  console.log("Cart API full response:", result);
+
+                  // Handle ApiResponse format: {success: true, data: {cart: {...}}}
+                  let cartData;
+                  if (result.data && result.data.cart) {
+                    cartData = result.data.cart;
+                  } else if (result.data) {
+                    cartData = result.data;
+                  } else if (result.cart) {
+                    cartData = result.cart;
+                  } else {
+                    cartData = result;
+                  }
+
+                  console.log("Final cart data structure:", cartData);
+                  console.log("Cart items:", cartData?.items);
+                  console.log("Cart items length:", cartData?.items?.length);
+
+                  cartState.cart = cartData;
+                  cartState.loading = false;
+                  cartState.error = null;
+
+                  renderCart();
+                } else {
+                  const errorText = await response.text();
+                  console.error("Cart API error:", errorText);
+                  throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+              } catch (error) {
+                console.error("Cart loading error:", error);
+                cartState.loading = false;
+                cartState.error = error.message;
+                renderCart();
+              }
+            },
+
+            async updateQuantity(productId, quantity) {
+              try {
+                const token = getAuthToken();
+                const response = await fetch("/api/cart/update", {
+                  method: "PUT",
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({ productId, quantity }),
+                });
+
+                if (response.ok) {
+                  await this.loadCart(); // Reload cart after update
+                  return { success: true };
+                } else {
+                  const error = await response.json();
+                  return { success: false, error: error.message };
+                }
+              } catch (error) {
+                console.error("Update quantity error:", error);
+                return { success: false, error: error.message };
+              }
+            },
+
+            async removeItem(productId) {
+              try {
+                const token = getAuthToken();
+                const response = await fetch(`/api/cart/remove/${productId}`, {
+                  method: "DELETE",
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                  },
+                });
+
+                if (response.ok) {
+                  await this.loadCart(); // Reload cart after removal
+                  return { success: true };
+                } else {
+                  const error = await response.json();
+                  return { success: false, error: error.message };
+                }
+              } catch (error) {
+                console.error("Remove item error:", error);
+                return { success: false, error: error.message };
+              }
+            },
+
+            async clearCart() {
+              try {
+                const token = getAuthToken();
+                const response = await fetch("/api/cart/clear", {
+                  method: "DELETE",
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                  },
+                });
+
+                if (response.ok) {
+                  await this.loadCart(); // Reload cart after clearing
+                  return { success: true };
+                } else {
+                  const error = await response.json();
+                  return { success: false, error: error.message };
+                }
+              } catch (error) {
+                console.error("Clear cart error:", error);
+                return { success: false, error: error.message };
+              }
+            },
+          };
+
+          // Bind API methods to cartState so CartView can call them
+          cartState.loadCart = cartAPI.loadCart.bind(cartAPI);
+          cartState.updateQuantity = cartAPI.updateQuantity.bind(cartAPI);
+          cartState.removeItem = cartAPI.removeItem.bind(cartAPI);
+          cartState.clearCart = cartAPI.clearCart.bind(cartAPI);
+
+          // Load initial cart data from database
+          await cartAPI.loadCart();
+        } catch (error) {
+          console.error("Cart initialization error:", error);
+          root.render(
+            SharedLayout.render(
+              React.createElement(CartView, {
+                cart: null,
+                loading: false,
+                error: "Failed to load cart data",
+              })
+            )
+          );
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", initializeCart);
+    </script>
+  </body>
+</html>

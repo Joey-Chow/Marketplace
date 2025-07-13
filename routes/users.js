@@ -29,6 +29,7 @@ router.get(
       sortOrder: options.sortOrder,
       search: options.search,
     });
+
     ApiResponse.success(res, result);
   })
 );

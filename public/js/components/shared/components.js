@@ -1,18 +1,6 @@
-// DataViewer Components
+// Shared UI Components used across all views
 
-// TabButton Component
-const TabButton = ({ children, active, onClick }) => {
-  return React.createElement(
-    "button",
-    {
-      className: `nav-tab ${active ? "active" : ""}`,
-      onClick,
-    },
-    children
-  );
-};
-
-// DataTable Component
+// DataTable Component - Used by UsersView, OrdersView, ReviewsView, etc.
 const DataTable = ({ headers, rows, loading, error }) => {
   if (loading) {
     return React.createElement(
@@ -60,7 +48,7 @@ const DataTable = ({ headers, rows, loading, error }) => {
   );
 };
 
-// StatsOverview Component
+// StatsOverview Component - Used for dashboard-style displays
 const StatsOverview = ({ stats }) => {
   return React.createElement(
     "div",
@@ -96,8 +84,8 @@ const getIcon = (key) => {
 
 const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
-window.DataViewerComponents = {
-  TabButton,
+// Export shared components
+window.SharedComponents = {
   DataTable,
   StatsOverview,
 };

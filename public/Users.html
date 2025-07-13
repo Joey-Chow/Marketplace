@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-wi            // Render error state
+            root.render(
+              SharedLayout.render(
+                React.createElement(UsersView, {
+                  data: null,
+                  loading: false,
+                  error: `Error loading users: ${errorText}`,
+                })
+              )
+            );tial-scale=1.0"
+    />
+    <title>Users - Marketplace</title>
+    <link rel="stylesheet" href="css/main.css" />
+  </head>
+  <body>
+    <!-- Shared Topbar -->
+    <div id="shared-topbar-root">
+      <!-- Topbar will be rendered here -->
+    </div>
+
+    <div class="container">
+      <div id="users-content">
+        <!-- Users content will be rendered here -->
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Load hooks and components for topbar -->
+    <script src="js/hooks/useAuth.js"></script>
+    <script src="js/components/shared/topbar/UserInfo.js"></script>
+    <script src="js/components/shared/topbar/Logout.js"></script>
+    <script src="js/components/shared/topbar/topbar.js"></script>
+
+    <!-- Load users components -->
+    <script src="js/utils/DataUtils.js"></script>
+    <script src="js/components/shared/components.js"></script>
+    <script src="js/components/views/UsersView.js"></script>
+
+    <!-- Load shared components -->
+    <script src="js/components/shared/topbar/TopbarLoader.js"></script>
+    <script src="js/components/shared/layout.js"></script>
+
+    <script>
+      // Initialize users page
+      async function initializeUsers() {
+        // Initialize shared topbar first
+        const topbarResult = await window.SharedTopbar.initialize(
+          "shared-topbar-root",
+          {
+            activeTab: "users",
+          }
+        );
+
+        if (!topbarResult.success || !topbarResult.authenticated) {
+          document.getElementById("users-content").innerHTML =
+            '<div class="error">Please log in to view users. <a href="index.html">Go to Login</a></div>';
+          return;
+        }
+
+        // Get auth token for API calls
+        const token =
+          localStorage.getItem("marketplace_token") ||
+          sessionStorage.getItem("marketplace_token");
+
+        // Initialize users view with loading state
+        const root = ReactDOM.createRoot(
+          document.getElementById("users-content")
+        );
+
+        // Show loading state
+        root.render(
+          SharedLayout.render(
+            React.createElement(UsersView, {
+              data: null,
+              loading: true,
+              error: null,
+            })
+          )
+        );
+
+        try {
+          // Fetch ALL users data from API (no pagination)
+          const response = await fetch("/api/users?limit=1000", {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (response.ok) {
+            const result = await response.json();
+
+            // Handle ApiResponse format: {success: true, data: {users: [...], pagination: {...}}}
+            let usersData, paginationData;
+            if (result.data && result.data.users) {
+              // UserService returns {users: [...], pagination: {...}}
+              usersData = result.data.users;
+              paginationData = result.data.pagination;
+            } else if (result.users) {
+              usersData = result.users;
+              paginationData = result.pagination;
+            } else {
+              console.error("Unexpected API response structure:", result);
+              usersData = [];
+              paginationData = { total: 0 };
+            }
+
+            // Render users view with data including pagination
+            root.render(
+              SharedLayout.render(
+                React.createElement(UsersView, {
+                  data: {
+                    users: usersData,
+                    pagination: paginationData,
+                  },
+                  loading: false,
+                  error: null,
+                })
+              )
+            );
+          } else {
+            const errorText = await response.text();
+            console.error("Users API error:", errorText);
+
+            // Render error state
+            root.render(
+              React.createElement(UsersView, {
+                data: null,
+                loading: false,
+                error: `Failed to load users: ${errorText}`,
+              })
+            );
+          }
+        } catch (error) {
+          console.error("Users loading error:", error);
+
+          // Render error state
+          root.render(
+            SharedLayout.render(
+              React.createElement(UsersView, {
+                data: null,
+                loading: false,
+                error: `Error loading users: ${error.message}`,
+              })
+            )
+          );
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", initializeUsers);
+    </script>
+  </body>
+</html>

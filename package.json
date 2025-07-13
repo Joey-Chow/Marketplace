@@ -7,6 +7,8 @@
     "start": "node app.js",
     "dev": "nodemon app.js",
     "test": "jest",
+    "build:prod": "node scripts/simple-bundler.js",
+    "build:watch": "nodemon --watch public/js --watch public/shared --exec 'echo File changed - restart server if needed'",
     "seed": "node scripts/seedDatabase.js",
     "benchmark": "node scripts/benchmarkQueries.js",
     "db:setup": "node scripts/dbManagement.js setup",

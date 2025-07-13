@@ -166,13 +166,47 @@ class UserService {
   static async getUsers(page = 1, limit = 20, filters = {}) {
     const skip = (page - 1) * limit;
 
-    const users = await User.find(filters)
+    // Separate sorting options from database filters
+    const {
+      sortBy = "createdAt",
+      sortOrder = "desc",
+      search,
+      ...dbFilters
+    } = filters;
+
+    // Clean up database filters - remove undefined/null values
+    const cleanFilters = {};
+    Object.keys(dbFilters).forEach((key) => {
+      if (
+        dbFilters[key] !== undefined &&
+        dbFilters[key] !== null &&
+        dbFilters[key] !== ""
+      ) {
+        cleanFilters[key] = dbFilters[key];
+      }
+    });
+
+    // Add search functionality if provided
+    if (search) {
+      cleanFilters.$or = [
+        { username: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+        { "profile.firstName": { $regex: search, $options: "i" } },
+        { "profile.lastName": { $regex: search, $options: "i" } },
+      ];
+    }
+
+    // Create sort object
+    const sortOptions = {};
+    sortOptions[sortBy] = sortOrder === "asc" ? 1 : -1;
+
+    const users = await User.find(cleanFilters)
       .select("-password")
       .skip(skip)
       .limit(limit)
-      .sort({ createdAt: -1 });
+      .sort(sortOptions);
 
-    const total = await User.countDocuments(filters);
+    const total = await User.countDocuments(cleanFilters);
 
     return {
       users,

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Orders - Marketplace</title>
+    <link rel="stylesheet" href="css/main.css" />
+  </head>
+  <body>
+    <!-- Shared Topbar -->
+    <div id="shared-topbar-root">
+      <!-- Topbar will be rendered here -->
+    </div>
+
+    <div class="container">
+      <div id="orders-content">
+        <!-- Orders content will be rendered here -->
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Load hooks and components for topbar -->
+    <script src="js/hooks/useAuth.js"></script>
+    <script src="js/components/shared/topbar/UserInfo.js"></script>
+    <script src="js/components/shared/topbar/Logout.js"></script>
+    <script src="js/components/shared/topbar/topbar.js"></script>
+
+    <!-- Load orders components -->
+    <script src="js/utils/DataUtils.js"></script>
+    <script src="js/components/shared/components.js"></script>
+    <script src="js/components/views/OrdersView.js"></script>
+
+    <!-- Load shared components -->
+    <script src="js/components/shared/topbar/TopbarLoader.js"></script>
+    <script src="js/components/shared/layout.js"></script>
+
+    <script>
+      // Initialize orders page
+      async function initializeOrders() {
+        // Initialize shared topbar first
+        const topbarResult = await window.SharedTopbar.initialize(
+          "shared-topbar-root",
+          {
+            activeTab: "orders",
+          }
+        );
+
+        if (!topbarResult.success || !topbarResult.authenticated) {
+          document.getElementById("orders-content").innerHTML =
+            '<div class="error">Please log in to view orders. <a href="index.html">Go to Login</a></div>';
+          return;
+        }
+
+        // Initialize orders view
+        const root = ReactDOM.createRoot(
+          document.getElementById("orders-content")
+        );
+
+        // Show loading state
+        root.render(
+          SharedLayout.render(
+            React.createElement(OrdersView, {
+              data: null,
+              loading: true,
+              error: null,
+            })
+          )
+        );
+
+        try {
+          // Get auth token for API calls
+          const token =
+            localStorage.getItem("marketplace_token") ||
+            sessionStorage.getItem("marketplace_token");
+
+          // Check user role - admins can see all orders, others see their own
+          const userRole = topbarResult.user?.role;
+          const isAdmin = userRole === "admin";
+
+          // Use appropriate endpoint based on user role
+          const endpoint = isAdmin
+            ? "/api/orders/all?limit=1000"
+            : "/api/orders?limit=1000";
+
+          // Fetch orders data from API
+          const response = await fetch(endpoint, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (response.ok) {
+            const result = await response.json();
+            console.log("Orders API response:", result);
+
+            // Handle ApiResponse format
+            let ordersData;
+            if (result.data && result.data.orders) {
+              ordersData = result.data.orders;
+            } else if (result.data) {
+              ordersData = result.data;
+            } else if (result.orders) {
+              ordersData = result.orders;
+            } else {
+              ordersData = result;
+            }
+
+            // Render orders view with data
+            root.render(
+              SharedLayout.render(
+                React.createElement(OrdersView, {
+                  data: { orders: ordersData },
+                  loading: false,
+                  error: null,
+                })
+              )
+            );
+          } else {
+            const errorText = await response.text();
+            console.error("Orders API error:", errorText);
+
+            // Render error state
+            root.render(
+              SharedLayout.render(
+                React.createElement(OrdersView, {
+                  data: null,
+                  loading: false,
+                  error: `Failed to load orders: ${errorText}`,
+                })
+              )
+            );
+          }
+        } catch (error) {
+          console.error("Orders loading error:", error);
+
+          // Render error state
+          root.render(
+            SharedLayout.render(
+              React.createElement(OrdersView, {
+                data: null,
+                loading: false,
+                error: `Error loading orders: ${error.message}`,
+              })
+            )
+          );
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", initializeOrders);
+    </script>
+  </body>
+</html>

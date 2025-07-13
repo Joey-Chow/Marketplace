@@ -64,7 +64,7 @@ router.get(
     };
 
     const result = await OrderService.getAllOrders(options);
-    res.json(ApiResponse.success(result));
+    ApiResponse.success(res, result);
   })
 );
 

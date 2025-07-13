@@ -4,8 +4,8 @@ const Topbar = ({
   cart,
   onLogout,
   onCartClick,
-  showCartDropdown,
-  currentTab,
+  showCartDropdown = false,
+  currentTab = null,
   onTabChange,
   onNavigateToDashboard,
 }) => {
@@ -55,7 +55,18 @@ const Topbar = ({
             className: `topbar-btn topbar-nav-item ${
               currentTab === item.id ? "active" : ""
             }`,
-            onClick: () => onTabChange(item.id),
+            onClick: () => {
+              // Direct navigation for specific items
+              if (item.id === "users") {
+                window.location.href = "Users.html";
+              } else if (item.id === "orders") {
+                window.location.href = "Orders.html";
+              } else if (item.id === "reviews") {
+                window.location.href = "Reviews.html";
+              } else if (item.id === "products") {
+                window.location.href = "index.html";
+              }
+            },
           },
           React.createElement("span", null, item.icon),
           React.createElement("span", null, item.label)
@@ -101,10 +112,11 @@ const CartButton = ({ cart, onClick, showDropdown }) => {
       className: "cart-button-container",
     },
     React.createElement(
-      "button",
+      "a",
       {
         className: "topbar-btn",
-        onClick: onClick,
+        href: "MyCart.html",
+        style: { textDecoration: "none", color: "inherit" },
       },
       React.createElement("span", null, "🛒"),
       React.createElement("span", null, "My Cart"),

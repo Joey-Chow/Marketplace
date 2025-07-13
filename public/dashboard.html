@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Marketplace Dashboard</title>
-    <link rel="stylesheet" href="css/dashboard.css" />
+    <link rel="stylesheet" href="css/main.css" />
     <script
       crossorigin
       src="https://unpkg.com/react@18/umd/react.development.js"
@@ -15,24 +15,55 @@
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-    <script src="js/components/StatCard.js"></script>
-    <script src="js/components/StatsGrid.js"></script>
-    <script src="js/components/ChartContainer.js"></script>
-    <script src="js/components/RealTimeIndicator.js"></script>
+
+    <!-- Load hooks and components for topbar -->
+    <script src="js/hooks/useAuth.js"></script>
+    <script src="js/components/shared/topbar/UserInfo.js"></script>
+    <script src="js/components/shared/topbar/Logout.js"></script>
+    <script src="js/components/shared/topbar/topbar.js"></script>
+
+    <!-- Load dashboard components -->
+    <script src="js/components/dashboard/StatCard.js"></script>
+    <script src="js/components/dashboard/StatsGrid.js"></script>
+    <script src="js/components/dashboard/ChartContainer.js"></script>
+    <script src="js/components/dashboard/RealTimeIndicator.js"></script>
     <script src="js/hooks/useDashboardData.js"></script>
     <script src="js/utils/ChartUtils.js"></script>
-    <script src="js/components/Dashboard.js"></script>
+    <script src="js/components/dashboard/Dashboard.js"></script>
+
+    <!-- Load shared components -->
+    <script src="js/components/shared/topbar/TopbarLoader.js"></script>
+    <script src="js/components/shared/layout.js"></script>
   </head>
   <body>
-    <div id="dashboard-root"></div>
+    <!-- Shared Topbar -->
+    <div id="shared-topbar-root">
+      <!-- Topbar will be rendered here -->
+    </div>
+
+    <div class="container">
+      <div id="dashboard-root"></div>
+    </div>
 
     <script>
       // Initialize React Dashboard
-      document.addEventListener("DOMContentLoaded", () => {
+      document.addEventListener("DOMContentLoaded", async () => {
+        // Initialize shared topbar first
+        const topbarResult = await window.SharedTopbar.initialize(
+          "shared-topbar-root"
+        );
+
+        if (!topbarResult.success || !topbarResult.authenticated) {
+          document.getElementById("dashboard-root").innerHTML =
+            '<div class="error">Please log in to view dashboard. <a href="index.html">Go to Login</a></div>';
+          return;
+        }
+
+        // Initialize dashboard
         const root = ReactDOM.createRoot(
           document.getElementById("dashboard-root")
         );
-        root.render(React.createElement(Dashboard));
+        root.render(SharedLayout.render(React.createElement(Dashboard)));
       });
     </script>
   </body>
