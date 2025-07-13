@@ -1,4 +1,3 @@
-const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
@@ -57,27 +56,6 @@ const securityMiddleware = (app) => {
       credentials: true,
     })
   );
-
-  // Rate limiting
-  const limiter = rateLimit({
-    windowMs: config.RATE_LIMIT_WINDOW,
-    max: config.RATE_LIMIT_MAX,
-    message: {
-      success: false,
-      message: "Too many requests from this IP, please try again later.",
-    },
-    standardHeaders: true,
-    legacyHeaders: false,
-    handler: (req, res) => {
-      logger.warn(`Rate limit exceeded for IP: ${req.ip}`);
-      res.status(429).json({
-        success: false,
-        message: "Too many requests from this IP, please try again later.",
-      });
-    },
-  });
-
-  app.use("/api", limiter);
 
   // Body parser middleware
   app.use(express.json({ limit: "10mb" }));
