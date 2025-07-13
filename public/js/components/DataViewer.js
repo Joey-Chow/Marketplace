@@ -84,12 +84,6 @@ const DataViewer = () => {
     }
   };
 
-  // Handle logout
-  const handleLogout = () => {
-    logout();
-    setCurrentTab("products");
-  };
-
   // Handle product operations
   const handleProductSave = React.useCallback(
     async (productData) => {

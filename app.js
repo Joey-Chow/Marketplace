@@ -4,7 +4,6 @@ const connectDB = require("./config/database");
 const config = require("./config");
 const logger = require("./utils/logger");
 const errorHandler = require("./middleware/errorHandler");
-const securityMiddleware = require("./middleware/security");
 
 // Route imports
 const authRoutes = require("./routes/auth");
@@ -28,8 +27,9 @@ app.set("trust proxy", 1);
 // Connect to database
 connectDB();
 
-// Security middleware
-securityMiddleware(app);
+// Body parser middleware
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 // Static files
 app.use(express.static(path.join(__dirname, "public")));

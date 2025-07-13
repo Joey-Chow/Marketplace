@@ -1,11 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
-const mongoSanitize = require("express-mongo-sanitize");
-const xss = require("xss");
-const hpp = require("hpp");
 const http = require("http");
 const socketIo = require("socket.io");
 const path = require("path");
@@ -35,19 +31,7 @@ const io = socketIo(server, {
   },
 });
 
-// Security middleware - Safari-compatible configuration
-app.use(
-  helmet({
-    contentSecurityPolicy: false, // Disable CSP completely for Safari compatibility
-    hsts: false, // Disable HSTS for development
-    crossOriginEmbedderPolicy: false, // Disable for development
-    crossOriginOpenerPolicy: false, // Disable for development
-    crossOriginResourcePolicy: false, // Disable for development
-  })
-);
 app.use(cors());
-app.use(mongoSanitize());
-app.use(hpp());
 
 // Additional Safari-friendly headers
 app.use((req, res, next) => {

@@ -51,13 +51,11 @@
     <div id="dataviewer-root"></div>
 
     <script>
-      // Initialize React DataViewer with error handling for Safari
+      // Initialize React DataViewer
       document.addEventListener("DOMContentLoaded", () => {
         try {
           if (typeof DataViewer === "undefined") {
-            console.error(
-              "DataViewer not loaded. Check that all script files loaded successfully."
-            );
+            console.error("DataViewer not loaded");
             document.getElementById("dataviewer-root").innerHTML =
               '<div style="padding: 20px; color: red;">Error: DataViewer component not loaded. Please check console for details.</div>';
             return;
