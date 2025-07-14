@@ -102,9 +102,9 @@ const Topbar = ({
 
 // Cart Button Component - Separate component for the cart button
 const CartButton = ({ cart, onClick, showDropdown }) => {
-  // Calculate total item count
+  // Calculate total item count - cart data comes from API as direct cart object
   const itemCount =
-    cart?.cart?.items?.reduce((count, item) => count + item.quantity, 0) || 0;
+    cart?.items?.reduce((count, item) => count + item.quantity, 0) || 0;
 
   return React.createElement(
     "div",
