@@ -5,20 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Cart - Marketplace</title>
     <link rel="stylesheet" href="css/main.css" />
-  </head>
-  <body>
-    <!-- Shared Topbar -->
-    <div id="shared-topbar-root">
-      <!-- Topbar will be rendered here -->
-    </div>
-
-    <div class="container">
-      <div id="cart-content">
-        <!-- Cart content will be rendered here -->
-      </div>
-    </div>
-    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
 
     <!-- Load hooks first -->
     <script src="js/hooks/useCart.js"></script>
@@ -35,14 +21,20 @@
 
     <!-- Load cart page component last (after dependencies) -->
     <script src="js/components/cart/CartPage.js"></script>
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  </head>
+  <body>
+    <div id="cart-root">
+
     <script>
-      // Initialize cart page with proper loading sequence
-
-      // Render cart page using React and useCart hook
-      const root = ReactDOM.createRoot(document.getElementById("cart-content"));
-      root.render(SharedLayout.render(React.createElement(window.CartPage)));
-
-      document.addEventListener("DOMContentLoaded", startCartApp);
+      document.addEventListener("DOMContentLoaded", () => {
+        const root = ReactDOM.createRoot(
+          document.getElementById("cart-root")
+        );
+        root.render(React.createElement(window.CartPage));
+      });
     </script>
   </body>
 </html>
