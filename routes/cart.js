@@ -112,28 +112,4 @@ router.delete(
   })
 );
 
-// @route   DELETE /api/cart/clear
-// @desc    Clear cart
-// @access  Private
-router.delete(
-  "/clear",
-  auth,
-  asyncHandler(async (req, res) => {
-    const cart = await CartService.clearCart(req.user.id);
-    res.json(new ApiResponse(200, { cart }, "Cart cleared successfully"));
-  })
-);
-
-// @route   DELETE /api/cart
-// @desc    Clear cart (alternate endpoint)
-// @access  Private
-router.delete(
-  "/",
-  auth,
-  asyncHandler(async (req, res) => {
-    const cart = await CartService.clearCart(req.user.id);
-    res.json(new ApiResponse(200, { cart }, "Cart cleared successfully"));
-  })
-);
-
 module.exports = router;

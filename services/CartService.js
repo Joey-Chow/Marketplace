@@ -231,38 +231,6 @@ class CartService {
   }
 
   /**
-   * Clear cart
-   * @param {string} userId - User ID
-   * @returns {Promise<Object>} Empty cart
-   */
-  static async clearCart(userId) {
-    try {
-      const cart = await Cart.findOne({ user: userId });
-      if (!cart) {
-        throw new CustomError("Cart not found", 404);
-      }
-
-      cart.items = [];
-      cart.totals = {
-        subtotal: 0,
-        tax: 0,
-        shipping: 0,
-        discount: 0,
-        total: 0,
-      };
-      await cart.save();
-
-      return cart;
-    } catch (error) {
-      logger.error("Error clearing cart:", error);
-      if (error instanceof CustomError) {
-        throw error;
-      }
-      throw new CustomError("Failed to clear cart", 500);
-    }
-  }
-
-  /**
    * Get cart summary
    * @param {string} userId - User ID
    * @returns {Promise<Object>} Cart summary

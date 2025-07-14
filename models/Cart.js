@@ -159,19 +159,6 @@ cartSchema.methods.updateItemQuantity = function (productId, quantity) {
   }
 };
 
-// Method to clear cart
-cartSchema.methods.clearCart = function () {
-  this.items = [];
-  this.totals = {
-    subtotal: 0,
-    tax: 0,
-    shipping: 0,
-    discount: 0,
-    total: 0,
-  };
-  this.appliedCoupons = [];
-};
-
 // Virtual for item count
 cartSchema.virtual("itemCount").get(function () {
   return this.items.reduce((count, item) => count + item.quantity, 0);

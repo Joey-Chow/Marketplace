@@ -34,7 +34,6 @@
     <!-- Topbar Components -->
     <script src="js/components/shared/topbar/UserInfo.js"></script>
     <script src="js/components/shared/topbar/Logout.js"></script>
-    <script src="js/components/shared/topbar/CartView.js"></script>
     <script src="js/components/shared/topbar/topbar.js"></script>
 
     <!-- View Components -->
@@ -58,13 +57,6 @@
       // Initialize React DataViewer
       document.addEventListener("DOMContentLoaded", () => {
         try {
-          if (typeof ProductsPage === "undefined") {
-            console.error("ProductsPage not loaded");
-            document.getElementById("dataviewer-root").innerHTML =
-              '<div style="padding: 20px; color: red;">Error: ProductsPage component not loaded. Please check console for details.</div>';
-            return;
-          }
-
           const root = ReactDOM.createRoot(
             document.getElementById("dataviewer-root")
           );
