@@ -644,6 +644,16 @@ body {
   margin-right: 5px;
 }
 
+/* +/- Buttons */
+.quantity-controls-btn {
+  display: inline-block;
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  color: #333;
+  background-color: #f8f9fa;
+}
+
 /* Admin Actions */
 .admin-actions {
   margin-top: 4px;

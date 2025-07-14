@@ -100,16 +100,6 @@ const CartSummary = ({ cart, loading }) => {
       "div",
       { className: "cart-summary-actions" },
 
-      // Continue Shopping Button
-      React.createElement(
-        "a",
-        {
-          href: "index.html",
-          className: "btn btn-secondary continue-shopping-btn",
-        },
-        "Continue Shopping"
-      ),
-
       // Checkout Button
       React.createElement(
         "button",
@@ -126,16 +116,8 @@ const CartSummary = ({ cart, loading }) => {
     React.createElement(
       "div",
       { className: "cart-summary-info" },
-      React.createElement(
-        "p",
-        { className: "info-text" },
-        "🚚 Free shipping on orders over $50"
-      ),
-      React.createElement(
-        "p",
-        { className: "info-text" },
-        "🔒 Secure checkout with SSL encryption"
-      )
+      React.createElement("p", { className: "info-text" }),
+      React.createElement("p", { className: "info-text" })
     )
   );
 };

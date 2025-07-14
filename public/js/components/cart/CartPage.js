@@ -13,44 +13,7 @@ const CartPage = () => {
     loadCart();
   }, [loadCart]);
 
-  if (loading) {
-    return React.createElement(
-      "div",
-      { className: "app-layout" },
-      React.createElement("div", { id: "shared-topbar-root" }),
-      window.SharedLayout.render(
-        React.createElement(
-          "div",
-          { className: "cart-loading" },
-          React.createElement("p", null, "Loading cart...")
-        )
-      )
-    );
-  }
-
-  if (error) {
-    return React.createElement(
-      "div",
-      { className: "app-layout" },
-      React.createElement("div", { id: "shared-topbar-root" }),
-      window.SharedLayout.render(
-        React.createElement(
-          "div",
-          { className: "cart-error" },
-          React.createElement("p", null, `Error: ${error}`),
-          React.createElement(
-            "button",
-            {
-              onClick: loadCart,
-              className: "btn btn-primary",
-            },
-            "Retry"
-          )
-        )
-      )
-    );
-  }
-
+  // empty cart check
   if (!cart || !cart.items || cart.items.length === 0) {
     return React.createElement(
       "div",
@@ -79,6 +42,7 @@ const CartPage = () => {
     );
   }
 
+  // Render cart items and summary
   return React.createElement(
     "div",
     { className: "app-layout" },

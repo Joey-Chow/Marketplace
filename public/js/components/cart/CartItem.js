@@ -12,14 +12,34 @@ const CartItem = ({ item, loading, onQuantityChange, onRemove }) => {
   const productId =
     item.productId || item.product?._id || item._id || product._id;
 
-  const handleQuantityChange = async (newQuantity) => {
-    if (newQuantity < 1) return;
+  const handleQuantityChange = (newQuantity) => {
+    if (newQuantity < 0) return; // Changed from < 1 to < 0
 
-    try {
-      await onQuantityChange(productId, newQuantity);
-    } catch (error) {
-      console.error("Error updating quantity:", error);
+    // If quantity is 0, remove the item
+    if (newQuantity === 0) {
+      requestAnimationFrame(() => {
+        Promise.resolve()
+          .then(() => {
+            return onRemove(productId);
+          })
+          .catch((error) => {
+            console.error("Error removing item:", error);
+          });
+      });
+      return;
     }
+
+    // Use requestAnimationFrame to defer the API call and prevent blocking
+    requestAnimationFrame(() => {
+      // Make the API call in a way that can't cause navigation
+      Promise.resolve()
+        .then(() => {
+          return onQuantityChange(productId, newQuantity);
+        })
+        .catch((error) => {
+          console.error("Error updating quantity:", error);
+        });
+    });
   };
 
   const handleRemove = async () => {
@@ -35,6 +55,49 @@ const CartItem = ({ item, loading, onQuantityChange, onRemove }) => {
     // TODO: Implement selected items logic for bulk operations
   };
 
+  const quantityModifie = () => {
+    return React.createElement(
+      "div",
+      { className: "cart-item-quantity-controls" },
+
+      // Decrease quantity button
+      React.createElement(
+        "span",
+        {
+          className: "quantity-controls-btn",
+          onMouseDown: (e) => {
+            if (item.quantity > 0) {
+              handleQuantityChange(item.quantity - 1);
+            }
+            return false;
+          },
+        },
+        "-"
+      ),
+
+      // Display current quantity
+      React.createElement(
+        "span",
+        { className: "quantity-display" },
+        item.quantity
+      ),
+
+      // Increase quantity button
+      React.createElement(
+        "span",
+        {
+          className: "quantity-controls-btn",
+          onMouseDown: (e) => {
+            handleQuantityChange(item.quantity + 1);
+            return false;
+          },
+        },
+        "+"
+      )
+    );
+  };
+
+  // Render the cart item row
   return React.createElement(
     "div",
     {
@@ -90,42 +153,10 @@ const CartItem = ({ item, loading, onQuantityChange, onRemove }) => {
       // Quantity Modifier
       React.createElement(
         "div",
-        { className: "cart-item-quantity-controls" },
-        React.createElement(
-          "button",
-          {
-            onClick: (e) => {
-              e.preventDefault();
-              handleQuantityChange(item.quantity - 1);
-            },
-            disabled: loading || item.quantity <= 1,
-            className: "quantity-btn quantity-decrease",
-            "aria-label": "Decrease quantity",
-          },
-          "-"
-        ),
-        React.createElement(
-          "span",
-          { className: "quantity-display" },
-          item.quantity
-        ),
-        React.createElement(
-          "button",
-          {
-            onClick: (e) => {
-              e.preventDefault();
-              handleQuantityChange(item.quantity + 1);
-            },
-            disabled: loading,
-            className: "quantity-btn quantity-increase",
-            "aria-label": "Increase quantity",
-          },
-          "+"
-        )
+        { className: "cart-item-quantity" },
+        quantityModifie()
       )
     )
-
-    // Quantity Modifier
   );
 };
 
