@@ -19,7 +19,9 @@
     <script src="js/components/shared/topbar/TopbarLoader.js"></script>
     <script src="js/components/shared/layout.js"></script>
 
-    <!-- Load cart page component last (after dependencies) -->
+    <!-- Load cart components -->
+    <script src="js/components/cart/CartItem.js"></script>
+    <script src="js/components/cart/CartSummary.js"></script>
     <script src="js/components/cart/CartPage.js"></script>
 
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -33,7 +35,7 @@
         const root = ReactDOM.createRoot(
           document.getElementById("cart-root")
         );
-        root.render(React.createElement(window.CartPage));
+        root.render(React.createElement(CartPage));
       });
     </script>
   </body>
