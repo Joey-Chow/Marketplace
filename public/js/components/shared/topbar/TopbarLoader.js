@@ -15,7 +15,14 @@ window.SharedTopbar = {
       }
 
       // Render topbar
-      const root = ReactDOM.createRoot(document.getElementById(containerId));
+      const container = document.getElementById(containerId);
+      if (container) {
+        // Ensure container has proper styling for sticky positioning
+        container.style.position = "relative";
+        container.style.zIndex = "1000";
+      }
+
+      const root = ReactDOM.createRoot(container);
       root.render(
         React.createElement(Topbar, {
           user: auth.user,
@@ -81,7 +88,14 @@ window.SharedTopbar = {
   },
 
   renderUnauthenticated(containerId) {
-    const root = ReactDOM.createRoot(document.getElementById(containerId));
+    const container = document.getElementById(containerId);
+    if (container) {
+      // Ensure container has proper styling for sticky positioning
+      container.style.position = "relative";
+      container.style.zIndex = "1000";
+    }
+
+    const root = ReactDOM.createRoot(container);
     root.render(
       React.createElement(
         "div",

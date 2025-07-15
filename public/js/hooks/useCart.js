@@ -168,4 +168,5 @@ const useCart = () => {
   };
 };
 
+// Expose useCart to global scope
 window.useCart = useCart;

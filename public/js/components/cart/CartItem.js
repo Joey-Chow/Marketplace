@@ -1,12 +1,16 @@
 // CartItem Component - Individual cart item with checkbox, image, details, and quantity controls
-const CartItem = ({ item, loading, onQuantityChange, onRemove }) => {
-  const [isSelected, setIsSelected] = React.useState(true);
-
+const CartItem = ({
+  item,
+  onQuantityChange,
+  onRemove,
+  isSelected = true,
+  onSelectionChange,
+}) => {
   const product = item.product || item;
   const productName = product.name || "Unknown Product";
   const productPrice = product.price || item.price || 0;
   const productImage =
-    product.imageUrl || product.image || "images/products/placeholder.jpg";
+    product.images[0].url || product.image || "images/products/placeholder.jpg";
 
   // Get the correct product ID - try multiple possible properties
   const productId =
@@ -42,17 +46,10 @@ const CartItem = ({ item, loading, onQuantityChange, onRemove }) => {
     });
   };
 
-  const handleRemove = async () => {
-    try {
-      await onRemove(productId);
-    } catch (error) {
-      console.error("Error removing item:", error);
-    }
-  };
-
   const handleCheckboxChange = (e) => {
-    setIsSelected(e.target.checked);
-    // TODO: Implement selected items logic for bulk operations
+    if (onSelectionChange) {
+      onSelectionChange(productId, e.target.checked);
+    }
   };
 
   const quantityModifie = () => {
