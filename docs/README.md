@@ -72,7 +72,8 @@ It also includes MongoDB database setup.
 
 
 ## Deliverables:
-   1, MongoDB database data population are under Models folde
-   1, Schemas that shows collections and relationships are under Models folder.
-   2, API source code with implementation of CRUD operations are in scripts/seedDatbase.js
-   3, API documentation with endpoints, request/response examples, and CRUD operations are under service folder
+1, MongoDB database data population are under Models folde
+2, Schemas that shows collections and relationships are under `models` folder.
+3, MongoDB database data population is in the `seedDatabase.js` file under `scripts` folder.
+4, API source code with implementation of CRUD operations are under `services` folder. For example, in `services/ProductService.js`, you can see methods like `createProduct`, `getProductById`, `updateProduct` and `deleteProduct`.
+5, API documentation with endpoints, request/response examples are in this `README.md`, there is a section called `API Endpoints`
