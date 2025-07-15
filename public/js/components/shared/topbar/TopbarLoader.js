@@ -1,5 +1,8 @@
 // Shared topbar functionality
 window.SharedTopbar = {
+  // Cache roots to prevent multiple createRoot calls
+  _roots: new Map(),
+
   async initialize(containerId = "shared-topbar-root", options = {}) {
     try {
       // Check authentication
@@ -22,20 +25,29 @@ window.SharedTopbar = {
         container.style.zIndex = "1000";
       }
 
-      const root = ReactDOM.createRoot(container);
-      root.render(
-        React.createElement(Topbar, {
-          user: auth.user,
-          cart: cartData,
-          onLogout: this.handleLogout.bind(this),
-          onCartClick: () => (window.location.href = "MyCart.html"),
-          showCartDropdown: false,
-          currentTab: options.activeTab || null,
-          onTabChange: this.handleTabChange.bind(this),
-          onNavigateToDashboard: () =>
-            (window.location.href = "dashboard.html"),
-        })
-      );
+      // Get or create root for this container
+      let root = this._roots.get(containerId);
+      if (!root && container) {
+        root = ReactDOM.createRoot(container);
+        this._roots.set(containerId, root);
+      }
+
+      if (root) {
+        root.render(
+          React.createElement(Topbar, {
+            user: auth.user,
+            cart: cartData,
+            onLogout: this.handleLogout.bind(this),
+            onCartClick: () => (window.location.href = "MyCart.html"),
+            showCartDropdown: false,
+            currentTab: options.activeTab || null,
+            onTabChange: this.handleTabChange.bind(this),
+            onNavigateToDashboard: () =>
+              (window.location.href = "dashboard.html"),
+            onSearch: options.onSearch || null,
+          })
+        );
+      }
 
       return { success: true, authenticated: true, user: auth.user };
     } catch (error) {
@@ -95,30 +107,38 @@ window.SharedTopbar = {
       container.style.zIndex = "1000";
     }
 
-    const root = ReactDOM.createRoot(container);
-    root.render(
-      React.createElement(
-        "div",
-        { className: "topbar unauthenticated" },
+    // Get or create root for this container
+    let root = this._roots.get(containerId);
+    if (!root && container) {
+      root = ReactDOM.createRoot(container);
+      this._roots.set(containerId, root);
+    }
+
+    if (root) {
+      root.render(
         React.createElement(
           "div",
-          { className: "topbar-left" },
-          React.createElement("h2", null, "Marketplace")
-        ),
-        React.createElement(
-          "div",
-          { className: "topbar-right" },
+          { className: "topbar unauthenticated" },
           React.createElement(
-            "a",
-            {
-              href: "index.html",
-              className: "topbar-btn",
-            },
-            "Login"
+            "div",
+            { className: "topbar-left" },
+            React.createElement("h2", null, "Marketplace")
+          ),
+          React.createElement(
+            "div",
+            { className: "topbar-right" },
+            React.createElement(
+              "a",
+              {
+                href: "index.html",
+                className: "topbar-btn",
+              },
+              "Login"
+            )
           )
         )
-      )
-    );
+      );
+    }
     return { success: true, authenticated: false };
   },
 

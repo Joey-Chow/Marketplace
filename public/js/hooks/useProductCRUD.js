@@ -145,17 +145,6 @@ const useProductCRUD = () => {
         headers: getAuthHeaders(),
       });
 
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error("Authentication required. Please login again.");
-        }
-        if (response.status === 403) {
-          throw new Error("You don't have permission to delete this product.");
-        }
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to delete product");
-      }
-
       // Show success popup
       alert("✅ Product deleted successfully!");
       return true;

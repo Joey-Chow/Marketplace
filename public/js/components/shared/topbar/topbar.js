@@ -8,13 +8,14 @@ const Topbar = ({
   currentTab = null,
   onTabChange,
   onNavigateToDashboard,
+  onSearch,
 }) => {
   // Menu items (excluding Overview as requested)
   const menuItems = [
-    { id: "users", label: "Users", icon: "👥" },
-    { id: "products", label: "Products", icon: "📦" },
-    { id: "orders", label: "Orders", icon: "🛒" },
-    { id: "reviews", label: "Reviews", icon: "⭐" },
+    { id: "users", label: "Users" },
+    { id: "products", label: "Products" },
+    { id: "orders", label: "Orders" },
+    { id: "reviews", label: "Reviews" },
   ];
 
   // Filter menu items based on user role
@@ -30,6 +31,7 @@ const Topbar = ({
     {
       className: "topbar",
     },
+
     // Left side: Navigation items
     React.createElement(
       "div",
@@ -43,7 +45,6 @@ const Topbar = ({
           className: "topbar-btn topbar-nav-item dashboard-nav",
           onClick: onNavigateToDashboard,
         },
-        React.createElement("span", null, "📈"),
         React.createElement("span", null, "Dashboard")
       ),
       // Menu items
@@ -73,12 +74,21 @@ const Topbar = ({
         )
       )
     ),
+
     // Right side: User Info, Logout, and Cart Button together
     React.createElement(
       "div",
       {
         className: "topbar-right",
       },
+      // Searchbox Component
+      React.createElement(Searchbox, {
+        onSearch:
+          onSearch ||
+          ((query) => {
+            console.log("Searching for:", query);
+          }),
+      }),
       // User Info Component
       user &&
         React.createElement(UserInfo, {

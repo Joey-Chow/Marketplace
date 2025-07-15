@@ -5,6 +5,8 @@ const UserInfo = ({ user }) => {
     {
       className: "topbar-btn user-info",
     },
+
+    // Display user avatar or initials
     React.createElement(
       "span",
       {
@@ -12,6 +14,8 @@ const UserInfo = ({ user }) => {
       },
       user.username || user.email
     ),
+
+    // Display user role as a badge
     React.createElement(
       "span",
       {

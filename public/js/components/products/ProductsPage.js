@@ -4,6 +4,27 @@ const ProductsPage = () => {
   const [loginError, setLoginError] = React.useState("");
   const [loginLoading, setLoginLoading] = React.useState(false);
 
+  // Use ref to store search handler to avoid render-time setState
+  const searchHandlerRef = React.useRef(null);
+  const [, forceUpdate] = React.useState({});
+
+  // Handle search handler updates
+  const handleSearchHandlerReady = React.useCallback((handler) => {
+    searchHandlerRef.current = handler;
+    // Force update to re-initialize topbar with new handler
+    forceUpdate({});
+  }, []);
+
+  // Initialize SharedTopbar when component mounts and user is authenticated
+  React.useEffect(() => {
+    if (user && window.SharedTopbar) {
+      window.SharedTopbar.initialize("shared-topbar-root", {
+        activeTab: "products",
+        onSearch: searchHandlerRef.current,
+      });
+    }
+  }, [user, searchHandlerRef.current]);
+
   // Handle login
   const handleLogin = async (email, password) => {
     setLoginLoading(true);
@@ -21,26 +42,6 @@ const ProductsPage = () => {
     }
   };
 
-  // Handle topbar logout
-  const handleTopbarLogout = React.useCallback(() => {
-    logout();
-  }, [logout]);
-
-  // Handle navigation to dashboard
-  const handleNavigateToDashboard = React.useCallback(() => {
-    window.location.href = "dashboard.html";
-  }, []);
-
-  // Show loading screen while checking authentication
-  if (authLoading) {
-    return React.createElement(
-      "div",
-      { className: "loading-screen" },
-      React.createElement("div", { className: "loading-spinner" }),
-      React.createElement("p", null, "Loading...")
-    );
-  }
-
   // Show login form if not authenticated
   if (!user) {
     return React.createElement(LoginForm, {
@@ -54,14 +55,15 @@ const ProductsPage = () => {
   return React.createElement(
     "div",
     { className: "app-layout" },
-    // Topbar with navigation
-    React.createElement(Topbar, {
-      user,
-      onLogout: handleTopbarLogout,
-      onNavigateToDashboard: handleNavigateToDashboard,
-    }),
+    // SharedTopbar container
+    React.createElement("div", { id: "shared-topbar-root" }),
     // Main content area with products
-    SharedLayout.render(React.createElement(ProductsContainer, { user }))
+    window.SharedLayout.render(
+      React.createElement(ProductsContainer, {
+        user,
+        onSearchHandlerReady: handleSearchHandlerReady,
+      })
+    )
   );
 };
 

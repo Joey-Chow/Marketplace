@@ -1,8 +1,54 @@
 // ProductsContainer - Handles product data loading and operations
-const ProductsContainer = ({ user }) => {
+const ProductsContainer = ({ user, onSearchHandlerReady }) => {
   const { loading, error, data, loadTabData } = useDataViewer();
   const productCRUD = useProductCRUD();
   const cart = useCart();
+
+  // Product search state
+  const [searchResults, setSearchResults] = React.useState(null);
+  const [searchLoading, setSearchLoading] = React.useState(false);
+  const [searchError, setSearchError] = React.useState(null);
+
+  // Search handler
+  const handleProductSearch = React.useCallback(async (query) => {
+    if (!query || query.trim() === "") {
+      setSearchResults(null);
+      setSearchError(null);
+      return;
+    }
+
+    setSearchLoading(true);
+    setSearchError(null);
+
+    try {
+      const response = await fetch(
+        `/api/products?search=${encodeURIComponent(query)}`
+      );
+      if (!response.ok) {
+        throw new Error("Search failed");
+      }
+
+      const result = await response.json();
+      const products = result.data?.products || result.data || [];
+      setSearchResults(products);
+    } catch (err) {
+      setSearchError("Error searching products");
+      setSearchResults([]);
+    } finally {
+      setSearchLoading(false);
+    }
+  }, []);
+
+  // Use ref to track if we've already notified parent
+  const notifiedRef = React.useRef(false);
+
+  // Notify parent when search handler is ready - use useEffect to avoid render-time setState
+  React.useEffect(() => {
+    if (onSearchHandlerReady && handleProductSearch && !notifiedRef.current) {
+      notifiedRef.current = true;
+      onSearchHandlerReady(handleProductSearch);
+    }
+  }, [onSearchHandlerReady, handleProductSearch]); // Include dependencies but use ref to prevent duplicate calls
 
   // Load products data when component mounts
   React.useEffect(() => {
@@ -68,40 +114,23 @@ const ProductsContainer = ({ user }) => {
     [cart.addToCart]
   );
 
-  // Show loading/error states
-  if (loading) {
-    return React.createElement(
-      "div",
-      { className: "loading" },
-      "Loading products..."
-    );
-  }
-
-  if (error) {
-    return React.createElement("div", { className: "error" }, error);
-  }
-
-  if (!data) {
-    return React.createElement(
-      "div",
-      { className: "loading" },
-      "No product data available"
-    );
-  }
-
   // Render products view with modal
   return React.createElement(
     React.Fragment,
     null,
     React.createElement(ProductsView, {
-      data,
-      loading,
-      error,
+      data:
+        searchResults !== null
+          ? { products: searchResults, categories: data?.categories || [] }
+          : data,
+      loading: searchLoading || loading,
+      error: searchError || error,
       productCRUD,
       user,
       onProductSave: handleProductSave,
       onProductDelete: handleProductDelete,
       onAddToCart: handleAddToCart,
+      onSearch: handleProductSearch,
     }),
     // Product Form Modal
     productCRUD.showForm &&

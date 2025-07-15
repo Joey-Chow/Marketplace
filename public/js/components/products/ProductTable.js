@@ -7,20 +7,13 @@ const ProductTable = ({
   loading,
   user,
 }) => {
-  if (loading) {
-    return React.createElement(
-      "div",
-      { className: "loading" },
-      "Loading products..."
-    );
-  }
-
   return React.createElement(
     "div",
     {
       className: "products-grid",
     },
     products.map((product) =>
+      // Render each product card
       React.createElement(
         "div",
         {

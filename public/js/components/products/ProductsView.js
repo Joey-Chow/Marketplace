@@ -1,11 +1,9 @@
 // ProductsView Component - Handles products display with category navigation
 const ProductsView = ({
   data,
-  loading,
   error,
   productCRUD,
   user,
-  onProductSave,
   onProductDelete,
   onAddToCart,
 }) => {
@@ -55,6 +53,7 @@ const ProductsView = ({
   const renderCategoryNavigation = () => {
     if (categories.length === 0) return null;
 
+    // Render category navigation
     return React.createElement(
       "div",
       { className: "category-navigation" },
@@ -69,6 +68,7 @@ const ProductsView = ({
         "All"
       ),
       categories.map((category) =>
+        // Render each category button
         React.createElement(
           "button",
           {
@@ -83,14 +83,6 @@ const ProductsView = ({
       )
     );
   };
-
-  if (loading) {
-    return React.createElement(
-      "div",
-      { className: "loading" },
-      "Loading products..."
-    );
-  }
 
   if (error) {
     return React.createElement("div", { className: "error" }, error);
