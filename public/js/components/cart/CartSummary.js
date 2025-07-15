@@ -1,9 +1,17 @@
 // CartSummary Component - Shows subtotal, tax, total and checkout button
-const CartSummary = ({ cart, loading }) => {
-  // Calculate subtotal
+const CartSummary = ({ cart, loading, selectedItems = [] }) => {
+  // Calculate subtotal for checked items only
   const subtotal = cart.items.reduce((sum, item) => {
-    const price = item.product?.price || item.price || 0;
-    return sum + price * item.quantity;
+    const productId =
+      item.productId || item.product?._id || item._id || item.product?._id;
+    const isSelected =
+      selectedItems.includes(productId) || selectedItems.length === 0; // Default to all selected if no selection info
+
+    if (isSelected) {
+      const price = item.product?.price || item.price || 0;
+      return sum + price * item.quantity;
+    }
+    return sum;
   }, 0);
 
   // Calculate tax (assuming 8.5% tax rate)
@@ -20,11 +28,23 @@ const CartSummary = ({ cart, loading }) => {
       return;
     }
 
+    // Check if any items are selected
+    const selectedItemsCount =
+      selectedItems.length > 0 ? selectedItems.length : cart.items.length;
+    if (selectedItemsCount === 0) {
+      alert("Please select items to checkout!");
+      return;
+    }
+
     // For now, show a summary
-    const itemCount = cart.items.reduce(
-      (count, item) => count + item.quantity,
-      0
-    );
+    const itemCount = cart.items.reduce((count, item) => {
+      const productId =
+        item.productId || item.product?._id || item._id || item.product?._id;
+      const isSelected =
+        selectedItems.includes(productId) || selectedItems.length === 0;
+      return isSelected ? count + item.quantity : count;
+    }, 0);
+
     const confirmMessage = `Proceed to checkout?\n\nItems: ${itemCount}\nSubtotal: $${subtotal.toFixed(
       2
     )}\nTax: $${tax.toFixed(2)}\nTotal: $${total.toFixed(2)}`;

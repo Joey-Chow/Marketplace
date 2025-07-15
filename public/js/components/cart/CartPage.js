@@ -3,6 +3,9 @@ const CartPage = () => {
   const { cart, loading, error, loadCart, updateQuantity, removeItem } =
     window.useCart();
 
+  // Track selected items for checkout
+  const [selectedItems, setSelectedItems] = React.useState([]);
+
   React.useEffect(() => {
     // Initialize SharedTopbar
     window.SharedTopbar.initialize("shared-topbar-root", {
@@ -12,6 +15,28 @@ const CartPage = () => {
     // Load cart
     loadCart();
   }, [loadCart]);
+
+  // Update selected items when cart changes
+  React.useEffect(() => {
+    if (cart && cart.items) {
+      // Initialize with all items selected
+      const allItemIds = cart.items.map(
+        (item) =>
+          item.productId || item.product?._id || item._id || item.product?._id
+      );
+      setSelectedItems(allItemIds);
+    }
+  }, [cart]);
+
+  // Handle item selection change
+  const handleItemSelectionChange = (productId, isSelected) => {
+    setSelectedItems((prev) => {
+      const newSelected = isSelected
+        ? [...prev, productId]
+        : prev.filter((id) => id !== productId);
+      return newSelected;
+    });
+  };
 
   // empty cart check
   if (!cart || !cart.items || cart.items.length === 0) {
@@ -65,15 +90,22 @@ const CartPage = () => {
           React.createElement(
             "div",
             { className: "cart-items-list" },
-            cart.items.map((item) =>
-              React.createElement(window.CartItem, {
+            cart.items.map((item) => {
+              const productId =
+                item.productId ||
+                item.product?._id ||
+                item._id ||
+                item.product?._id;
+              return React.createElement(window.CartItem, {
                 key: item._id || item.productId || item.product?._id,
                 item: item,
                 loading: loading,
                 onQuantityChange: updateQuantity,
                 onRemove: removeItem,
-              })
-            )
+                isSelected: selectedItems.includes(productId),
+                onSelectionChange: handleItemSelectionChange,
+              });
+            })
           )
         ),
 
@@ -81,6 +113,7 @@ const CartPage = () => {
         React.createElement(window.CartSummary, {
           cart: cart,
           loading: loading,
+          selectedItems: selectedItems,
         })
       )
     )

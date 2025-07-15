@@ -73,7 +73,7 @@ router.get("/analytics", auth, authorize("admin"), async (req, res) => {
       {
         $project: {
           productName: "$productInfo.name",
-          productImage: { $arrayElemAt: ["$productInfo.images.url", 0] },
+          productImage: { $arrayElemAt: ["$productInfo.image.url", 0] },
           totalQuantity: 1,
           totalRevenue: 1,
           orderCount: 1,
@@ -307,7 +307,7 @@ router.get("/seller", auth, authorize("seller", "admin"), async (req, res) => {
       {
         $project: {
           productName: "$productInfo.name",
-          productImage: { $arrayElemAt: ["$productInfo.images.url", 0] },
+          productImage: { $arrayElemAt: ["$productInfo.image.url", 0] },
           totalQuantity: 1,
           totalRevenue: 1,
           orderCount: 1,

@@ -147,6 +147,12 @@ const products = [
     },
     tags: ["smartphone", "apple", "ios", "camera"],
     featured: true,
+    images: [
+      {
+        url: "/images/products/iphone-15-pro-0-bf8a5611.jpg",
+        alt: "iPhone 15 Pro",
+      },
+    ],
   },
   {
     name: "Samsung Galaxy S24",
@@ -160,6 +166,13 @@ const products = [
       warranty: "1 year",
     },
     tags: ["smartphone", "samsung", "android", "5g"],
+    images: [
+      {
+        url: "/images/products/product-10-0-a0362aae.jpg",
+        alt: "Product Image",
+        alt: "Samsung Galaxy S24",
+      },
+    ],
   },
   {
     name: "MacBook Air M3",
@@ -173,6 +186,13 @@ const products = [
       warranty: "1 year",
     },
     tags: ["laptop", "apple", "macbook", "portable"],
+    images: [
+      {
+        url: "/images/products/macbook-air-m3-0-31a35356.jpg",
+        alt: "Product Image",
+        alt: "MacBook Air M3",
+      },
+    ],
   },
   // Clothing
   {
@@ -186,6 +206,13 @@ const products = [
       color: "Navy Blue",
     },
     tags: ["clothing", "tshirt", "cotton", "casual"],
+    images: [
+      {
+        url: "/images/products/premium-cotton-t-shirt-0-5e799700.jpg",
+        alt: "Product Image",
+        alt: "Premium Cotton T-Shirt",
+      },
+    ],
   },
   {
     name: "Denim Jeans",
@@ -198,6 +225,13 @@ const products = [
       color: "Blue",
     },
     tags: ["clothing", "jeans", "denim", "casual"],
+    images: [
+      {
+        url: "/images/products/denim-jeans-0-40aa6a8f.jpg",
+        alt: "Product Image",
+        alt: "Denim Jeans",
+      },
+    ],
   },
   // Home & Garden
   {
@@ -211,26 +245,659 @@ const products = [
       warranty: "2 years",
     },
     tags: ["lighting", "desk", "led", "home"],
+    images: [
+      {
+        url: "/images/products/led-desk-lamp-0-6514f2e7.jpg",
+        alt: "Product Image",
+        alt: "LED Desk Lamp",
+      },
+    ],
   },
-  // Add more products...
-  ...Array.from({ length: 34 }, (_, i) => ({
-    name: `Product ${i + 7}`,
-    description: `High-quality description for product ${
-      i + 7
-    }. This is a sample product with great features and excellent value.`,
-    price: Math.floor(Math.random() * 500) + 20,
-    inventory: {
-      quantity: Math.floor(Math.random() * 100) + 10,
-      lowStockThreshold: Math.floor(Math.random() * 10) + 5,
-    },
+  // Add more products with specific details and images
+  {
+    name: "Wireless Bluetooth Headphones",
+    description:
+      "Premium over-ear headphones with active noise cancellation and 30-hour battery life",
+    price: 199.99,
+    inventory: { quantity: 75, lowStockThreshold: 15 },
     specifications: {
-      brand: `Brand${i + 7}`,
-      model: `Model${i + 7}`,
-      color: ["Black", "White", "Blue", "Red", "Green"][i % 5],
+      brand: "AudioTech",
+      model: "BT-3000",
+      color: "Matte Black",
+      warranty: "2 years",
+    },
+    tags: ["headphones", "bluetooth", "wireless", "noise-cancelling"],
+    images: [
+      {
+        url: "/images/products/denim-jeans-0-40aa6a8f.jpg",
+        alt: "Wireless Bluetooth Headphones",
+      },
+    ],
+  },
+  {
+    name: "Gaming Mechanical Keyboard",
+    description:
+      "RGB backlit mechanical keyboard with cherry MX switches for gaming",
+    price: 149.99,
+    inventory: { quantity: 40, lowStockThreshold: 8 },
+    specifications: {
+      brand: "GameGear",
+      model: "MK-RGB",
+      color: "Black",
+      warranty: "3 years",
+    },
+    tags: ["gaming", "keyboard", "mechanical", "rgb"],
+    images: [
+      {
+        url: "/images/products/product-12-0-61a2a056.jpg",
+        alt: "Product Image",
+        alt: "Gaming Mechanical Keyboard",
+      },
+    ],
+  },
+  {
+    name: "4K Webcam",
+    description:
+      "Ultra HD webcam with auto-focus and built-in microphone for streaming",
+    price: 89.99,
+    inventory: { quantity: 60, lowStockThreshold: 12 },
+    specifications: {
+      brand: "StreamCam",
+      model: "4K-PRO",
+      color: "Black",
       warranty: "1 year",
     },
-    tags: ["sample", "product", "test", "quality"],
-  })),
+    tags: ["webcam", "4k", "streaming", "video"],
+    images: [
+      {
+        url: "/images/products/macbook-air-m3-0-31a35356.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Wireless Charging Pad",
+    description:
+      "Fast wireless charging pad compatible with all Qi-enabled devices",
+    price: 34.99,
+    inventory: { quantity: 120, lowStockThreshold: 25 },
+    specifications: {
+      brand: "ChargeTech",
+      model: "QI-15W",
+      color: "White",
+      warranty: "1 year",
+    },
+    tags: ["wireless", "charging", "qi", "fast-charge"],
+    images: [
+      {
+        url: "/images/products/product-9-1-4240f48e.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Bluetooth Speaker",
+    description:
+      "Portable waterproof speaker with 360-degree sound and 12-hour battery",
+    price: 79.99,
+    inventory: { quantity: 85, lowStockThreshold: 18 },
+    specifications: {
+      brand: "SoundWave",
+      model: "360-BT",
+      color: "Ocean Blue",
+      warranty: "1 year",
+    },
+    tags: ["speaker", "bluetooth", "portable", "waterproof"],
+    images: [
+      {
+        url: "/images/products/product-11-0-dc4590e3.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Smart Watch",
+    description: "Fitness tracker with heart rate monitor and GPS connectivity",
+    price: 249.99,
+    inventory: { quantity: 35, lowStockThreshold: 7 },
+    specifications: {
+      brand: "FitTech",
+      model: "SW-100",
+      color: "Space Gray",
+      warranty: "1 year",
+    },
+    tags: ["smartwatch", "fitness", "gps", "health"],
+    images: [
+      {
+        url: "/images/products/product-13-2-8ce19be0.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Leather Jacket",
+    description:
+      "Genuine leather jacket with classic design and premium finish",
+    price: 299.99,
+    inventory: { quantity: 25, lowStockThreshold: 5 },
+    specifications: {
+      material: "Genuine Leather",
+      brand: "LeatherCraft",
+      color: "Brown",
+      size: "L",
+    },
+    tags: ["jacket", "leather", "fashion", "premium"],
+    images: [
+      {
+        url: "/images/products/product-15-2-0ac1050c.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Running Sneakers",
+    description:
+      "Lightweight running shoes with advanced cushioning technology",
+    price: 129.99,
+    inventory: { quantity: 90, lowStockThreshold: 20 },
+    specifications: {
+      brand: "RunFast",
+      model: "RF-2024",
+      color: "Black/White",
+      size: "US 9",
+    },
+    tags: ["shoes", "running", "sports", "comfortable"],
+    images: [
+      {
+        url: "/images/products/product-16-1-6eee41fa.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Wool Sweater",
+    description: "Cozy merino wool sweater perfect for cold weather",
+    price: 89.99,
+    inventory: { quantity: 55, lowStockThreshold: 12 },
+    specifications: {
+      material: "Merino Wool",
+      brand: "WoolWear",
+      color: "Charcoal Gray",
+      size: "M",
+    },
+    tags: ["sweater", "wool", "warm", "winter"],
+    images: [
+      {
+        url: "/images/products/product-16-1-6eee41fa.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Casual Dress",
+    description: "Elegant casual dress suitable for work and social events",
+    price: 69.99,
+    inventory: { quantity: 40, lowStockThreshold: 8 },
+    specifications: {
+      material: "Cotton Blend",
+      brand: "ElegantWear",
+      color: "Navy Blue",
+      size: "S",
+    },
+    tags: ["dress", "casual", "elegant", "work"],
+    images: [
+      {
+        url: "/images/products/product-19-2-761b8df4.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Coffee Maker",
+    description:
+      "Programmable coffee maker with thermal carafe and auto-brew timer",
+    price: 159.99,
+    inventory: { quantity: 30, lowStockThreshold: 6 },
+    specifications: {
+      brand: "BrewMaster",
+      model: "CM-2000",
+      color: "Stainless Steel",
+      warranty: "2 years",
+    },
+    tags: ["coffee", "kitchen", "appliance", "programmable"],
+    images: [
+      {
+        url: "/images/products/product-20-2-f4c95f39.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Air Purifier",
+    description: "HEPA air purifier with smart sensors and quiet operation",
+    price: 199.99,
+    inventory: { quantity: 45, lowStockThreshold: 10 },
+    specifications: {
+      brand: "PureAir",
+      model: "AP-HEPA",
+      color: "White",
+      warranty: "3 years",
+    },
+    tags: ["air-purifier", "hepa", "smart", "home"],
+    images: [
+      {
+        url: "/images/products/product-22-1-a0fee73a.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Yoga Mat",
+    description:
+      "Non-slip yoga mat with extra thickness for comfort and stability",
+    price: 39.99,
+    inventory: { quantity: 100, lowStockThreshold: 20 },
+    specifications: {
+      brand: "YogaPlus",
+      model: "YM-PRO",
+      color: "Purple",
+      thickness: "6mm",
+    },
+    tags: ["yoga", "fitness", "exercise", "mat"],
+    images: [
+      { url: "/images/product-23-1-2d5bfa8c.jpg", alt: "Product Image" },
+    ],
+  },
+  {
+    name: "Ceramic Dinnerware Set",
+    description: "16-piece ceramic dinnerware set perfect for family dining",
+    price: 89.99,
+    inventory: { quantity: 25, lowStockThreshold: 5 },
+    specifications: {
+      brand: "TableCraft",
+      material: "Ceramic",
+      color: "White",
+      pieces: "16",
+    },
+    tags: ["dinnerware", "ceramic", "kitchen", "dining"],
+    images: [
+      {
+        url: "/images/products/product-23-1-2d5bfa8c.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Garden Tool Set",
+    description: "Complete 10-piece garden tool set with ergonomic handles",
+    price: 79.99,
+    inventory: { quantity: 35, lowStockThreshold: 8 },
+    specifications: {
+      brand: "GardenPro",
+      material: "Steel",
+      color: "Green/Silver",
+      pieces: "10",
+    },
+    tags: ["garden", "tools", "outdoor", "gardening"],
+    images: [
+      {
+        url: "/images/products/product-23-1-2d5bfa8c.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Throw Pillow Set",
+    description: "Decorative throw pillow set with removable covers",
+    price: 49.99,
+    inventory: { quantity: 70, lowStockThreshold: 15 },
+    specifications: {
+      brand: "HomeDecor",
+      material: "Cotton",
+      color: "Beige",
+      size: "18x18 inches",
+    },
+    tags: ["pillows", "home-decor", "comfort", "living-room"],
+    images: [
+      {
+        url: "/images/products/product-19-0-5bc5dc6c.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Science Fiction Novel",
+    description:
+      "Bestselling sci-fi novel about space exploration and alien encounters",
+    price: 14.99,
+    inventory: { quantity: 150, lowStockThreshold: 30 },
+    specifications: {
+      author: "Alex Future",
+      publisher: "Galaxy Books",
+      pages: "342",
+      format: "Paperback",
+    },
+    tags: ["book", "science-fiction", "novel", "bestseller"],
+    images: [
+      {
+        url: "/images/products/product-27-0-cf770457.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Cookbook Collection",
+    description:
+      "Essential cookbook with 200 healthy recipes for everyday cooking",
+    price: 24.99,
+    inventory: { quantity: 80, lowStockThreshold: 16 },
+    specifications: {
+      author: "Chef Maria",
+      publisher: "Culinary Press",
+      pages: "288",
+      format: "Hardcover",
+    },
+    tags: ["cookbook", "recipes", "cooking", "healthy"],
+    images: [
+      {
+        url: "/images/products/product-29-2-b2f900d9.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Business Guide",
+    description:
+      "Comprehensive guide to starting and growing a successful business",
+    price: 19.99,
+    inventory: { quantity: 60, lowStockThreshold: 12 },
+    specifications: {
+      author: "John Success",
+      publisher: "Business Books",
+      pages: "256",
+      format: "Paperback",
+    },
+    tags: ["business", "guide", "entrepreneurship", "success"],
+    images: [
+      {
+        url: "/images/products/product-31-1-41976035.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Photography Handbook",
+    description:
+      "Complete handbook for digital photography techniques and tips",
+    price: 29.99,
+    inventory: { quantity: 45, lowStockThreshold: 10 },
+    specifications: {
+      author: "Sarah Lens",
+      publisher: "Photo Press",
+      pages: "320",
+      format: "Paperback",
+    },
+    tags: ["photography", "handbook", "digital", "techniques"],
+    images: [
+      {
+        url: "/images/products/product-33-0-9a5c21ae.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Basketball",
+    description: "Official size basketball with superior grip and durability",
+    price: 29.99,
+    inventory: { quantity: 50, lowStockThreshold: 10 },
+    specifications: {
+      brand: "SportsPro",
+      size: "Official",
+      material: "Leather",
+      color: "Orange",
+    },
+    tags: ["basketball", "sports", "outdoor", "recreation"],
+    images: [
+      {
+        url: "/images/products/product-34-0-88658b6c.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Camping Tent",
+    description: "4-person waterproof camping tent with easy setup system",
+    price: 149.99,
+    inventory: { quantity: 20, lowStockThreshold: 4 },
+    specifications: {
+      brand: "OutdoorGear",
+      capacity: "4 person",
+      material: "Polyester",
+      color: "Green",
+    },
+    tags: ["camping", "tent", "outdoor", "waterproof"],
+    images: [
+      {
+        url: "/images/products/product-37-0-1f2cb16d.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Fishing Rod Set",
+    description: "Complete fishing rod set with reel, line, and tackle box",
+    price: 89.99,
+    inventory: { quantity: 25, lowStockThreshold: 5 },
+    specifications: {
+      brand: "FishMaster",
+      length: "6.5 feet",
+      material: "Carbon Fiber",
+      color: "Black/Blue",
+    },
+    tags: ["fishing", "rod", "outdoor", "recreation"],
+    images: [
+      {
+        url: "/images/products/product-38-2-cc36b4f3.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Hiking Backpack",
+    description:
+      "40L hiking backpack with multiple compartments and hydration system",
+    price: 119.99,
+    inventory: { quantity: 35, lowStockThreshold: 8 },
+    specifications: {
+      brand: "TrailBlaze",
+      capacity: "40L",
+      material: "Nylon",
+      color: "Forest Green",
+    },
+    tags: ["backpack", "hiking", "outdoor", "travel"],
+    images: [
+      {
+        url: "/images/products/product-40-2-cf0999c4.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Dumbbells Set",
+    description: "Adjustable dumbbell set with multiple weight options",
+    price: 199.99,
+    inventory: { quantity: 30, lowStockThreshold: 6 },
+    specifications: {
+      brand: "FitnessPro",
+      material: "Steel",
+      color: "Black",
+    },
+    tags: ["dumbbells", "fitness", "exercise", "strength"],
+    images: [
+      {
+        url: "/images/products/samsung-galaxy-s24-2-5bb08dcf.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Bike Helmet",
+    description:
+      "Lightweight cycling helmet with ventilation and LED safety light",
+    price: 59.99,
+    inventory: { quantity: 40, lowStockThreshold: 8 },
+    specifications: {
+      brand: "SafeRide",
+      size: "Medium",
+      material: "Polycarbonate",
+      color: "Red",
+    },
+    tags: ["helmet", "cycling", "safety", "bike"],
+    images: [
+      {
+        url: "/images/products/product-28-0-50cb1ff1.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Tennis Racket",
+    description:
+      "Professional tennis racket with carbon fiber frame and premium strings",
+    price: 179.99,
+    inventory: { quantity: 20, lowStockThreshold: 4 },
+    specifications: {
+      brand: "TennisPro",
+      material: "Carbon Fiber",
+      color: "Black/Yellow",
+    },
+    tags: ["tennis", "racket", "sports", "professional"],
+    images: [
+      {
+        url: "/images/products/product-20-2-f4c95f39.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Water Bottle",
+    description:
+      "Insulated stainless steel water bottle keeps drinks cold for 24 hours",
+    price: 24.99,
+    inventory: { quantity: 100, lowStockThreshold: 20 },
+    specifications: {
+      brand: "HydroTech",
+      capacity: "32oz",
+      material: "Stainless Steel",
+      color: "Blue",
+    },
+    tags: ["water-bottle", "insulated", "hydration", "outdoor"],
+    images: [
+      {
+        url: "/images/products/product-19-0-5bc5dc6c.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Skateboard",
+    description:
+      "Complete skateboard with maple deck and high-quality bearings",
+    price: 89.99,
+    inventory: { quantity: 25, lowStockThreshold: 5 },
+    specifications: {
+      brand: "SkateLife",
+      deck: "Maple Wood",
+      size: "31 inches",
+      color: "Multi-Color",
+    },
+    tags: ["skateboard", "sports", "recreation", "youth"],
+    images: [
+      {
+        url: "/images/products/product-15-2-0ac1050c.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Golf Club Set",
+    description:
+      "Complete golf club set with bag and accessories for beginners",
+    price: 299.99,
+    inventory: { quantity: 15, lowStockThreshold: 3 },
+    specifications: {
+      brand: "GolfPro",
+      clubs: "11 piece",
+      material: "Steel/Graphite",
+      color: "Black/Silver",
+    },
+    tags: ["golf", "clubs", "sports", "beginner"],
+    images: [
+      {
+        url: "/images/products/product-15-1-4b599c9d.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Soccer Ball",
+    description:
+      "FIFA approved soccer ball with traditional design and superior flight",
+    price: 39.99,
+    inventory: { quantity: 60, lowStockThreshold: 12 },
+    specifications: {
+      brand: "SoccerWorld",
+      size: "Size 5",
+      material: "Synthetic Leather",
+      color: "Black/White",
+    },
+    tags: ["soccer", "ball", "sports", "fifa"],
+    images: [
+      {
+        url: "/images/products/product-10-2-bc9e730d.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Resistance Bands",
+    description:
+      "Exercise resistance bands set with multiple resistance levels",
+    price: 29.99,
+    inventory: { quantity: 80, lowStockThreshold: 16 },
+    specifications: {
+      brand: "FitBands",
+      resistance: "Light-Heavy",
+      material: "Latex",
+      color: "Multi-Color",
+    },
+    tags: ["resistance-bands", "fitness", "exercise", "portable"],
+    images: [
+      {
+        url: "/images/products/product-10-0-a0362aae.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
+  {
+    name: "Badminton Set",
+    description: "Complete badminton set with rackets, net, and shuttlecocks",
+    price: 69.99,
+    inventory: { quantity: 30, lowStockThreshold: 6 },
+    specifications: {
+      brand: "BadmintonPro",
+      rackets: "4 piece",
+      material: "Aluminum",
+      color: "Blue/White",
+    },
+    tags: ["badminton", "sports", "outdoor", "recreation"],
+    images: [
+      {
+        url: "/images/products/product-8-1-d469817f.jpg",
+        alt: "Product Image",
+      },
+    ],
+  },
 ];
 
 async function seedDatabase() {
@@ -295,7 +962,9 @@ async function seedDatabase() {
         productSnapshot: {
           name: product.name,
           description: product.description,
-          image: "/images/products/placeholder.jpg", // Use placeholder for orders
+          images: [
+            { url: "/images/products/placeholder.jpg", alt: "Product Image" },
+          ], // Use placeholder for orders
           sku: product.inventory.sku,
         },
       }));

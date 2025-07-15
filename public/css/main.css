@@ -10,6 +10,7 @@ body {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
   margin: 0;
+  overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
 /* Main Layout with Topbar and Sidebar */
@@ -17,6 +18,14 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  padding-top: 50px; /* Account for fixed topbar */
+}
+
+/* Topbar container - ensure sticky positioning works */
+#shared-topbar-root {
+  position: relative;
+  z-index: 1000;
+  width: 100%;
 }
 
 /* Topbar */
@@ -28,10 +37,13 @@ body {
   background-color: #fff;
   border-bottom: 1px solid #e0e0e0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 1000;
+  left: 0;
+  right: 0;
+  z-index: 1001; /* Higher than container */
   min-height: 50px;
+  width: 100%;
 }
 
 .topbar-left {
@@ -1541,6 +1553,7 @@ body {
 }
 
 .cart-item-info {
+  height: 95%;
   display: flex;
   align-items: flex-start;
   flex-direction: column;
@@ -1593,9 +1606,9 @@ body {
 }
 
 .quantity-display {
+  font-size: 0.9rem;
   min-width: 30px;
   text-align: center;
-  font-weight: 600;
   color: #333;
 }
 
