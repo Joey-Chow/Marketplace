@@ -29,7 +29,7 @@ const LoginForm = ({ onLogin, loading, error }) => {
       React.createElement(
         "div",
         { className: "login-header" },
-        React.createElement("h2", null, "🛒 Marketplace Login"),
+        React.createElement("h2", null, "Marketplace Login"),
         React.createElement("p", null, "Please login to access the admin panel")
       ),
       error &&

@@ -19,6 +19,7 @@ const useDashboardData = () => {
     }));
   }, []);
 
+  //
   const connectSocket = React.useCallback(() => {
     return new Promise((resolve, reject) => {
       try {

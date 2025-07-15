@@ -138,37 +138,6 @@ const useCart = () => {
     }
   }, []);
 
-  // Clear entire cart
-  const clearCart = React.useCallback(async () => {
-    setLoading(true);
-    setError("");
-    try {
-      const response = await fetch("/api/cart/clear", {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("marketplace_token")}`,
-        },
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setCart(data.data.cart);
-        return { success: true };
-      } else {
-        setError(data.message || "Failed to clear cart");
-        return { success: false, error: data.message };
-      }
-    } catch (err) {
-      const errorMsg = "Failed to clear cart";
-      setError(errorMsg);
-      console.error("Clear cart error:", err);
-      return { success: false, error: errorMsg };
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
   // Auto-load cart when token is available
   React.useEffect(() => {
     console.log("useCart: Auto-load effect running");
@@ -196,7 +165,6 @@ const useCart = () => {
     addToCart,
     updateQuantity,
     removeItem,
-    clearCart,
   };
 };
 

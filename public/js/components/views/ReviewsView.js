@@ -1,10 +1,10 @@
-// UsersView Component - Handles users display
-const UsersView = ({ data, loading, error }) => {
+// ReviewsView Component - Handles reviews display
+const ReviewsView = ({ data, loading, error }) => {
   if (loading) {
     return React.createElement(
       "div",
       { className: "loading" },
-      "Loading users..."
+      "Loading reviews..."
     );
   }
 
@@ -20,7 +20,7 @@ const UsersView = ({ data, loading, error }) => {
     );
   }
 
-  const usersData = DataUtils.formatUsersData(data);
+  const reviewsData = DataUtils.formatReviewsData(data);
 
   return React.createElement(
     "div",
@@ -28,15 +28,15 @@ const UsersView = ({ data, loading, error }) => {
     React.createElement(
       "h2",
       null,
-      `👥 Users (${(data.users || data).length} total)`
+      `⭐ Reviews (${(data.reviews || data).length} total)`
     ),
-    React.createElement(DataViewerComponents.DataTable, {
-      headers: usersData.headers,
-      rows: usersData.rows,
+    React.createElement(SharedComponents.DataTable, {
+      headers: reviewsData.headers,
+      rows: reviewsData.rows,
       loading,
       error,
     })
   );
 };
 
-window.UsersView = UsersView;
+window.ReviewsView = ReviewsView;

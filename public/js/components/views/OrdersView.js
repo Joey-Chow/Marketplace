@@ -30,7 +30,7 @@ const OrdersView = ({ data, loading, error }) => {
       null,
       `🛒 Orders (${(data.orders || data).length} total)`
     ),
-    React.createElement(DataViewerComponents.DataTable, {
+    React.createElement(SharedComponents.DataTable, {
       headers: ordersData.headers,
       rows: ordersData.rows,
       loading,
