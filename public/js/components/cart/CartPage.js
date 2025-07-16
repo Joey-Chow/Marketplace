@@ -16,18 +16,6 @@ const CartPage = () => {
     loadCart();
   }, [loadCart]);
 
-  // Update selected items when cart changes
-  React.useEffect(() => {
-    if (cart && cart.items) {
-      // Initialize with all items selected
-      const allItemIds = cart.items.map(
-        (item) =>
-          item.productId || item.product?._id || item._id || item.product?._id
-      );
-      setSelectedItems(allItemIds);
-    }
-  }, [cart]);
-
   // Handle item selection change
   const handleItemSelectionChange = (productId, isSelected) => {
     setSelectedItems((prev) => {
@@ -91,11 +79,7 @@ const CartPage = () => {
             "div",
             { className: "cart-items-list" },
             cart.items.map((item) => {
-              const productId =
-                item.productId ||
-                item.product?._id ||
-                item._id ||
-                item.product?._id;
+              const productId = item.product?._id || item.product;
               return React.createElement(window.CartItem, {
                 key: item._id || item.productId || item.product?._id,
                 item: item,

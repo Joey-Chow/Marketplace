@@ -3,7 +3,7 @@ const CartItem = ({
   item,
   onQuantityChange,
   onRemove,
-  isSelected = true,
+  isSelected = false,
   onSelectionChange,
 }) => {
   const product = item.product || item;
@@ -13,8 +13,7 @@ const CartItem = ({
     product.images[0].url || product.image || "images/products/placeholder.jpg";
 
   // Get the correct product ID - try multiple possible properties
-  const productId =
-    item.productId || item.product?._id || item._id || product._id;
+  const productId = item.product?._id || item.product;
 
   const handleQuantityChange = (newQuantity) => {
     if (newQuantity < 0) return; // Changed from < 1 to < 0
@@ -63,6 +62,8 @@ const CartItem = ({
         {
           className: "quantity-controls-btn",
           onMouseDown: (e) => {
+            e.preventDefault();
+            e.stopPropagation();
             if (item.quantity > 0) {
               handleQuantityChange(item.quantity - 1);
             }
@@ -85,6 +86,8 @@ const CartItem = ({
         {
           className: "quantity-controls-btn",
           onMouseDown: (e) => {
+            e.preventDefault();
+            e.stopPropagation();
             handleQuantityChange(item.quantity + 1);
             return false;
           },

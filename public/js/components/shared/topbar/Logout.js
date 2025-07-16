@@ -3,7 +3,7 @@ const Logout = ({ onLogout }) => {
   return React.createElement(
     "button",
     {
-      className: "topbar-btn",
+      className: "topbar-btn topbar-nav-item",
       onClick: onLogout,
       title: "Logout",
       onMouseOver: (e) => {
@@ -17,8 +17,7 @@ const Logout = ({ onLogout }) => {
         e.target.style.borderColor = "#ddd";
       },
     },
-    React.createElement("span", null, "🚪"),
-    React.createElement("span", null, "Logout")
+    "Logout"
   );
 };
 

@@ -15,6 +15,7 @@ const Searchbox = ({ onSearch }) => {
     {
       className: "searchbox",
     },
+    // Search input field
     React.createElement("input", {
       type: "text",
       value: query,
@@ -26,6 +27,7 @@ const Searchbox = ({ onSearch }) => {
       },
       placeholder: "Search product...",
     }),
+    // Search button
     React.createElement(
       "button",
       {

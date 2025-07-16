@@ -69,7 +69,6 @@ const Topbar = ({
               }
             },
           },
-          React.createElement("span", null, item.icon),
           React.createElement("span", null, item.label)
         )
       )

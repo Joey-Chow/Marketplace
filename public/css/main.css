@@ -107,7 +107,7 @@ body {
   color: white;
   border: none;
   border-radius: 24px;
-  padding: 6px 16px;
+  padding: 6px 10px;
   cursor: pointer;
   transition: background 0.2s;
 }
@@ -135,7 +135,7 @@ body {
 }
 
 .topbar-btn:hover {
-  background-color: #667eea;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
   color: white;
   border-color: #667eea;
 }
@@ -163,7 +163,7 @@ body {
 
 /* Topbar Navigation Specific Styles */
 .topbar-nav-item.active {
-  background-color: #667eea !important;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
   color: white !important;
   border-color: #007bff !important;
 }
@@ -1194,7 +1194,7 @@ body {
 .category-btn.active {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  border-color: #667eea;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
 }
 
 .category-btn.active:hover {
@@ -1302,7 +1302,7 @@ body {
   gap: 8px;
   width: 100%;
   justify-content: right;
-  padding: 0 20px 20px 20px;
+  padding: 0 10px 10px 10px;
 }
 
 .product-edit-btn,
@@ -1763,7 +1763,6 @@ body {
 
 .total-amount {
   font-weight: 700;
-  color: #007bff;
   font-size: 1.2rem;
 }
 
@@ -1786,8 +1785,7 @@ body {
 }
 
 .checkout-btn {
-  background: #007bff;
-  border: 2px solid #007bff;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
   color: white;
   font-weight: 600;
   padding: 12px 24px;
@@ -1795,8 +1793,7 @@ body {
 }
 
 .checkout-btn:hover:not(:disabled) {
-  background: #0056b3;
-  border-color: #0056b3;
+  background: linear-gradient(90deg, #a89ad7 0%, #b3c2f2 100%);
 }
 
 .checkout-btn:disabled {

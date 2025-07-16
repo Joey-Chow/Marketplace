@@ -15,7 +15,7 @@ router.get(
   asyncHandler(async (req, res) => {
     const options = {
       page: parseInt(req.query.page) || 1,
-      limit: parseInt(req.query.limit) || 10,
+      limit: req.query.limit ? parseInt(req.query.limit) : 1000, // Default to 1000 if not specified
       status: req.query.status,
       sortBy: req.query.sortBy || "createdAt",
       sortOrder: req.query.sortOrder || "desc",
@@ -42,7 +42,7 @@ router.get(
 
     const options = {
       page: parseInt(req.query.page) || 1,
-      limit: parseInt(req.query.limit) || 10,
+      limit: req.query.limit ? parseInt(req.query.limit) : 1000, // Default to 1000 if not specified
       status: req.query.status,
       sortBy: req.query.sortBy || "createdAt",
       sortOrder: req.query.sortOrder || "desc",

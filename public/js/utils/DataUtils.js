@@ -1,4 +1,6 @@
 // Data formatting utilities
+// Define which attributes to display for each data type
+
 const DataUtils = {
   formatOverviewData: (data) => {
     const collections = {};
@@ -64,23 +66,29 @@ const DataUtils = {
     const orders = data.orders || data;
     return {
       headers: [
-        "Order Number",
+        "Product",
+        "Quantity",
+        "Price",
         "Customer",
-        "Total",
         "Status",
         "Payment",
         "Date",
+        "Order Number",
       ],
       rows: orders.map((order) => {
+        const productName = order.items[0]?.product?.name || "N/A";
+        const quantity = order.items[0]?.quantity || 0;
+        const price = order.items[0]?.price || 0;
         const customer = order.buyer?.username || "N/A";
         const date = order.createdAt
           ? new Date(order.createdAt).toLocaleDateString()
           : "-";
 
         return [
-          order.orderNumber,
+          productName,
+          quantity,
+          `$${price.toFixed(2)}`,
           customer,
-          `$${order.pricing?.total?.toFixed(2) || "0.00"}`,
           React.createElement(
             "span",
             { className: `badge ${order.status}` },
@@ -92,6 +100,7 @@ const DataUtils = {
             order.payment?.status
           ),
           date,
+          order.orderNumber,
         ];
       }),
     };

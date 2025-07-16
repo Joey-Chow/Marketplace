@@ -1,11 +1,12 @@
 // CartSummary Component - Shows subtotal, tax, total and checkout button
 const CartSummary = ({ cart, loading, selectedItems = [] }) => {
+  const [showPaymentModal, setShowPaymentModal] = React.useState(false);
+  const [checkoutLoading, setCheckoutLoading] = React.useState(false);
+
   // Calculate subtotal for checked items only
   const subtotal = cart.items.reduce((sum, item) => {
-    const productId =
-      item.productId || item.product?._id || item._id || item.product?._id;
-    const isSelected =
-      selectedItems.includes(productId) || selectedItems.length === 0; // Default to all selected if no selection info
+    const productId = item.product?._id || item.product;
+    const isSelected = selectedItems.includes(productId);
 
     if (isSelected) {
       const price = item.product?.price || item.price || 0;
@@ -21,124 +22,159 @@ const CartSummary = ({ cart, loading, selectedItems = [] }) => {
   // Calculate total
   const total = subtotal + tax;
 
-  const handleCheckout = () => {
-    // TODO: Implement checkout functionality
-    if (cart.items.length === 0) {
-      alert("Your cart is empty!");
-      return;
-    }
+  // Get selected items for checkout
+  const getSelectedItemsForCheckout = () => {
+    return cart.items
+      .filter((item) => {
+        const productId = item.product?._id || item.product;
+        return selectedItems.includes(productId) || selectedItems.length === 0;
+      })
+      .map((item) => item.product?._id || item.product);
+  };
 
+  const handleCheckout = () => {
     // Check if any items are selected
-    const selectedItemsCount =
-      selectedItems.length > 0 ? selectedItems.length : cart.items.length;
-    if (selectedItemsCount === 0) {
+    const selectedItemsForCheckout = getSelectedItemsForCheckout();
+    if (selectedItemsForCheckout.length === 0) {
       alert("Please select items to checkout!");
       return;
     }
 
-    // For now, show a summary
-    const itemCount = cart.items.reduce((count, item) => {
-      const productId =
-        item.productId || item.product?._id || item._id || item.product?._id;
-      const isSelected =
-        selectedItems.includes(productId) || selectedItems.length === 0;
-      return isSelected ? count + item.quantity : count;
-    }, 0);
+    // Show payment modal
+    setShowPaymentModal(true);
+  };
 
-    const confirmMessage = `Proceed to checkout?\n\nItems: ${itemCount}\nSubtotal: $${subtotal.toFixed(
-      2
-    )}\nTax: $${tax.toFixed(2)}\nTotal: $${total.toFixed(2)}`;
+  const handlePaymentConfirm = async ({ paymentMethod, shippingAddress }) => {
+    setCheckoutLoading(true);
 
-    if (confirm(confirmMessage)) {
-      alert(
-        "Checkout functionality not implemented yet. This would redirect to payment page."
-      );
-      // window.location.href = "checkout.html";
+    try {
+      const selectedItemsForCheckout = getSelectedItemsForCheckout();
+
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("marketplace_token")}`,
+        },
+        body: JSON.stringify({
+          selectedItems: selectedItemsForCheckout,
+          paymentMethod,
+          shippingAddress,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert(`✅ Order placed successfully! Order ID: ${result.order._id}`);
+        setShowPaymentModal(false);
+
+        // Refresh cart to remove selected items
+        if (window.location.reload) {
+          window.location.reload();
+        }
+      } else {
+        alert(`❌ Checkout failed: ${result.error}`);
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+      alert(`❌ Checkout failed: ${error.message}`);
+    } finally {
+      setCheckoutLoading(false);
     }
   };
 
+  const handlePaymentCancel = () => {
+    setShowPaymentModal(false);
+  };
+
   return React.createElement(
-    "div",
-    { className: "cart-summary-container" },
-
+    React.Fragment,
+    null,
     React.createElement(
       "div",
-      { className: "cart-summary-header" },
-      React.createElement("h3", null, "Order Summary")
-    ),
+      { className: "cart-summary-container" },
 
-    React.createElement(
-      "div",
-      { className: "cart-summary-details" },
-
-      // Subtotal
       React.createElement(
         "div",
-        { className: "summary-line" },
-        React.createElement("span", null, "Subtotal:"),
+        { className: "cart-summary-header" },
+        React.createElement("h3", null, "Order Summary")
+      ),
+
+      React.createElement(
+        "div",
+        { className: "cart-summary-details" },
+
+        // Subtotal
         React.createElement(
-          "span",
-          { className: "amount" },
-          `$${subtotal.toFixed(2)}`
+          "div",
+          { className: "summary-line" },
+          React.createElement("span", null, "Subtotal:"),
+          React.createElement(
+            "span",
+            { className: "amount" },
+            `$${subtotal.toFixed(2)}`
+          )
+        ),
+
+        // Tax
+        React.createElement(
+          "div",
+          { className: "summary-line" },
+          React.createElement("span", null, "Tax (8.5%):"),
+          React.createElement(
+            "span",
+            { className: "amount" },
+            `$${tax.toFixed(2)}`
+          )
+        ),
+
+        // Shipping (free for now)
+        React.createElement(
+          "div",
+          { className: "summary-line" },
+          React.createElement("span", null, "Shipping:"),
+          React.createElement("span", { className: "amount free" }, "FREE")
+        ),
+
+        // Total
+        React.createElement(
+          "div",
+          { className: "summary-line total-line" },
+          React.createElement("span", { className: "total-label" }, "Total:"),
+          React.createElement(
+            "span",
+            { className: "total-amount" },
+            `$${total.toFixed(2)}`
+          )
         )
       ),
 
-      // Tax
       React.createElement(
         "div",
-        { className: "summary-line" },
-        React.createElement("span", null, "Tax (8.5%):"),
-        React.createElement(
-          "span",
-          { className: "amount" },
-          `$${tax.toFixed(2)}`
-        )
-      ),
+        { className: "cart-summary-actions" },
 
-      // Shipping (free for now)
-      React.createElement(
-        "div",
-        { className: "summary-line" },
-        React.createElement("span", null, "Shipping:"),
-        React.createElement("span", { className: "amount free" }, "FREE")
-      ),
-
-      // Total
-      React.createElement(
-        "div",
-        { className: "summary-line total-line" },
-        React.createElement("span", { className: "total-label" }, "Total:"),
+        // Checkout Button
         React.createElement(
-          "span",
-          { className: "total-amount" },
-          `$${total.toFixed(2)}`
+          "button",
+          {
+            onClick: handleCheckout,
+            disabled: loading || cart.items.length === 0 || checkoutLoading,
+            className: "btn btn-primary checkout-btn",
+          },
+          checkoutLoading ? "Processing..." : "Proceed to Checkout"
         )
       )
     ),
 
-    React.createElement(
-      "div",
-      { className: "cart-summary-actions" },
-
-      // Checkout Button
-      React.createElement(
-        "button",
-        {
-          onClick: handleCheckout,
-          disabled: loading || cart.items.length === 0,
-          className: "btn btn-primary checkout-btn",
-        },
-        loading ? "Processing..." : "Proceed to Checkout"
-      )
-    ),
-
-    // Additional info
-    React.createElement(
-      "div",
-      { className: "cart-summary-info" },
-      React.createElement("p", { className: "info-text" }),
-      React.createElement("p", { className: "info-text" })
-    )
+    // Payment Modal
+    React.createElement(PaymentModal, {
+      isOpen: showPaymentModal,
+      onClose: handlePaymentCancel,
+      onConfirm: handlePaymentConfirm,
+      orderSummary: { subtotal, tax, total },
+      loading: checkoutLoading,
+    })
   );
 };
 

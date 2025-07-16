@@ -19,12 +19,13 @@ class OrderService {
         sortOrder = "desc",
       } = options;
 
-      const query = { user: userId };
+      const query = { buyer: userId };
       if (status) {
         query.status = status;
       }
 
       const orders = await Order.find(query)
+        .populate("buyer", "username email profile.firstName profile.lastName")
         .populate("items.product")
         .sort({ [sortBy]: sortOrder === "desc" ? -1 : 1 })
         .limit(limit * 1)

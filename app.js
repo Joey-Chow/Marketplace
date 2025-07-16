@@ -42,6 +42,7 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use("/api/checkout", require("./routes/checkout"));
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/data", dataViewerRoutes);
 

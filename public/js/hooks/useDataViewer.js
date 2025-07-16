@@ -29,10 +29,6 @@ const useDataViewer = () => {
     }
   }, []);
 
-  const setCurrentTab = React.useCallback((tab) => {
-    setState((prev) => ({ ...prev, currentTab: tab }));
-  }, []);
-
   const loadTabData = React.useCallback(
     async (tab) => {
       setState((prev) => ({ ...prev, loading: true, error: null }));
@@ -51,22 +47,6 @@ const useDataViewer = () => {
               products: productsData.products || productsData,
               categories: categoriesData.categories || categoriesData,
             };
-            break;
-          case "orders":
-            data = await fetchData("orders");
-            break;
-          case "reviews":
-            data = await fetchData("reviews");
-            break;
-          case "categories":
-            data = await fetchData("categories");
-            break;
-          case "analytics":
-            data = await fetchData("analytics");
-            break;
-          case "cart":
-            // Cart data is handled by useCart hook, just return empty data
-            data = {};
             break;
           default:
             throw new Error("Unknown tab");
@@ -90,7 +70,6 @@ const useDataViewer = () => {
 
   return {
     ...state,
-    setCurrentTab,
     loadTabData,
   };
 };
