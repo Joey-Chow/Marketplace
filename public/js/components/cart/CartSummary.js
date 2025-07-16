@@ -27,7 +27,7 @@ const CartSummary = ({ cart, loading, selectedItems = [] }) => {
     return cart.items
       .filter((item) => {
         const productId = item.product?._id || item.product;
-        return selectedItems.includes(productId) || selectedItems.length === 0;
+        return selectedItems.includes(productId);
       })
       .map((item) => item.product?._id || item.product);
   };

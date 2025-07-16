@@ -1,52 +1,467 @@
-# ACID Transaction Checkout System Documentation
+# ACID Transaction Implementation Documentation
 
 ## Overview
 
-This document describes the ACID-compliant checkout system implementation for the Marketplace application, including transaction boundaries, error handling strategies, and comprehensive test scenarios.
+This document provides comprehensive documentation for the ACID-compliant checkout system implemented in the Marketplace application. The implementation ensures data consistency and integrity during the checkout process using MongoDB replica set transactions.
 
-## Transaction Boundaries
+## 1. Codebase of ACID Implementation
 
-### Transaction Scope
+### Core Implementation File
 
-Each checkout transaction encompasses the following operations:
+- **File**: `services/CheckoutService.js`
+- **Purpose**: Implements ACID transactions for checkout processing
+- **Dependencies**: MongoDB replica set, Mongoose ODM
 
-1. **Cart Validation** - Verify selected items exist and are available
-2. **Stock Validation** - Ensure sufficient inventory for all items
-3. **Order Creation** - Create new order document with pending status
-4. **Inventory Updates** - Decrement product stock quantities
-5. **Cart Updates** - Remove only selected items from user's cart
-6. **User Updates** - Add order to user's order history
-7. **Payment Processing** - Process payment simulation
-8. **Order Confirmation** - Update order status to confirmed
+### Key Components
 
-### Transaction Properties
+#### 1.1 Transaction Initialization
 
-- **Atomicity**: All operations succeed or all fail (no partial updates)
-- **Consistency**: Database remains in valid state before and after transaction
-- **Isolation**: Concurrent transactions don't interfere with each other
-- **Durability**: Committed changes persist even in case of system failure
+```javascript
+// Start session with ACID properties
+const session = await mongoose.startSession();
+session.startTransaction({
+  readConcern: { level: "snapshot" },
+  writeConcern: { w: "majority" },
+});
+```
 
-## Error Handling Strategies
+#### 1.2 Three-Phase Transaction Pattern
 
-### 1. Validation Errors
+The implementation follows the required pattern:
 
-- **Empty Cart**: Transaction aborts before starting
-- **No Items Selected**: Transaction aborts with user-friendly message
-- **Invalid Product IDs**: Transaction aborts with detailed error
+**Phase 1: Read/Check Preconditions**
 
-### 2. Stock Availability Errors
+```javascript
+// 1. Read or check preconditions
+const preconditions = await this._checkPreconditions(
+  userId,
+  selectedItems,
+  session
+);
+```
 
-- **Insufficient Stock**: Transaction aborts, inventory unchanged
-- **Product Not Found**: Transaction aborts, no changes made
-- **Concurrent Stock Updates**: Optimistic locking prevents conflicts
+**Phase 2: Update Stock**
 
-### 3. Payment Processing Errors
+```javascript
+// 2. Update stock
+await this._updateStock(preconditions.productUpdates, session);
+```
 
-- **Payment Failure**: Transaction aborts, all changes rolled back
-- **Payment Timeout**: Transaction aborts with timeout error
-- **Invalid Payment Method**: Transaction aborts before processing
+**Phase 3: Create Order**
 
-### 4. Database Errors
+```javascript
+// 3. Create order
+const result = await this._createOrder(
+  userId,
+  preconditions,
+  paymentMethod,
+  shippingAddress,
+  session
+);
+```
+
+#### 1.3 Rollback Conditions Implementation
+
+```javascript
+// Rollback condition 1: Stock availability check
+if (product.inventory.quantity < cartItem.quantity) {
+  throw new Error(
+    `Insufficient stock for ${product.name}. Available: ${product.inventory.quantity}, Requested: ${cartItem.quantity}`
+  );
+}
+
+// Rollback condition 2: Payment success check
+if (!result.paymentResult.success) {
+  throw new Error(`Payment failed: ${result.paymentResult.error}`);
+}
+```
+
+#### 1.4 Retry Logic for Transient Errors
+
+```javascript
+const maxRetries = 3;
+let retryCount = 0;
+while (retryCount < maxRetries) {
+  // Transaction logic with retry on transient errors
+  if (this._isRetryableError(error) && retryCount < maxRetries - 1) {
+    retryCount++;
+    await new Promise((resolve) => setTimeout(resolve, 100 * retryCount));
+    continue;
+  }
+}
+```
+
+### 1.5 Database Models Involved
+
+- **Cart**: User shopping cart with selected items
+- **Product**: Product inventory and details
+- **Order**: Order creation and status tracking
+- **User**: User order history updates
+
+## 2. Transaction Boundaries and Error Handling Strategies
+
+### 2.1 Transaction Boundaries
+
+#### Transaction Start
+
+```javascript
+const session = await mongoose.startSession();
+session.startTransaction({
+  readConcern: { level: "snapshot" },
+  writeConcern: { w: "majority" },
+});
+```
+
+#### Transaction End
+
+```javascript
+// Success path
+await session.commitTransaction();
+
+// Failure path
+await session.abortTransaction();
+
+// Cleanup
+session.endSession();
+```
+
+### 2.2 Collections and Documents Affected
+
+#### Read Operations (with session)
+
+- **Cart**: `Cart.findOne({ user: userId }).session(session)`
+- **Product**: `Product.findById(cartItem.product).session(session)`
+
+#### Write Operations (with session)
+
+- **Product**: Update inventory quantities
+- **Order**: Create new order document
+- **Cart**: Remove selected items
+- **User**: Update order history
+
+### 2.3 Rollback Mechanisms
+
+#### Automatic Rollback Triggers
+
+1. **Insufficient Stock**: When `product.inventory.quantity < cartItem.quantity`
+2. **Payment Failure**: When `paymentResult.success === false`
+3. **Database Errors**: Connection issues, constraint violations
+4. **Validation Errors**: Empty cart, invalid items
+
+#### Error Handling Strategy
+
+```javascript
+try {
+  // Transaction operations
+  await session.commitTransaction();
+  return result;
+} catch (error) {
+  // Abort transaction on any error
+  await session.abortTransaction();
+
+  // Retry logic for transient errors
+  if (this._isRetryableError(error) && retryCount < maxRetries - 1) {
+    retryCount++;
+    continue;
+  }
+
+  throw error;
+} finally {
+  session.endSession();
+}
+```
+
+#### Retryable Error Types
+
+- `TransientTransactionError`
+- `UnknownTransactionCommitResult`
+- `WriteConflict` (code: 112)
+- `LockTimeout` (code: 46)
+
+### 2.4 Data Consistency Guarantees
+
+#### Read Consistency
+
+- **Snapshot Isolation**: All reads see consistent data snapshot
+- **Read Concern**: `"snapshot"` level ensures consistent reads
+
+#### Write Consistency
+
+- **Write Concern**: `"majority"` ensures writes are acknowledged by majority of replica set members
+- **Atomicity**: All writes succeed or all fail
+
+## 3. Test Cases Demonstrating Transaction Success and Failure Scenarios
+
+### 3.1 Successful Transaction Scenario
+
+#### Test Setup
+
+```javascript
+// Mock data
+const userId = "user123";
+const selectedItems = ["product1", "product2"];
+const paymentMethod = "credit_card";
+const shippingAddress = {
+  firstName: "John",
+  lastName: "Doe",
+  street: "123 Main St",
+  city: "Boston",
+  state: "MA",
+  zipCode: "02101",
+};
+```
+
+#### Expected Log Output
+
+```
+INFO: Starting checkout transaction for user: user123 (attempt 1)
+INFO: Preconditions validated {
+  itemCount: 2,
+  subtotal: 299.98,
+  tax: 25.50,
+  total: 325.48
+}
+INFO: Stock updated for 2 products
+INFO: Order created successfully {
+  orderId: ObjectId("..."),
+  paymentId: "pay_1690123456_abc123xyz"
+}
+INFO: Selected items removed from cart { removedItems: 2 }
+INFO: Checkout transaction completed successfully {
+  orderId: ObjectId("..."),
+  paymentId: "pay_1690123456_abc123xyz",
+  attempt: 1
+}
+```
+
+### 3.2 Insufficient Stock Failure Scenario
+
+#### Test Case
+
+```javascript
+// Product with insufficient stock
+const product = {
+  _id: "product1",
+  name: "iPhone 15 Pro",
+  inventory: { quantity: 1 },
+  price: 999.99,
+};
+
+const cartItem = {
+  product: "product1",
+  quantity: 5, // Requesting more than available
+};
+```
+
+#### Expected Log Output
+
+```
+INFO: Starting checkout transaction for user: user123 (attempt 1)
+ERROR: Checkout transaction failed (attempt 1) {
+  error: "Insufficient stock for iPhone 15 Pro. Available: 1, Requested: 5",
+  userId: "user123",
+  selectedItems: ["product1"]
+}
+```
+
+#### Transaction Behavior
+
+- **Rollback**: All changes reverted (no stock updates, no order creation)
+- **Error Thrown**: "Insufficient stock for iPhone 15 Pro. Available: 1, Requested: 5"
+- **Database State**: Unchanged (atomicity preserved)
+
+### 3.3 Payment Failure Scenario
+
+#### Test Case
+
+```javascript
+// Mock payment failure (10% failure rate in implementation)
+const paymentResult = {
+  success: false,
+  error: "Payment processing failed",
+};
+```
+
+#### Expected Log Output
+
+```
+INFO: Starting checkout transaction for user: user123 (attempt 1)
+INFO: Preconditions validated {
+  itemCount: 2,
+  subtotal: 299.98,
+  tax: 25.50,
+  total: 325.48
+}
+INFO: Stock updated for 2 products
+ERROR: Checkout transaction failed (attempt 1) {
+  error: "Payment failed: Payment processing failed",
+  userId: "user123",
+  selectedItems: ["product1", "product2"]
+}
+```
+
+#### Transaction Behavior
+
+- **Rollback**: Stock updates reverted, order not created
+- **Error Thrown**: "Payment failed: Payment processing failed"
+- **Database State**: Restored to pre-transaction state
+
+### 3.4 Transient Error Retry Scenario
+
+#### Test Case
+
+```javascript
+// Simulate WriteConflict error
+const error = new Error("WriteConflict");
+error.code = 112;
+```
+
+#### Expected Log Output
+
+```
+INFO: Starting checkout transaction for user: user123 (attempt 1)
+ERROR: Checkout transaction failed (attempt 1) {
+  error: "WriteConflict",
+  userId: "user123",
+  selectedItems: ["product1"]
+}
+INFO: Retrying checkout transaction (attempt 2)
+INFO: Starting checkout transaction for user: user123 (attempt 2)
+INFO: Checkout transaction completed successfully {
+  orderId: ObjectId("..."),
+  paymentId: "pay_1690123456_def456uvw",
+  attempt: 2
+}
+```
+
+#### Transaction Behavior
+
+- **Retry Logic**: Exponential backoff (100ms, 200ms, 300ms)
+- **Max Retries**: 3 attempts
+- **Success**: Transaction succeeds on retry
+
+### 3.5 Database Connection Failure Scenario
+
+#### Test Case
+
+```javascript
+// Simulate database connection loss
+const error = new Error("MongoNetworkError: connection lost");
+```
+
+#### Expected Log Output
+
+```
+INFO: Starting checkout transaction for user: user123 (attempt 1)
+ERROR: Checkout transaction failed (attempt 1) {
+  error: "MongoNetworkError: connection lost",
+  userId: "user123",
+  selectedItems: ["product1"]
+}
+```
+
+#### Transaction Behavior
+
+- **No Retry**: Non-transient error, immediate failure
+- **Rollback**: Transaction aborted automatically
+- **Error Propagation**: Original error thrown to caller
+
+### 3.6 Testing Built-in Scenarios
+
+#### Test Implementation
+
+```javascript
+// Test insufficient stock scenario
+await checkoutService.testCheckoutScenario("insufficient_stock");
+
+// Test payment failure scenario
+await checkoutService.testCheckoutScenario("payment_failure");
+
+// Test database error scenario
+await checkoutService.testCheckoutScenario("database_error");
+```
+
+#### Expected Test Logs
+
+```
+INFO: Testing insufficient stock scenario
+INFO: Test completed for scenario: insufficient_stock {
+  error: "Insufficient stock - testing error handling"
+}
+
+INFO: Testing payment failure scenario
+INFO: Test completed for scenario: payment_failure {
+  error: "Payment failed - testing error handling"
+}
+
+INFO: Testing database error scenario
+INFO: Test completed for scenario: database_error {
+  error: "Database connection lost - testing error handling"
+}
+```
+
+## 4. Configuration Requirements
+
+### 4.1 MongoDB Replica Set Setup
+
+```bash
+# Initialize replica set
+rs.initiate({
+  _id: "rs0",
+  members: [{ _id: 0, host: "127.0.0.1:27017" }]
+});
+```
+
+### 4.2 Connection String
+
+```javascript
+MONGODB_URI=mongodb://127.0.0.1:27017/marketplace?replicaSet=rs0
+```
+
+### 4.3 Transaction Configuration
+
+```javascript
+{
+  readConcern: { level: "snapshot" },
+  writeConcern: { w: "majority" }
+}
+```
+
+## 5. Performance Considerations
+
+### 5.1 Transaction Timeout
+
+- Default: 60 seconds
+- Configurable via MongoDB settings
+
+### 5.2 Retry Strategy
+
+- Maximum retries: 3
+- Exponential backoff: 100ms, 200ms, 300ms
+- Only for transient errors
+
+### 5.3 Concurrency Handling
+
+- Optimistic locking via snapshot isolation
+- Write conflicts trigger automatic retry
+- Session-based isolation prevents interference
+
+## 6. Monitoring and Logging
+
+### 6.1 Transaction Lifecycle Logging
+
+- Transaction start/end events
+- Retry attempts and reasons
+- Success/failure outcomes
+- Performance metrics
+
+### 6.2 Error Tracking
+
+- Categorized by error type
+- Retry statistics
+- Performance impact analysis
+
+This implementation ensures full ACID compliance while maintaining high performance and reliability in the checkout process.
 
 - **Connection Lost**: Transaction aborts, session closed gracefully
 - **Write Conflicts**: Transaction retries up to 3 times before failing
@@ -134,99 +549,3 @@ ERROR: Payment failed: Payment processing failed
 ERROR: Checkout transaction failed - Rolling back
 INFO: Order deleted, inventory restored, cart unchanged
 ```
-
-### 4. Concurrent Transaction Test
-
-**Scenario**: Two users attempt to buy the last item simultaneously
-**Expected Result**: One succeeds, one fails with stock error
-
-**Test Log**:
-
-```
-// User 1 Transaction
-INFO: Starting checkout transaction for user: user1
-INFO: Stock validated - Product A: 1 available, 1 requested
-INFO: Order created - stock decremented to 0
-INFO: Transaction committed successfully
-
-// User 2 Transaction (concurrent)
-INFO: Starting checkout transaction for user: user2
-ERROR: Insufficient stock for Product A. Available: 0, Requested: 1
-ERROR: Transaction aborted - no changes made
-```
-
-### 5. Database Connection Failure Test
-
-**Scenario**: Database connection lost during transaction
-**Expected Result**: Transaction aborts, session closed gracefully
-
-**Test Log**:
-
-```
-INFO: Starting checkout transaction for user: 64a1b2c3d4e5f6789012345
-INFO: Order created successfully
-ERROR: Database connection lost during inventory update
-ERROR: Transaction aborted - session closed
-INFO: All operations rolled back successfully
-```
-
-## Performance Metrics
-
-### Transaction Timing
-
-- **Average Transaction Time**: 1.2 seconds
-- **95th Percentile**: 2.5 seconds
-- **Timeout Threshold**: 30 seconds
-
-### Success Rates
-
-- **Successful Transactions**: 95%
-- **Failed Due to Stock**: 3%
-- **Failed Due to Payment**: 1.5%
-- **Failed Due to System**: 0.5%
-
-## Implementation Details
-
-### Database Session Configuration
-
-```javascript
-session.startTransaction({
-  readConcern: { level: "snapshot" },
-  writeConcern: { w: "majority" },
-});
-```
-
-### Key Features
-
-1. **Selected Items Only**: Only processes and removes selected cart items
-2. **Optimistic Locking**: Prevents concurrent modification conflicts
-3. **Comprehensive Logging**: Detailed logs for debugging and monitoring
-4. **Graceful Degradation**: Handles failures without data corruption
-5. **User-Friendly Errors**: Clear error messages for different failure types
-
-## Security Considerations
-
-### Authentication
-
-- All checkout endpoints require valid JWT token
-- User can only checkout their own cart items
-
-### Data Validation
-
-- Input sanitization for all user-provided data
-- Product price validation against current database values
-- Stock quantity validation with atomic operations
-
-### Audit Trail
-
-- All transactions logged with unique transaction IDs
-- User actions tracked for compliance and debugging
-- Failed attempts logged for security monitoring
-
-## Future Enhancements
-
-1. **Real Payment Integration**: Replace simulation with actual payment processors
-2. **Advanced Inventory Management**: Support for reserved stock during checkout
-3. **Multiple Payment Methods**: Support for split payments and wallet integration
-4. **Enhanced Error Recovery**: Automatic retry mechanisms for transient failures
-5. **Performance Optimization**: Connection pooling and query optimization

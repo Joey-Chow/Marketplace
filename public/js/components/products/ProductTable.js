@@ -49,6 +49,7 @@ const ProductTable = ({
           },
           product.name
         ),
+
         // Price and Add to Cart section
         React.createElement(
           "div",
@@ -68,13 +69,23 @@ const ProductTable = ({
               "Add to Cart"
             )
         ),
-        // Admin Edit/Delete buttons
+
+        // Admin section
         user?.role === "admin" &&
           React.createElement(
             "div",
             {
               className: "product-admin-actions",
             },
+
+            // stock status
+            React.createElement(
+              "div",
+              { className: "topbar-btn" },
+              `Stock: ${product.inventory?.quantity}`
+            ),
+
+            // Edit button
             React.createElement(
               "button",
               {
@@ -83,6 +94,8 @@ const ProductTable = ({
               },
               "Edit"
             ),
+
+            // Delete button
             React.createElement(
               "button",
               {
