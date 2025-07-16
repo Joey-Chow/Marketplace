@@ -1,3 +1,5 @@
+// this file defines all the API routes and middleware for the application
+
 const express = require("express");
 const path = require("path");
 const connectDB = require("./config/database");
@@ -15,6 +17,7 @@ const orderRoutes = require("./routes/orders");
 const reviewRoutes = require("./routes/reviews");
 const dashboardRoutes = require("./routes/dashboard");
 const dataViewerRoutes = require("./routes/dataViewer");
+const checkoutRoutes = require("./routes/checkout");
 
 /**
  * Express application setup
@@ -42,7 +45,7 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/reviews", reviewRoutes);
-app.use("/api/checkout", require("./routes/checkout"));
+app.use("/api/checkout", checkoutRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/data", dataViewerRoutes);
 

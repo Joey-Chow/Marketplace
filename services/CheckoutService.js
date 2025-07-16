@@ -27,7 +27,7 @@ class CheckoutService {
       /*
        * ACID transaction implementation
        */
-      const session = await mongoose.startSession();
+      const session = await mongoose.startSession(); // ACID keyword
       session.startTransaction({
         readConcern: { level: "snapshot" },
         writeConcern: { w: "majority" },

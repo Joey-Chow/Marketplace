@@ -6,6 +6,7 @@ const useOrders = () => {
     error: null,
   });
 
+  // Load orders data
   const loadOrders = React.useCallback(async () => {
     setState((prev) => ({ ...prev, loading: true, error: null }));
 
