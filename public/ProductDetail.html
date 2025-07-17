@@ -3,34 +3,34 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Orders - Marketplace</title>
+    <title>Product Detail - Marketplace</title>
     <link rel="stylesheet" href="css/main.css" />
 
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
 
-    <!-- Load hooks and components for topbar -->
+    <!-- Load hooks -->
     <script src="js/hooks/useAuth.js"></script>
-    <script src="js/hooks/useOrders.js"></script>
-    <script src="js/components/shared/topbar/topbar.js"></script>
-
-    <!-- Load orders components -->
-    <script src="js/components/shared/components.js"></script>
-    <script src="js/components/order/OrderPage.js"></script>
+    <script src="js/hooks/useProductDetail.js"></script>
 
     <!-- Load shared components -->
-    <script src="js/components/shared/topbar/TopbarLoader.js"></script>
+    <script src="js/components/shared/topbar/topbar.js"></script>
+    <script src="js/components/shared/components.js"></script>
     <script src="js/components/shared/layout.js"></script>
+    <script src="js/components/shared/topbar/TopbarLoader.js"></script>
+
+    <!-- Load product detail component -->
+    <script src="js/components/product_detail/ProductDetailPage.js"></script>
   </head>
   <body>
-    <div id="orders-root">
+    <div id="product-detail-root"></div>
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         const root = ReactDOM.createRoot(
-          document.getElementById("orders-root")
+          document.getElementById("product-detail-root")
         );
-        root.render(React.createElement(OrderPage));
+        root.render(React.createElement(ProductDetailPage));
       });
     </script>
   </body>

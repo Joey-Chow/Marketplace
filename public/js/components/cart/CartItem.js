@@ -120,7 +120,13 @@ const CartItem = ({
     // Product Image
     React.createElement(
       "div",
-      { className: "product-image-section" },
+      {
+        className: "product-image-section",
+        style: { cursor: "pointer" },
+        onClick: () => {
+          window.location.href = `productdetail.html?id=${productId}`;
+        },
+      },
       React.createElement("img", {
         src: productImage,
         alt: productName,
@@ -137,11 +143,7 @@ const CartItem = ({
       { className: "cart-item-info" },
 
       // Product Name
-      React.createElement(
-        "div",
-        { className: "product-name-cart" },
-        productName
-      ),
+      React.createElement("div", { className: "product-name" }, productName),
 
       // Product Price
       React.createElement(

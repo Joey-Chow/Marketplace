@@ -103,22 +103,23 @@ body {
 }
 
 .search-button {
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
   border: none;
-  border-radius: 24px;
-  padding: 6px 10px;
   cursor: pointer;
-  transition: background 0.2s;
 }
 
 .search-button:hover {
-  background: linear-gradient(90deg, #a89ad7 0%, #b3c2f2 100%);
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.12);
+  transform: scale(1.1);
 }
 
 /* Topbar Button Styles - Unified styling for all topbar buttons */
 .topbar-btn {
+  height: 40px;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -147,8 +148,8 @@ body {
 
 .cart-badge {
   position: absolute;
-  top: 3px;
-  right: 3px;
+  top: 10px;
+  right: 12px;
   background-color: #dc3545;
   color: white;
   border-radius: 50%;
@@ -159,6 +160,17 @@ body {
   text-align: center;
   z-index: 1002;
   pointer-events: none;
+}
+
+.add-to-cart-icon {
+  width: 23px;
+  height: 23px;
+  display: block;
+}
+
+.add-to-cart-icon:hover {
+  transform: scale(1.15);
+  transition: transform 0.2s ease;
 }
 
 /* Topbar Navigation Specific Styles */
@@ -773,16 +785,6 @@ body {
   background-color: #c82333;
 }
 
-/* Product card layout adjustments */
-.product-card h3 {
-  font-weight: bold;
-  font-size: 16px;
-  color: #333;
-  min-width: 200px;
-  word-wrap: break-word;
-  margin: 0 0 8px 0;
-}
-
 /* Authentication Styles */
 .login-overlay {
   position: fixed;
@@ -1231,21 +1233,20 @@ body {
   overflow: hidden;
 }
 
-.product-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-}
-
 .product-image-section {
-  width: 100%;
   display: flex;
   justify-content: center;
   margin-bottom: 0;
+  transition: transform 0.2s ease; /* Add transition to base state */
+}
+
+.product-image-section:hover {
+  transform: scale(1.02);
 }
 
 .product-main-image {
   width: 100%;
-  height: 210px;
+  height: 100%;
   object-fit: cover;
   border-radius: 0;
   border: none;
@@ -1257,30 +1258,28 @@ body {
 }
 
 .product-name {
-  font-size: 15px;
+  font-size: 18px;
   color: #333;
   margin-bottom: 3px;
-  line-height: 1;
   text-align: left;
   padding: 15px 20px 0 10px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
 }
 
-.product-name-cart {
-  font-size: 15px;
-  color: #333;
-  margin-bottom: 5px;
-  line-height: 1.2;
-  word-wrap: break-word;
+.product-description {
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 10px;
+  padding: 0 10px;
+  letter-spacing: 0.3px;
 }
 
 .product-price-cart-section {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   width: 100%;
   margin-bottom: 10px;
-  gap: 15px;
-  padding: 0 10px;
 }
 
 .product-price-display {
@@ -1288,6 +1287,7 @@ body {
   font-weight: bold;
   color: #000000;
   flex-shrink: 0;
+  padding: 0 10px;
 }
 
 .product-cart-btn {
@@ -2251,4 +2251,50 @@ body {
 
 .payment-modal::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
+}
+
+/* Product Detail Page Styles */
+.product-reviews-section {
+  margin-top: 30px;
+  padding: 20px;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.product-reviews-title {
+  font-size: 1.2rem;
+  color: #333;
+  font-weight: 600;
+  margin-right: 30px;
+}
+
+.product-reviews-count {
+  font-size: 1.2rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.product-details-right {
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.product-details-left {
+  max-width: 900px;
+  display: flex;
+  gap: 30px;
+}
+
+.star-rating {
+  display: flex;
+  align-items: center;
+  gap: 2px;
 }

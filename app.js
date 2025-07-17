@@ -59,9 +59,23 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-// Serve React app for SPA routes
+// Serve index.html for root and /index.html
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
+});
+
+app.get("/index.html", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
+});
+
+// Serve React app for other SPA routes (but not API routes or static files)
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  // Only serve index.html for non-API routes and non-static files
+  if (!req.path.startsWith("/api/") && !req.path.startsWith("/public/")) {
+    res.sendFile(path.join(__dirname, "index.html"));
+  } else {
+    res.status(404).json({ error: "Endpoint not found" });
+  }
 });
 
 // Global error handler (must be last)

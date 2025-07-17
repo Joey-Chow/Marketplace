@@ -14,6 +14,35 @@ router.get("/test", (req, res) => {
   res.json({ success: true, message: "DataViewer routes working" });
 });
 
+// Get overview data for dashboard
+router.get("/overview", async (req, res) => {
+  try {
+    // Get counts for all collections
+    const collections = await Promise.all([
+      User.countDocuments().then((count) => ({ name: "users", count })),
+      Product.countDocuments().then((count) => ({ name: "products", count })),
+      Order.countDocuments().then((count) => ({ name: "orders", count })),
+      Review.countDocuments().then((count) => ({ name: "reviews", count })),
+      Cart.countDocuments().then((count) => ({ name: "carts", count })),
+      Category.countDocuments().then((count) => ({
+        name: "categories",
+        count,
+      })),
+    ]);
+
+    res.json({
+      success: true,
+      data: {
+        collections,
+        timestamp: new Date().toISOString(),
+      },
+    });
+  } catch (error) {
+    console.error("Overview endpoint error:", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 // Get all products
 router.get("/products", async (req, res) => {
   try {
@@ -21,7 +50,7 @@ router.get("/products", async (req, res) => {
       .populate("seller", "username sellerInfo.storeName")
       .populate("category", "name icon")
       .select(
-        "name price inventory.quantity ratings.average status featured images createdAt"
+        "name description price inventory.quantity ratings.average status featured images createdAt"
       )
       .sort({ createdAt: -1 })
       .lean();
@@ -119,7 +148,7 @@ router.get("/analytics", async (req, res) => {
     const sixMonthsAgo = new Date();
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
-    const revenueByMonth = await Order.aggregate([
+    const monthlySales = await Order.aggregate([
       {
         $match: {
           createdAt: { $gte: sixMonthsAgo },
@@ -133,7 +162,7 @@ router.get("/analytics", async (req, res) => {
             month: { $month: "$createdAt" },
           },
           revenue: { $sum: "$pricing.total" },
-          orders: { $sum: 1 },
+          orderCount: { $sum: 1 },
         },
       },
       { $sort: { "_id.year": 1, "_id.month": 1 } },
@@ -196,24 +225,52 @@ router.get("/analytics", async (req, res) => {
         $group: {
           _id: "$category._id",
           categoryName: { $first: "$category.name" },
-          totalSold: { $sum: "$items.quantity" },
+          totalQuantity: { $sum: "$items.quantity" },
           totalRevenue: {
             $sum: { $multiply: ["$items.price", "$items.quantity"] },
           },
+          totalOrders: { $sum: 1 },
         },
       },
       { $sort: { totalRevenue: -1 } },
     ]);
 
+    // Calculate sales summary
+    const salesSummary = await Order.aggregate([
+      {
+        $match: {
+          status: "completed",
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: "$pricing.total" },
+          totalOrders: { $sum: 1 },
+        },
+      },
+    ]);
+
+    const avgOrderValue =
+      salesSummary.length > 0
+        ? salesSummary[0].totalRevenue / salesSummary[0].totalOrders
+        : 0;
+
     res.json({
       success: true,
       data: {
-        revenueByMonth,
+        monthlySales,
         topProducts,
         categoryPerformance,
+        sales: {
+          totalRevenue:
+            salesSummary.length > 0 ? salesSummary[0].totalRevenue : 0,
+          avgOrderValue,
+        },
       },
     });
   } catch (error) {
+    console.error("Analytics endpoint error:", error);
     res.status(500).json({ success: false, error: error.message });
   }
 });

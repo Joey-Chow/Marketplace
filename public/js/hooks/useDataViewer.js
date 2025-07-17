@@ -7,6 +7,7 @@ const useDataViewer = () => {
     data: null,
   });
 
+  // Function to fetch data for a specific tab
   const fetchData = React.useCallback(async (endpoint) => {
     try {
       // Add timestamp to prevent caching
@@ -37,9 +38,6 @@ const useDataViewer = () => {
         let data;
 
         switch (tab) {
-          case "users":
-            data = await fetchData("users");
-            break;
           case "products":
             const productsData = await fetchData("products");
             const categoriesData = await fetchData("categories");

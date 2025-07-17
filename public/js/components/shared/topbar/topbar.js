@@ -18,6 +18,92 @@ const Topbar = ({
     { id: "reviews", label: "Reviews" },
   ];
 
+  // Searchbox Component
+  const Searchbox = ({ onSearch }) => {
+    const [query, setQuery] = React.useState("");
+    const handleSearch = () => {
+      if (onSearch && typeof onSearch === "function") {
+        onSearch(query);
+      } else {
+        console.warn("Search function not available");
+      }
+    };
+    return React.createElement(
+      "div",
+      {
+        className: "searchbox",
+      },
+      // Search input field
+      React.createElement("input", {
+        type: "text",
+        value: query,
+        onChange: (e) => setQuery(e.target.value),
+        onKeyPress: (e) => {
+          if (e.key === "Enter") {
+            handleSearch();
+          }
+        },
+        placeholder: "Search product...",
+      }),
+      // Search button
+      React.createElement("img", {
+        className: "search-button",
+        src: "/images/logo/search.png",
+        alt: "Search",
+      })
+    );
+  };
+
+  // User Info Component
+  const UserInfo = ({ user }) => {
+    return React.createElement(
+      "div",
+      {
+        className: "topbar-btn user-info",
+      },
+      // Display user avatar or initials
+      React.createElement(
+        "span",
+        {
+          className: "user-name",
+        },
+        user.username || user.email
+      ),
+
+      // Display user role as a badge
+      React.createElement(
+        "span",
+        {
+          className: `badge ${user.role}`,
+        },
+        user.role
+      )
+    );
+  };
+
+  //logout button component
+  const Logout = ({ onLogout }) => {
+    return React.createElement(
+      "button",
+      {
+        className: "topbar-btn topbar-nav-item",
+        onClick: onLogout,
+        title: "Logout",
+        onMouseOver: (e) => {
+          e.target.style.backgroundColor = "#dc3545";
+          e.target.style.color = "white";
+          e.target.style.borderColor = "#dc3545";
+        },
+        onMouseOut: (e) => {
+          e.target.style.backgroundColor = "transparent";
+          e.target.style.color = "#333";
+          e.target.style.borderColor = "#ddd";
+        },
+      },
+      "Logout"
+    );
+  };
+
   // Filter menu items based on user role
   const filteredMenuItems = menuItems.filter((item) => {
     if (item.roles) {
@@ -125,10 +211,16 @@ const CartButton = ({ cart, onClick, showDropdown }) => {
       {
         className: "topbar-btn",
         href: "MyCart.html",
-        style: { textDecoration: "none", color: "inherit" },
       },
-      React.createElement("span", null, "🛒"),
-      React.createElement("span", null, "My Cart"),
+      React.createElement("img", {
+        src: "/images/logo/cart.png",
+        alt: "Cart",
+        style: {
+          width: "34px",
+          height: "34px",
+          display: "block",
+        },
+      }),
       itemCount > 0 &&
         React.createElement(
           "span",

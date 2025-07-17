@@ -37,6 +37,7 @@ const useProductCRUD = () => {
     setError(null);
   }, []);
 
+  // Create product function
   const createProduct = React.useCallback(
     async (productData) => {
       setLoading(true);
@@ -89,6 +90,7 @@ const useProductCRUD = () => {
     [hideForm]
   );
 
+  // Update product function
   const updateProduct = React.useCallback(
     async (productId, productData) => {
       setLoading(true);

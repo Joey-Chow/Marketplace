@@ -23,12 +23,27 @@ const useDashboardData = () => {
   const connectSocket = React.useCallback(() => {
     return new Promise((resolve, reject) => {
       try {
-        const socketInstance = io("http://localhost:3000");
+        // Check if io is available (Socket.IO library loaded)
+        if (typeof io === "undefined") {
+          console.warn(
+            "Socket.IO library not loaded, skipping real-time features"
+          );
+          updateConnectionStatus(false);
+          reject(new Error("Socket.IO not available"));
+          return;
+        }
+
+        const socketInstance = io("http://localhost:3000", {
+          timeout: 3000,
+          forceNew: true,
+          transports: ["websocket", "polling"],
+        });
         setSocket(socketInstance);
 
         const timeout = setTimeout(() => {
+          socketInstance.disconnect();
           reject(new Error("Socket connection timeout"));
-        }, 5000);
+        }, 3000);
 
         socketInstance.on("connect", () => {
           clearTimeout(timeout);
@@ -44,12 +59,13 @@ const useDashboardData = () => {
 
         socketInstance.on("connect_error", (error) => {
           clearTimeout(timeout);
-          console.error("Connection error:", error);
+          console.warn("Socket connection failed:", error.message);
           updateConnectionStatus(false);
+          socketInstance.disconnect();
           reject(error);
         });
       } catch (error) {
-        console.error("Socket initialization error:", error);
+        console.warn("Socket initialization error:", error);
         updateConnectionStatus(false);
         reject(error);
       }
@@ -153,17 +169,22 @@ const useDashboardData = () => {
 
   React.useEffect(() => {
     const init = async () => {
+      // Always load dashboard data first
       await loadDashboardData();
 
+      // Try to connect socket but don't block if it fails
       try {
         await connectSocket();
-        console.log("Socket connected successfully");
+        console.log(
+          "Socket connected successfully - real-time updates enabled"
+        );
       } catch (socketError) {
         console.warn(
           "Socket connection failed, continuing without real-time updates:",
-          socketError
+          socketError.message
         );
         updateConnectionStatus(false);
+        // Continue without socket - dashboard will still work
       }
     };
 

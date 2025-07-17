@@ -19,6 +19,8 @@ const ProductTable = ({
         {
           key: product._id,
           className: "product-card",
+          onClick: () =>
+            (window.location.href = `ProductDetail.html?id=${product._id}`),
         },
 
         React.createElement(
@@ -27,6 +29,7 @@ const ProductTable = ({
             className: "product-image-section",
           },
           React.createElement("img", {
+            className: "product-main-image",
             src:
               product.images && product.images.length > 0
                 ? product.images[0].url
@@ -35,7 +38,6 @@ const ProductTable = ({
               product.images && product.images.length > 0
                 ? product.images[0].alt
                 : `${product.name} thumbnail`,
-            className: "product-main-image",
             onError: (e) => {
               e.target.src = "/images/products/placeholder.jpg";
             },
@@ -50,6 +52,17 @@ const ProductTable = ({
           product.name
         ),
 
+        // Product description
+        React.createElement(
+          "div",
+          { className: "product-description" },
+          product.description
+            ? product.description.length > 100
+              ? product.description.substring(0, 100) + "..."
+              : product.description
+            : "No description available"
+        ),
+
         // Price and Add to Cart section
         React.createElement(
           "div",
@@ -60,14 +73,11 @@ const ProductTable = ({
             `$${product.price}`
           ),
           (user?.role === "buyer" || user?.role === "admin") &&
-            React.createElement(
-              "button",
-              {
-                className: "topbar-btn",
-                onClick: () => onAddToCart && onAddToCart(product),
-              },
-              "Add to Cart"
-            )
+            React.createElement("img", {
+              className: "add-to-cart-icon",
+              src: "/images/logo/cart.png",
+              onClick: () => onAddToCart && onAddToCart(product),
+            })
         ),
 
         // Admin section
