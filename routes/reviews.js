@@ -25,3 +25,29 @@ router.get(
 );
 
 module.exports = router;
+
+// @route   GET /api/reviews/:productId
+// @desc    Get reviews for a specific product
+// @access  Public
+router.get(
+  "/:productId",
+  asyncHandler(async (req, res) => {
+    const productId = req.params.productId;
+    const options = {
+      page: parseInt(req.query.page) || 1,
+      limit: parseInt(req.query.limit) || 10,
+      sortBy: req.query.sortBy || "createdAt",
+      sortOrder: req.query.sortOrder || "desc",
+      rating: req.query.rating,
+    };
+
+    const result = await ReviewService.getAllReviews({
+      ...options,
+      productId, // Filter by product ID
+    });
+
+    res.json(
+      new ApiResponse(200, result, "Product reviews retrieved successfully")
+    );
+  })
+);

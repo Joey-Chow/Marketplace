@@ -51,52 +51,6 @@ const CartItem = ({
     }
   };
 
-  const quantityModifie = () => {
-    return React.createElement(
-      "div",
-      { className: "cart-item-quantity-controls" },
-
-      // Decrease quantity button
-      React.createElement(
-        "span",
-        {
-          className: "quantity-controls-btn",
-          onMouseDown: (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            if (item.quantity > 0) {
-              handleQuantityChange(item.quantity - 1);
-            }
-            return false;
-          },
-        },
-        "-"
-      ),
-
-      // Display current quantity
-      React.createElement(
-        "span",
-        { className: "quantity-display" },
-        item.quantity
-      ),
-
-      // Increase quantity button
-      React.createElement(
-        "span",
-        {
-          className: "quantity-controls-btn",
-          onMouseDown: (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            handleQuantityChange(item.quantity + 1);
-            return false;
-          },
-        },
-        "+"
-      )
-    );
-  };
-
   // Render the cart item row
   return React.createElement(
     "div",
@@ -121,7 +75,6 @@ const CartItem = ({
     React.createElement(
       "div",
       {
-        className: "product-image-section",
         style: { cursor: "pointer" },
         onClick: () => {
           window.location.href = `productdetail.html?id=${productId}`;
@@ -156,7 +109,11 @@ const CartItem = ({
       React.createElement(
         "div",
         { className: "cart-item-quantity" },
-        quantityModifie()
+        SharedComponents.QuantityModifier({
+          quantity: item.quantity,
+          onQuantityChange: handleQuantityChange,
+          productId: productId,
+        })
       )
     )
   );

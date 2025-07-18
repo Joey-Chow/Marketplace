@@ -15,7 +15,6 @@ const Topbar = ({
     { id: "users", label: "Users" },
     { id: "products", label: "Products" },
     { id: "orders", label: "Orders" },
-    { id: "reviews", label: "Reviews" },
   ];
 
   // Searchbox Component
@@ -148,8 +147,6 @@ const Topbar = ({
                 window.location.href = "Users.html";
               } else if (item.id === "orders") {
                 window.location.href = "Orders.html";
-              } else if (item.id === "reviews") {
-                window.location.href = "Reviews.html";
               } else if (item.id === "products") {
                 window.location.href = "index.html";
               }

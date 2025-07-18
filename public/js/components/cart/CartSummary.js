@@ -88,6 +88,7 @@ const CartSummary = ({ cart, loading, selectedItems = [] }) => {
     setShowPaymentModal(false);
   };
 
+  // render right section of the page
   return React.createElement(
     React.Fragment,
     null,

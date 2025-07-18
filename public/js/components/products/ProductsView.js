@@ -50,63 +50,147 @@ const ProductsView = ({
     return null;
   };
 
-  const renderCategoryNavigation = () => {
-    if (categories.length === 0) return null;
-
-    // Render category navigation
+  const ProductTable = ({
+    products,
+    onEdit,
+    onDelete,
+    onAddToCart,
+    loading,
+    user,
+  }) => {
     return React.createElement(
       "div",
-      { className: "category-navigation" },
-      React.createElement(
-        "button",
-        {
-          className: `category-btn ${
-            selectedCategory === "all" ? "active" : ""
-          }`,
-          onClick: () => setSelectedCategory("all"),
-        },
-        "All"
-      ),
-      categories.map((category) =>
-        // Render each category button
+      {
+        className: "products-grid",
+      },
+      products.map((product) =>
+        // Render each product card
         React.createElement(
-          "button",
+          "div",
           {
-            key: category._id,
-            className: `category-btn ${
-              selectedCategory === category._id ? "active" : ""
-            }`,
-            onClick: () => setSelectedCategory(category._id),
+            key: product._id,
+            className: "product-card",
+            onClick: () =>
+              (window.location.href = `ProductDetail.html?id=${product._id}`),
           },
-          category.name
+
+          // Product image section
+          React.createElement(
+            "div",
+            {
+              className: "product-image-section",
+            },
+            React.createElement("img", {
+              className: "product-main-image",
+              src:
+                product.images && product.images.length > 0
+                  ? product.images[0].url
+                  : "/images/products/placeholder.jpg",
+              alt:
+                product.images && product.images.length > 0
+                  ? product.images[0].alt
+                  : `${product.name} thumbnail`,
+              onError: (e) => {
+                e.target.src = "/images/products/placeholder.jpg";
+              },
+            })
+          ),
+
+          // Product name under image
+          React.createElement(
+            "div",
+            {
+              className: "product-name",
+            },
+            product.name
+          ),
+
+          // Product description
+          React.createElement(
+            "div",
+            { className: "product-description" },
+            product.description
+              ? product.description.length > 100
+                ? product.description.substring(0, 100) + "..."
+                : product.description
+              : "No description available"
+          ),
+
+          // Price and Add to Cart section
+          React.createElement(
+            "div",
+            { className: "product-price-cart-section" },
+            React.createElement(
+              "div",
+              { className: "product-price-display" },
+              `$${product.price}`
+            ),
+            (user?.role === "buyer" || user?.role === "admin") &&
+              React.createElement("img", {
+                className: "add-to-cart-icon",
+                src: "/images/logo/cart.png",
+                onClick: (e) => {
+                  onAddToCart && onAddToCart(product);
+                  e.stopPropagation();
+                },
+              })
+          ),
+
+          // Admin section
+          user?.role === "admin" &&
+            React.createElement(
+              "div",
+              {
+                className: "product-admin-actions",
+              },
+
+              // stock status
+              React.createElement(
+                "div",
+                { className: "topbar-btn" },
+                `Stock: ${product.inventory?.quantity}`
+              ),
+
+              // Edit button
+              React.createElement(
+                "button",
+                {
+                  className: "topbar-btn",
+                  onClick: (e) => {
+                    onEdit(product);
+                    e.stopPropagation();
+                  },
+                },
+                "Edit"
+              ),
+
+              // Delete button
+              React.createElement(
+                "button",
+                {
+                  className: "topbar-btn",
+                  onClick: (e) => {
+                    onDelete(product._id);
+                    e.stopPropagation();
+                  },
+                },
+                "Delete"
+              )
+            )
         )
       )
     );
   };
 
-  if (error) {
-    return React.createElement("div", { className: "error" }, error);
-  }
-
+  // Show all products
   return React.createElement(
     "div",
     null,
     React.createElement(
       "div",
       { className: "section-header" },
-      React.createElement(
-        "h2",
-        null,
-        selectedCategory === "all"
-          ? `All Products (${filteredProducts.length} total)`
-          : `${
-              categories.find((cat) => cat._id === selectedCategory)?.name ||
-              "Products"
-            } (${filteredProducts.length} total)`
-      ),
       renderCreateButton()
     ),
-    renderCategoryNavigation(),
     React.createElement(ProductTable, {
       products: filteredProducts,
       onEdit: productCRUD.showEditForm,

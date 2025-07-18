@@ -10,7 +10,10 @@ const ProductDetailPage = () => {
   console.log("Extracted product ID:", productId);
 
   // Component logic goes here
-  const { product, loading, error } = useProductDetail(productId);
+  const { product, reviews, loading, error } = useProductDetail(productId);
+
+  // State for quantity selection
+  const [selectedQuantity, setSelectedQuantity] = React.useState(1);
 
   React.useEffect(() => {
     // Initialize SharedTopbar
@@ -39,6 +42,271 @@ const ProductDetailPage = () => {
     );
   }
 
+  const imageSection = () => {
+    return React.createElement(
+      "div",
+      {
+        className: "product-image-section",
+      },
+
+      // Main product image
+      React.createElement("img", {
+        className: "product-image-large",
+        src:
+          product.images && product.images.length > 0
+            ? product.images[0].url
+            : "/images/products/placeholder.jpg",
+        alt:
+          product.images && product.images.length > 0
+            ? product.images[0].alt
+            : `${product.name} image`,
+        onError: (e) => {
+          e.target.src = "/images/products/placeholder.jpg";
+        },
+      }),
+
+      // Image previews section
+      React.createElement(
+        "div",
+        {
+          className: "image-previews-section",
+        },
+        product.images &&
+          product.images.map((image, index) =>
+            // small image previews
+            React.createElement("img", {
+              key: index,
+              src: image.url,
+              alt: image.alt || `Image ${index + 1}`,
+              className: "image-preview",
+              onClick: () => {
+                document.querySelector(".product-image-large").src = image.url;
+              },
+            })
+          )
+      )
+    );
+  };
+
+  const reviewStarSection = () => {
+    return React.createElement(
+      "div",
+      {
+        className: "product-reviews-section",
+      },
+
+      // Reviews count
+      React.createElement(
+        "span",
+        {
+          className: "product-reviews-title",
+        },
+        `${reviews.length || 0} reviews`
+      ),
+
+      // Rating count
+      React.createElement(
+        "span",
+        {
+          className: "product-reviews-count",
+        },
+        `${product.ratings?.average || 0}`
+      ),
+
+      // Star rating display
+      React.createElement(
+        "div",
+        {
+          className: "star-rating",
+        },
+        // Generate 5 stars
+        ...Array.from({ length: 5 }, (_, index) => {
+          const starIndex = index + 1;
+          const rating = product.ratings?.average || 0;
+          const isFilled = starIndex <= Math.floor(rating);
+          const isHalfFilled =
+            starIndex === Math.ceil(rating) && rating % 1 !== 0;
+
+          return React.createElement(
+            "span",
+            {
+              key: index,
+              style: {
+                color: isFilled || isHalfFilled ? "#ffd700" : "#e0e0e0",
+                fontSize: "20px",
+                lineHeight: "1",
+              },
+            },
+            "★"
+          );
+        })
+      )
+    );
+  };
+
+  // ...existing code...
+
+  const reviewsSection = () => {
+    // If no reviews available, show empty state
+    if (!reviews || reviews.length === 0) {
+      return React.createElement(
+        "div",
+        { className: "reviews-empty" },
+        "No reviews yet for this product."
+      );
+    }
+
+    // Render reviews table with two-row layout
+    return React.createElement(
+      "div",
+      { className: "reviews-list-container" },
+      React.createElement(
+        "table",
+        { className: "reviews-table-two-row" },
+        React.createElement(
+          "tbody",
+          null,
+          reviews
+            .map((review, index) => [
+              // First row: rating (stars), date, and buyer
+              React.createElement(
+                "tr",
+                {
+                  key: `${review._id || index}-header`,
+                  className: "review-header-row",
+                },
+                React.createElement(
+                  "td",
+                  { className: "review-rating-cell" },
+                  React.createElement(
+                    "div",
+                    { className: "review-rating-stars" },
+                    ...Array.from({ length: 5 }, (_, starIndex) => {
+                      const isFilled = starIndex < (review.rating || 0);
+                      return React.createElement(
+                        "span",
+                        {
+                          key: starIndex,
+                          className: `star ${isFilled ? "filled" : "empty"}`,
+                        },
+                        "★"
+                      );
+                    })
+                  )
+                ),
+                React.createElement(
+                  "td",
+                  { className: "review-date-cell" },
+                  review.createdAt
+                    ? new Date(review.createdAt).toLocaleDateString()
+                    : "Unknown date"
+                ),
+                React.createElement(
+                  "td",
+                  { className: "review-buyer-cell" },
+                  review.user?.username || review.author || "Anonymous"
+                )
+              ),
+              // Second row: comment with bottom border
+              React.createElement(
+                "tr",
+                {
+                  key: `${review._id || index}-comment`,
+                  className: "review-comment-row",
+                },
+                React.createElement(
+                  "td",
+                  {
+                    className: "review-comment-cell",
+                    colSpan: 3,
+                  },
+                  React.createElement(
+                    "p",
+                    { className: "review-comment-text" },
+                    review.comment || "No comment provided"
+                  )
+                )
+              ),
+            ])
+            .flat()
+        )
+      )
+    );
+  };
+
+  const addToCartSection = () => {
+    return React.createElement(
+      "div",
+      {
+        className: "add-to-cart-section",
+      },
+
+      // Quantity selector
+      React.createElement(
+        "div",
+        {
+          className: "quantity-selector",
+        },
+        React.createElement(
+          "label",
+          {
+            htmlFor: "quantity-select",
+            style: { fontWeight: "600" },
+          },
+          "Quantity:"
+        ),
+        // Quantity select dropdown
+        React.createElement(
+          "select",
+          {
+            className: "quantity-select-dropdown",
+            id: "quantity-select",
+            value: selectedQuantity,
+            onChange: (e) => setSelectedQuantity(parseInt(e.target.value)),
+          },
+          // Create options for quantities 1-5
+          ...Array.from({ length: 5 }, (_, index) => {
+            const quantity = index + 1;
+            return React.createElement(
+              "option",
+              {
+                key: quantity,
+                value: quantity,
+              },
+              quantity
+            );
+          })
+        )
+      ),
+      // Add to cart button
+      React.createElement(
+        "button",
+        {
+          className: "btn btn-primary checkout-btn",
+          onClick: () => {
+            // TODO: Implement add to cart functionality
+            console.log(
+              "Add to cart clicked for product:",
+              product._id,
+              "with quantity:",
+              selectedQuantity
+            );
+          },
+          onMouseOver: (e) => {
+            e.target.style.transform = "translateY(-2px)";
+            e.target.style.boxShadow = "0 8px 20px rgba(102, 126, 234, 0.3)";
+          },
+          onMouseOut: (e) => {
+            e.target.style.transform = "translateY(0)";
+            e.target.style.boxShadow = "none";
+          },
+        },
+        "Add to Cart"
+      )
+    );
+  };
+
+  // Render the product detail page
   return React.createElement(
     "div",
     { className: "app-layout" },
@@ -51,110 +319,18 @@ const ProductDetailPage = () => {
         "div",
         {
           className: "product-detail-container",
-          style: {
-            display: "grid",
-            gridTemplateColumns: window.innerWidth > 768 ? "1fr 1fr" : "1fr",
-            gap: window.innerWidth > 768 ? "40px" : "30px",
-            maxWidth: "1500px",
-            margin: "0 auto",
-            padding: "20px",
-          },
         },
 
         // Left section - Product image and reviews
         React.createElement(
           "div",
           {
-            className: "product-detail-left",
+            className: "product-details-left",
           },
 
-          // Product image
-          React.createElement(
-            "div",
-            {
-              style: {
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                padding: "20px",
-                minHeight: "400px",
-              },
-            },
-            React.createElement("img", {
-              style: {
-                maxWidth: "100%",
-                maxHeight: "400px",
-                objectFit: "contain",
-                borderRadius: "8px",
-              },
-              src:
-                product.images && product.images.length > 0
-                  ? product.images[0].url
-                  : "/images/products/placeholder.jpg",
-              alt:
-                product.images && product.images.length > 0
-                  ? product.images[0].alt
-                  : `${product.name} image`,
-              onError: (e) => {
-                e.target.src = "/images/products/placeholder.jpg";
-              },
-            })
-          ),
-
-          // Product reviews section
-          React.createElement(
-            "div",
-            {
-              className: "product-reviews-section",
-            },
-
-            // Reviews count
-            React.createElement(
-              "span",
-              {
-                className: "product-reviews-title",
-              },
-              `${product.ratings?.count || 0} reviews`
-            ),
-
-            // Rating count
-            React.createElement(
-              "span",
-              {
-                className: "product-reviews-count",
-              },
-              `${product.ratings?.average || 0}`
-            ),
-
-            // Star rating display
-            React.createElement(
-              "div",
-              {
-                className: "star-rating",
-              },
-              // Generate 5 stars
-              ...Array.from({ length: 5 }, (_, index) => {
-                const starIndex = index + 1;
-                const rating = product.ratings?.average || 0;
-                const isFilled = starIndex <= Math.floor(rating);
-                const isHalfFilled =
-                  starIndex === Math.ceil(rating) && rating % 1 !== 0;
-
-                return React.createElement(
-                  "span",
-                  {
-                    key: index,
-                    style: {
-                      color: isFilled || isHalfFilled ? "#ffd700" : "#e0e0e0",
-                      fontSize: "20px",
-                      lineHeight: "1",
-                    },
-                  },
-                  "★"
-                );
-              })
-            )
-          )
+          imageSection(),
+          reviewStarSection(),
+          reviewsSection()
         ),
 
         // Right section - Product details and actions
@@ -190,50 +366,7 @@ const ProductDetailPage = () => {
             },
             product.description
           ),
-
-          // Add to cart button
-          React.createElement(
-            "div",
-            {
-              style: {
-                display: "flex",
-                gap: "15px",
-                marginTop: "auto",
-              },
-            },
-            React.createElement(
-              "button",
-              {
-                style: {
-                  flex: "1",
-                  padding: "15px 30px",
-                  background:
-                    "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "8px",
-                  fontSize: "1.1rem",
-                  fontWeight: "600",
-                  cursor: "pointer",
-                  transition: "all 0.2s ease",
-                },
-                onClick: () => {
-                  // TODO: Implement add to cart functionality
-                  console.log("Add to cart clicked for product:", product._id);
-                },
-                onMouseOver: (e) => {
-                  e.target.style.transform = "translateY(-2px)";
-                  e.target.style.boxShadow =
-                    "0 8px 20px rgba(102, 126, 234, 0.3)";
-                },
-                onMouseOut: (e) => {
-                  e.target.style.transform = "translateY(0)";
-                  e.target.style.boxShadow = "none";
-                },
-              },
-              "Add to Cart"
-            )
-          )
+          addToCartSection()
         )
       )
     )

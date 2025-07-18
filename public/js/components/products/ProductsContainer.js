@@ -57,17 +57,6 @@ const ProductsContainer = ({ user, onSearchHandlerReady }) => {
     }
   }, [loadTabData, user]);
 
-  // Load cart for users who can add to cart
-  React.useEffect(() => {
-    if (user && (user.role === "admin" || user.role === "buyer")) {
-      const timeoutId = setTimeout(() => {
-        cart.loadCart();
-      }, 300);
-
-      return () => clearTimeout(timeoutId);
-    }
-  }, [user, cart.loadCart]);
-
   // Handle product save
   const handleProductSave = React.useCallback(
     async (productData) => {

@@ -1,5 +1,6 @@
 const useProductDetail = (productId) => {
   const [product, setProduct] = React.useState(null);
+  const [reviews, setReviews] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState("");
 
@@ -33,5 +34,27 @@ const useProductDetail = (productId) => {
     fetchProduct();
   }, [productId]);
 
-  return { product, loading, error };
+  // Fetch reviews filtered by productId
+  React.useEffect(() => {
+    const fetchReviews = async () => {
+      if (!productId) return;
+
+      try {
+        const response = await fetch(`/api/reviews/${productId}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch product reviews");
+        }
+
+        const data = await response.json();
+        console.log("Parsed reviews JSON:", data);
+        setReviews(data.data.reviews);
+      } catch (err) {
+        setError(err.message || "Failed to load product reviews");
+      }
+    };
+
+    fetchReviews();
+  }, [productId]);
+
+  return { product, reviews, loading, error };
 };
