@@ -1,10 +1,14 @@
 // CartPage Component - Main cart page with improved layout structure
 const CartPage = () => {
-  const { cart, loading, error, loadCart, updateQuantity, removeItem } =
-    window.useCart();
-
-  // Track selected items for checkout
-  const [selectedItems, setSelectedItems] = React.useState([]);
+  const {
+    cart,
+    loading,
+    error,
+    loadCart,
+    updateQuantity,
+    removeItem,
+    toggleItemSelection,
+  } = window.useCart();
 
   React.useEffect(() => {
     // Initialize SharedTopbar
@@ -15,16 +19,6 @@ const CartPage = () => {
     // Load cart
     loadCart();
   }, [loadCart]);
-
-  // Handle item selection change
-  const handleItemSelectionChange = (productId, isSelected) => {
-    setSelectedItems((prev) => {
-      const newSelected = isSelected
-        ? [...prev, productId]
-        : prev.filter((id) => id !== productId);
-      return newSelected;
-    });
-  };
 
   // empty cart check
   if (!cart || !cart.items || cart.items.length === 0) {
@@ -68,7 +62,7 @@ const CartPage = () => {
         "div",
         { className: "cart-page-container" },
 
-        // Cart items container
+        // Left side: Cart items container
         React.createElement(
           "div",
           { className: "cart-items-container" },
@@ -86,18 +80,16 @@ const CartPage = () => {
                 loading: loading,
                 onQuantityChange: updateQuantity,
                 onRemove: removeItem,
-                isSelected: selectedItems.includes(productId),
-                onSelectionChange: handleItemSelectionChange,
+                toggleItemSelection: toggleItemSelection,
               });
             })
           )
         ),
 
-        // Cart summary container
+        // right side: Cart summary container
         React.createElement(window.CartSummary, {
           cart: cart,
           loading: loading,
-          selectedItems: selectedItems,
         })
       )
     )

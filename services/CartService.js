@@ -231,42 +231,42 @@ class CartService {
   }
 
   /**
-   * Get cart summary
+   * toggle item selection in cart
    * @param {string} userId - User ID
-   * @returns {Promise<Object>} Cart summary
+   * @param {string} productId - Product ID
+   * @returns {Promise<Object>} Updated cart
    */
-  static async getCartSummary(userId) {
+  static async toggleItemSelection(userId, productId) {
     try {
-      const cart = await Cart.findOne({ user: userId }).populate(
-        "items.product"
-      );
-
+      const cart = await Cart.findOne({ user: userId });
       if (!cart) {
-        return {
-          itemCount: 0,
-          totalPrice: 0,
-          items: [],
-        };
+        throw new CustomError("Cart not found", 404);
       }
 
-      // Calculate totals
+      const itemIndex = cart.items.findIndex(
+        (item) => item.product.toString() === productId
+      );
+
+      if (itemIndex === -1) {
+        throw new CustomError("Item not found in cart", 404);
+      }
+
+      // Toggle selection
+      cart.items[itemIndex].isSelected = !cart.items[itemIndex].isSelected;
+
+      await cart.save();
+
+      // Calculate totals and return cart with populated products
       await cart.calculateTotals();
       await cart.save();
 
-      return {
-        itemCount: cart.items.reduce((total, item) => total + item.quantity, 0),
-        totalPrice: cart.totals.total,
-        items: cart.items.map((item) => ({
-          productId: item.product._id,
-          name: item.product.name,
-          price: item.product.price,
-          quantity: item.quantity,
-          subtotal: item.product.price * item.quantity,
-        })),
-      };
+      return await Cart.findById(cart._id).populate("items.product");
     } catch (error) {
-      logger.error("Error getting cart summary:", error);
-      throw new CustomError("Failed to get cart summary", 500);
+      logger.error("Error toggling item selection:", error);
+      if (error instanceof CustomError) {
+        throw error;
+      }
+      throw new CustomError("Failed to toggle item selection", 500);
     }
   }
 }

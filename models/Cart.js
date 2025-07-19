@@ -21,6 +21,10 @@ const cartSchema = new mongoose.Schema(
           min: 1,
           default: 1,
         },
+        isSelected: {
+          type: Boolean,
+          default: true,
+        },
         // Removed price field - we'll use current product prices
         addedAt: {
           type: Date,
@@ -94,10 +98,9 @@ cartSchema.methods.calculateTotals = async function () {
   // Populate products to get current prices
   await this.populate("items.product");
 
-  this.totals.subtotal = this.items.reduce(
-    (sum, item) => sum + (item.product?.price || 0) * item.quantity,
-    0
-  );
+  this.totals.subtotal = this.items
+    .filter((item) => item.isSelected)
+    .reduce((sum, item) => sum + (item.product?.price || 0) * item.quantity, 0);
 
   // Apply tax (simple 8% tax rate)
   this.totals.tax = this.totals.subtotal * 0.08;
@@ -159,9 +162,34 @@ cartSchema.methods.updateItemQuantity = function (productId, quantity) {
   }
 };
 
+// Method to toggle item selection
+cartSchema.methods.toggleItemSelection = function (productId, isSelected) {
+  const item = this.items.find(
+    (item) => item.product.toString() === productId.toString()
+  );
+
+  if (item) {
+    item.isSelected = isSelected !== undefined ? isSelected : !item.isSelected;
+  }
+};
+
+// Method to select/deselect all items
+cartSchema.methods.toggleAllItems = function (isSelected) {
+  this.items.forEach((item) => {
+    item.isSelected = isSelected;
+  });
+};
+
 // Virtual for item count
 cartSchema.virtual("itemCount").get(function () {
   return this.items.reduce((count, item) => count + item.quantity, 0);
+});
+
+// Virtual for selected item count
+cartSchema.virtual("selectedItemCount").get(function () {
+  return this.items
+    .filter((item) => item.isSelected)
+    .reduce((count, item) => count + item.quantity, 0);
 });
 
 module.exports = mongoose.model("Cart", cartSchema);

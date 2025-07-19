@@ -59,9 +59,11 @@ const useCart = () => {
 
       if (data.success) {
         setCart(data.data.cart);
+        alert(`✅ Added to cart!`);
         return { success: true, message: data.message };
       } else {
         setError(data.message || "Failed to add item to cart");
+        console.error("Add to cart error:", data.message);
         return { success: false, error: data.message };
       }
     } catch (err) {
@@ -157,6 +159,46 @@ const useCart = () => {
     }
   }, []); // Only run once on mount
 
+  // Toggle item selection
+  const toggleItemSelection = React.useCallback(
+    async (productId, isSelected) => {
+      setLoading(true);
+      setError("");
+      try {
+        const response = await fetch(`/api/cart/select/${productId}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem(
+              "marketplace_token"
+            )}`,
+          },
+          body: JSON.stringify({
+            isSelected: isSelected,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          setCart(data.data.cart);
+          return { success: true };
+        } else {
+          setError(data.message || "Failed to update item selection");
+          return { success: false, error: data.message };
+        }
+      } catch (err) {
+        const errorMsg = "Failed to update item selection";
+        setError(errorMsg);
+        console.error("Toggle item selection error:", err);
+        return { success: false, error: errorMsg };
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
+
   return {
     cart,
     loading,
@@ -165,6 +207,7 @@ const useCart = () => {
     addToCart,
     updateQuantity,
     removeItem,
+    toggleItemSelection,
   };
 };
 

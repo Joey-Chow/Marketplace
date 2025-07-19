@@ -3,8 +3,8 @@ const CartItem = ({
   item,
   onQuantityChange,
   onRemove,
-  isSelected = false,
   onSelectionChange,
+  toggleItemSelection,
 }) => {
   const product = item.product || item;
   const productName = product.name || "Unknown Product";
@@ -45,17 +45,40 @@ const CartItem = ({
     });
   };
 
-  const handleCheckboxChange = (e) => {
-    if (onSelectionChange) {
-      onSelectionChange(productId, e.target.checked);
+  const handleCheckboxChange = async (e) => {
+    const isChecked = e.target.checked;
+
+    if (!toggleItemSelection) {
+      console.error("toggleItemSelection function not provided");
+      return;
+    }
+
+    try {
+      // Use the toggleItemSelection function from useCart hook
+      const result = await toggleItemSelection(productId, isChecked);
+
+      if (result.success) {
+        // Call the local callback to update UI state if needed
+        if (onSelectionChange) {
+          onSelectionChange(productId, isChecked);
+        }
+      } else {
+        console.error("Failed to update item selection:", result.error);
+        // Revert checkbox state on error
+        e.target.checked = !isChecked;
+      }
+    } catch (error) {
+      console.error("Error updating item selection:", error);
+      // Revert checkbox state on error
+      e.target.checked = !isChecked;
     }
   };
 
-  // Render the cart item row
+  // Render the row for this cart item
   return React.createElement(
     "div",
     {
-      className: `cart-item-row ${isSelected ? "selected" : ""}`,
+      className: `cart-item-row ${item.isSelected ? "selected" : ""}`,
       "data-product-id": productId,
     },
 
@@ -65,7 +88,7 @@ const CartItem = ({
       { className: "cart-item-checkbox" },
       React.createElement("input", {
         type: "checkbox",
-        checked: isSelected,
+        checked: item.isSelected || false, // Use the database field
         onChange: handleCheckboxChange,
         className: "item-checkbox",
       })

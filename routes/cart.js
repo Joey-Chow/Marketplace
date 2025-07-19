@@ -112,4 +112,21 @@ router.delete(
   })
 );
 
+// @desc   toggle select item in cart
+// @route  POST /api/cart/select/:productId
+// @access Private
+router.post(
+  "/select/:productId",
+  auth,
+  asyncHandler(async (req, res) => {
+    const cart = await CartService.toggleItemSelection(
+      req.user.id,
+      req.params.productId
+    );
+    res.json(
+      new ApiResponse(200, { cart }, "Item selection toggled successfully")
+    );
+  })
+);
+
 module.exports = router;

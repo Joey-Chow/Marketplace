@@ -696,12 +696,6 @@ body {
   box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
 }
 
-.btn-primary:disabled {
-  opacity: 0.6;
-  transform: none;
-  cursor: not-allowed;
-}
-
 .btn-secondary {
   background: #f8f9fa;
   color: #666;
@@ -1244,23 +1238,21 @@ body {
 }
 
 .product-name {
-  font-size: 18px;
+  font-size: 16px;
   color: #333;
   margin-bottom: 3px;
   margin-left: 10px;
   text-align: left;
   padding: 15px 20px 0 10px;
   font-weight: 500;
-  letter-spacing: 0.3px;
 }
 
 .product-description {
-  font-size: 18px;
+  font-size: 16px;
   color: #666;
   margin-bottom: 10px;
   margin-left: 10px;
   padding: 0 10px;
-  letter-spacing: 0.3px;
 }
 
 .product-price-cart-section {
@@ -1514,6 +1506,7 @@ body {
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 30px;
+  justify-items: center;
 }
 
 @media (max-width: 900px) {
@@ -1524,10 +1517,13 @@ body {
 }
 
 .cart-items-container {
+  width: 100%;
+  max-width: 1200px;
   background: white;
   border-radius: 12px;
   padding: 25px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  justify-self: end;
 }
 
 .cart-items-container h2 {
@@ -1687,6 +1683,8 @@ body {
 
 /* Cart Summary Styles */
 .cart-summary-container {
+  width: 100%;
+  max-width: 400px;
   background: white;
   border-radius: 12px;
   padding: 25px;
@@ -1694,6 +1692,7 @@ body {
   height: fit-content;
   position: sticky;
   top: 80px;
+  justify-self: start;
 }
 
 .cart-summary-header h3 {
@@ -1766,15 +1765,6 @@ body {
   font-weight: 600;
   padding: 12px 24px;
   font-size: 1rem;
-}
-
-.checkout-btn:hover:not(:disabled) {
-  background: linear-gradient(90deg, #a89ad7 0%, #b3c2f2 100%);
-}
-
-.checkout-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
 }
 
 .cart-summary-info {
@@ -2225,8 +2215,8 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 40px;
-  max-width: 1500px;
-  padding: 20px;
+  justify-items: center;
+  border: 2px solid #e0e0e0;
 }
 
 .product-reviews-section {
@@ -2253,16 +2243,20 @@ body {
 }
 
 .product-details-right {
-  max-width: 600px;
-  max-height: 400px;
+  max-width: 900px;
+  min-width: 600px;
+  width: 100%;
+  height: 400px;
   display: flex;
   flex-direction: column;
   gap: 20px;
   padding: 20px;
+  margin-top: 20px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 80px;
+  justify-self: start;
 }
 
 .star-rating {
@@ -2279,9 +2273,13 @@ body {
 }
 
 .product-details-left {
+  width: 100%;
+  min-width: 500px;
+  max-width: 900px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  justify-self: end;
 }
 
 .product-image-section {

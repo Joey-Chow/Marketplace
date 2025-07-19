@@ -4,13 +4,11 @@ const ProductDetailPage = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const productId = urlParams.get("id");
 
-  // Debug logging
-  console.log("Current URL:", window.location.href);
-  console.log("URL search params:", window.location.search);
-  console.log("Extracted product ID:", productId);
-
   // Component logic goes here
   const { product, reviews, loading, error } = useProductDetail(productId);
+
+  // Cart functionality
+  const { addToCart, loading: cartLoading } = useCart();
 
   // State for quantity selection
   const [selectedQuantity, setSelectedQuantity] = React.useState(1);
@@ -283,25 +281,12 @@ const ProductDetailPage = () => {
         "button",
         {
           className: "btn btn-primary checkout-btn",
-          onClick: () => {
-            // TODO: Implement add to cart functionality
-            console.log(
-              "Add to cart clicked for product:",
-              product._id,
-              "with quantity:",
-              selectedQuantity
-            );
-          },
-          onMouseOver: (e) => {
-            e.target.style.transform = "translateY(-2px)";
-            e.target.style.boxShadow = "0 8px 20px rgba(102, 126, 234, 0.3)";
-          },
-          onMouseOut: (e) => {
-            e.target.style.transform = "translateY(0)";
-            e.target.style.boxShadow = "none";
-          },
+          disabled: cartLoading || !product._id,
+          onClick: () => { 
+            addToCart(product._id, selectedQuantity);
+          }
         },
-        "Add to Cart"
+        cartLoading ? "Adding..." : "Add to Cart"
       )
     );
   };

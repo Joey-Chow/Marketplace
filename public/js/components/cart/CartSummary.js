@@ -1,26 +1,13 @@
 // CartSummary Component - Shows subtotal, tax, total and checkout button
-const CartSummary = ({ cart, loading, selectedItems = [] }) => {
+const CartSummary = ({ cart, loading, selectedItems = [], getCartSummary }) => {
   const [showPaymentModal, setShowPaymentModal] = React.useState(false);
   const [checkoutLoading, setCheckoutLoading] = React.useState(false);
 
-  // Calculate subtotal for checked items only
-  const subtotal = cart.items.reduce((sum, item) => {
-    const productId = item.product?._id || item.product;
-    const isSelected = selectedItems.includes(productId);
-
-    if (isSelected) {
-      const price = item.product?.price || item.price || 0;
-      return sum + price * item.quantity;
-    }
-    return sum;
-  }, 0);
-
-  // Calculate tax (assuming 8.5% tax rate)
-  const taxRate = 0.085;
-  const tax = subtotal * taxRate;
-
-  // Calculate total
-  const total = subtotal + tax;
+  // Use cart summary from backend, fallback to cart totals if available
+  const subtotal = cart.totals?.subtotal || 0;
+  const tax = cart.totals?.tax || 0;
+  const shipping = cart.totals?.shipping || 0;
+  const total = cart.totals?.total || 0;
 
   // Get selected items for checkout
   const getSelectedItemsForCheckout = () => {
@@ -33,14 +20,6 @@ const CartSummary = ({ cart, loading, selectedItems = [] }) => {
   };
 
   const handleCheckout = () => {
-    // Check if any items are selected
-    const selectedItemsForCheckout = getSelectedItemsForCheckout();
-    if (selectedItemsForCheckout.length === 0) {
-      alert("Please select items to checkout!");
-      return;
-    }
-
-    // Show payment modal
     setShowPaymentModal(true);
   };
 
@@ -122,7 +101,7 @@ const CartSummary = ({ cart, loading, selectedItems = [] }) => {
         React.createElement(
           "div",
           { className: "summary-line" },
-          React.createElement("span", null, "Tax (8.5%):"),
+          React.createElement("span", null, "Tax:"),
           React.createElement(
             "span",
             { className: "amount" },
@@ -130,12 +109,16 @@ const CartSummary = ({ cart, loading, selectedItems = [] }) => {
           )
         ),
 
-        // Shipping (free for now)
+        // Shipping
         React.createElement(
           "div",
           { className: "summary-line" },
           React.createElement("span", null, "Shipping:"),
-          React.createElement("span", { className: "amount free" }, "FREE")
+          React.createElement(
+            "span",
+            { className: `amount ${shipping === 0 ? "free" : ""}` },
+            shipping === 0 ? "FREE" : `$${shipping.toFixed(2)}`
+          )
         ),
 
         // Total
@@ -173,7 +156,7 @@ const CartSummary = ({ cart, loading, selectedItems = [] }) => {
       isOpen: showPaymentModal,
       onClose: handlePaymentCancel,
       onConfirm: handlePaymentConfirm,
-      orderSummary: { subtotal, tax, total },
+      orderSummary: { subtotal, tax, shipping, total },
       loading: checkoutLoading,
     })
   );

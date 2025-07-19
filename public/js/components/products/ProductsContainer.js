@@ -90,14 +90,8 @@ const ProductsContainer = ({ user, onSearchHandlerReady }) => {
     async (product) => {
       try {
         const result = await cart.addToCart(product._id, 1);
-        if (result.success) {
-          alert(`✅ ${product.name} added to cart!`);
-        } else {
-          alert(`❌ Failed to add to cart: ${result.error}`);
-        }
       } catch (error) {
         console.error("Failed to add to cart:", error);
-        alert("❌ Failed to add item to cart. Please try again.");
       }
     },
     [cart.addToCart]
