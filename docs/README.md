@@ -1,5 +1,9 @@
 # Marketplace - E-Commerce Platform
 
+![Products Overview](intro_images/products.png)
+![products overview](intro_images/product.png)
+![Products Overview](intro_images/cart.png)
+
 ## Project description:
 
 A full-stack e-commerce marketplace application built with Node.js, Express, MongoDB, and React. Features user authentication, product management, shopping cart functionality, order processing, and comprehensive data analytics.

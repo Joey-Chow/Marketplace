@@ -736,6 +736,7 @@ body {
   border-radius: 4px;
   color: #333;
   background-color: #f8f9fa;
+  cursor: pointer;
 }
 
 /* Admin Actions */
@@ -2396,24 +2397,14 @@ body {
   padding-top: 5px;
 }
 
-/* Remove default margin between table rows */
-.reviews-table-two-row tr {
-  margin: 0;
-}
-
-.reviews-table-two-row td {
-  vertical-align: top;
-}
-
 /* Tighter spacing for the review comment cell */
 .review-comment-cell {
-  padding-top: 5px;
   padding-bottom: 15px;
 }
 
 .review-comment-cell {
   padding: 15px;
-  border-bottom: 2px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .review-comment-text {
