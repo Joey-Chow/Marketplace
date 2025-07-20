@@ -20,8 +20,8 @@ const ProductDetailPage = () => {
     });
   }, []);
 
-  // Show loading state
-  if (loading) {
+  // Show loading state or error state
+  if (loading || !product) {
     return React.createElement(
       "div",
       { className: "app-layout" },
@@ -33,8 +33,24 @@ const ProductDetailPage = () => {
           React.createElement(
             "div",
             { className: "loading" },
-            "Loading product details..."
+            loading ? "Loading product details..." : "Product not found"
           )
+        )
+      )
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return React.createElement(
+      "div",
+      { className: "app-layout" },
+      React.createElement("div", { id: "shared-topbar-root" }),
+      window.SharedLayout.render(
+        React.createElement(
+          "div",
+          { className: "product-detail-container" },
+          React.createElement("div", { className: "error" }, `Error: ${error}`)
         )
       )
     );
@@ -108,7 +124,7 @@ const ProductDetailPage = () => {
         {
           className: "product-reviews-count",
         },
-        `${product.ratings?.average || 0}`
+        `${product.ratings?.average?.toFixed(1) || 0}`
       ),
 
       // Star rating display
@@ -239,7 +255,7 @@ const ProductDetailPage = () => {
         className: "add-to-cart-section",
       },
 
-      // Quantity selector
+      // Quantity info and selector
       React.createElement(
         "div",
         {
@@ -274,17 +290,34 @@ const ProductDetailPage = () => {
               quantity
             );
           })
+        ),
+        // Stock availability badge
+        React.createElement(
+          "div",
+          { className: "badge" },
+          product.inventory?.quantity >= 5
+            ? React.createElement(
+                "span",
+                { className: "badge in-stock" },
+                "In Stock"
+              )
+            : React.createElement(
+                "span",
+                { className: "badge low-stock" },
+                `Only ${product.inventory?.quantity ?? 0} left`
+              )
         )
       ),
+
       // Add to cart button
       React.createElement(
         "button",
         {
           className: "btn btn-primary checkout-btn",
           disabled: cartLoading || !product._id,
-          onClick: () => { 
+          onClick: () => {
             addToCart(product._id, selectedQuantity);
-          }
+          },
         },
         cartLoading ? "Adding..." : "Add to Cart"
       )

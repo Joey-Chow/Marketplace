@@ -149,7 +149,15 @@ const products = [
     featured: true,
     images: [
       {
-        url: "/images/products/iphone-15-pro-0-bf8a5611.jpg",
+        url: "/images/products/iPhone 15 Pro1.jpg",
+        alt: "iPhone 15 Pro",
+      },
+      {
+        url: "/images/products/iPhone 15 Pro2.jpg",
+        alt: "iPhone 15 Pro",
+      },
+      {
+        url: "/images/products/iPhone 15 Pro3.jpg",
         alt: "iPhone 15 Pro",
       },
     ],
@@ -168,7 +176,7 @@ const products = [
     tags: ["smartphone", "samsung", "android", "5g"],
     images: [
       {
-        url: "/images/products/product-10-0-a0362aae.jpg",
+        url: "/images/products/Samsung Galaxy S24.jpg",
         alt: "Product Image",
         alt: "Samsung Galaxy S24",
       },
@@ -188,7 +196,7 @@ const products = [
     tags: ["laptop", "apple", "macbook", "portable"],
     images: [
       {
-        url: "/images/products/macbook-air-m3-0-31a35356.jpg",
+        url: "/images/products/MacBook Air M3.jpg",
         alt: "Product Image",
         alt: "MacBook Air M3",
       },
@@ -208,7 +216,7 @@ const products = [
     tags: ["clothing", "tshirt", "cotton", "casual"],
     images: [
       {
-        url: "/images/products/premium-cotton-t-shirt-0-5e799700.jpg",
+        url: "/images/products/Premium Cotton T-Shirt.jpg",
         alt: "Product Image",
         alt: "Premium Cotton T-Shirt",
       },
@@ -227,7 +235,7 @@ const products = [
     tags: ["clothing", "jeans", "denim", "casual"],
     images: [
       {
-        url: "/images/products/denim-jeans-0-40aa6a8f.jpg",
+        url: "/images/products/Denim Jeans.jpg",
         alt: "Product Image",
         alt: "Denim Jeans",
       },
@@ -247,7 +255,7 @@ const products = [
     tags: ["lighting", "desk", "led", "home"],
     images: [
       {
-        url: "/images/products/led-desk-lamp-0-6514f2e7.jpg",
+        url: "/images/products/LED Desk Lamp.jpg",
         alt: "Product Image",
         alt: "LED Desk Lamp",
       },
@@ -269,7 +277,7 @@ const products = [
     tags: ["headphones", "bluetooth", "wireless", "noise-cancelling"],
     images: [
       {
-        url: "/images/products/denim-jeans-0-40aa6a8f.jpg",
+        url: "/images/products/Wireless Bluetooth Headphones.jpg",
         alt: "Wireless Bluetooth Headphones",
       },
     ],
@@ -289,7 +297,7 @@ const products = [
     tags: ["gaming", "keyboard", "mechanical", "rgb"],
     images: [
       {
-        url: "/images/products/product-12-0-61a2a056.jpg",
+        url: "/images/products/Gaming Mechanical Keyboard.jpg",
         alt: "Product Image",
         alt: "Gaming Mechanical Keyboard",
       },
@@ -310,8 +318,8 @@ const products = [
     tags: ["webcam", "4k", "streaming", "video"],
     images: [
       {
-        url: "/images/products/macbook-air-m3-0-31a35356.jpg",
-        alt: "Product Image",
+        url: "/images/products/4K Webcam.jpg",
+        alt: "4K Webcam",
       },
     ],
   },
@@ -330,8 +338,8 @@ const products = [
     tags: ["wireless", "charging", "qi", "fast-charge"],
     images: [
       {
-        url: "/images/products/product-9-1-4240f48e.jpg",
-        alt: "Product Image",
+        url: "/images/products/Wireless Charging Pad.jpg",
+        alt: "Wireless Charging Pad",
       },
     ],
   },
@@ -350,8 +358,8 @@ const products = [
     tags: ["speaker", "bluetooth", "portable", "waterproof"],
     images: [
       {
-        url: "/images/products/product-11-0-dc4590e3.jpg",
-        alt: "Product Image",
+        url: "/images/products/Bluetooth Speaker.jpg",
+        alt: "Bluetooth Speaker",
       },
     ],
   },
@@ -369,8 +377,8 @@ const products = [
     tags: ["smartwatch", "fitness", "gps", "health"],
     images: [
       {
-        url: "/images/products/product-13-2-8ce19be0.jpg",
-        alt: "Product Image",
+        url: "/images/products/Smart Watch.jpg",
+        alt: "Smart Watch",
       },
     ],
   },
@@ -389,8 +397,8 @@ const products = [
     tags: ["jacket", "leather", "fashion", "premium"],
     images: [
       {
-        url: "/images/products/product-15-2-0ac1050c.jpg",
-        alt: "Product Image",
+        url: "/images/products/Leather Jacket.jpg",
+        alt: "Leather Jacket",
       },
     ],
   },
@@ -409,8 +417,8 @@ const products = [
     tags: ["shoes", "running", "sports", "comfortable"],
     images: [
       {
-        url: "/images/products/product-16-1-6eee41fa.jpg",
-        alt: "Product Image",
+        url: "/images/products/Running Sneakers.jpg",
+        alt: "Running Sneakers",
       },
     ],
   },
@@ -428,8 +436,8 @@ const products = [
     tags: ["sweater", "wool", "warm", "winter"],
     images: [
       {
-        url: "/images/products/product-16-1-6eee41fa.jpg",
-        alt: "Product Image",
+        url: "/images/products/Wool Sweater.jpg",
+        alt: "Wool Sweater",
       },
     ],
   },
@@ -447,8 +455,8 @@ const products = [
     tags: ["dress", "casual", "elegant", "work"],
     images: [
       {
-        url: "/images/products/product-19-2-761b8df4.jpg",
-        alt: "Product Image",
+        url: "/images/products/Casual Dress.jpg",
+        alt: "Casual Dress",
       },
     ],
   },
@@ -467,8 +475,8 @@ const products = [
     tags: ["coffee", "kitchen", "appliance", "programmable"],
     images: [
       {
-        url: "/images/products/product-20-2-f4c95f39.jpg",
-        alt: "Product Image",
+        url: "/images/products/Coffee Maker.jpg",
+        alt: "Coffee Maker",
       },
     ],
   },
@@ -486,8 +494,8 @@ const products = [
     tags: ["air-purifier", "hepa", "smart", "home"],
     images: [
       {
-        url: "/images/products/product-22-1-a0fee73a.jpg",
-        alt: "Product Image",
+        url: "/images/products/Air Purifier.jpg",
+        alt: "Air Purifier",
       },
     ],
   },
@@ -504,9 +512,7 @@ const products = [
       thickness: "6mm",
     },
     tags: ["yoga", "fitness", "exercise", "mat"],
-    images: [
-      { url: "/images/product-23-1-2d5bfa8c.jpg", alt: "Product Image" },
-    ],
+    images: [{ url: "/images/products/Yoga Mat.jpg", alt: "Yoga Mat" }],
   },
   {
     name: "Ceramic Dinnerware Set",
@@ -522,8 +528,8 @@ const products = [
     tags: ["dinnerware", "ceramic", "kitchen", "dining"],
     images: [
       {
-        url: "/images/products/product-23-1-2d5bfa8c.jpg",
-        alt: "Product Image",
+        url: "/images/products/Ceramic Dinnerware Set.jpg",
+        alt: "Ceramic Dinnerware Set",
       },
     ],
   },
@@ -541,8 +547,8 @@ const products = [
     tags: ["garden", "tools", "outdoor", "gardening"],
     images: [
       {
-        url: "/images/products/product-23-1-2d5bfa8c.jpg",
-        alt: "Product Image",
+        url: "/images/products/Garden Tool Set.jpg",
+        alt: "Garden Tool Set",
       },
     ],
   },
@@ -560,8 +566,8 @@ const products = [
     tags: ["pillows", "home-decor", "comfort", "living-room"],
     images: [
       {
-        url: "/images/products/product-19-0-5bc5dc6c.jpg",
-        alt: "Product Image",
+        url: "/images/products/Throw Pillow Set.jpg",
+        alt: "Throw Pillow Set",
       },
     ],
   },
@@ -580,8 +586,8 @@ const products = [
     tags: ["book", "science-fiction", "novel", "bestseller"],
     images: [
       {
-        url: "/images/products/product-27-0-cf770457.jpg",
-        alt: "Product Image",
+        url: "/images/products/Science Fiction Novel.jpg",
+        alt: "Science Fiction Novel",
       },
     ],
   },
@@ -600,8 +606,8 @@ const products = [
     tags: ["cookbook", "recipes", "cooking", "healthy"],
     images: [
       {
-        url: "/images/products/product-29-2-b2f900d9.jpg",
-        alt: "Product Image",
+        url: "/images/products/Cookbook Collection.jpg",
+        alt: "Cookbook Collection",
       },
     ],
   },
@@ -620,8 +626,8 @@ const products = [
     tags: ["business", "guide", "entrepreneurship", "success"],
     images: [
       {
-        url: "/images/products/product-31-1-41976035.jpg",
-        alt: "Product Image",
+        url: "/images/products/Business Guide.jpg",
+        alt: "Business Guide",
       },
     ],
   },
@@ -640,8 +646,8 @@ const products = [
     tags: ["photography", "handbook", "digital", "techniques"],
     images: [
       {
-        url: "/images/products/product-33-0-9a5c21ae.jpg",
-        alt: "Product Image",
+        url: "/images/products/Photography Handbook.jpg",
+        alt: "Photography Handbook",
       },
     ],
   },
@@ -659,8 +665,8 @@ const products = [
     tags: ["basketball", "sports", "outdoor", "recreation"],
     images: [
       {
-        url: "/images/products/product-34-0-88658b6c.jpg",
-        alt: "Product Image",
+        url: "/images/products/Basketball.jpg",
+        alt: "Basketball",
       },
     ],
   },
@@ -678,8 +684,8 @@ const products = [
     tags: ["camping", "tent", "outdoor", "waterproof"],
     images: [
       {
-        url: "/images/products/product-37-0-1f2cb16d.jpg",
-        alt: "Product Image",
+        url: "/images/products/Camping Tent.jpg",
+        alt: "Camping Tent",
       },
     ],
   },
@@ -697,8 +703,8 @@ const products = [
     tags: ["fishing", "rod", "outdoor", "recreation"],
     images: [
       {
-        url: "/images/products/product-38-2-cc36b4f3.jpg",
-        alt: "Product Image",
+        url: "/images/products/Fishing Rod Set.jpg",
+        alt: "Fishing Rod Set",
       },
     ],
   },
@@ -717,8 +723,8 @@ const products = [
     tags: ["backpack", "hiking", "outdoor", "travel"],
     images: [
       {
-        url: "/images/products/product-40-2-cf0999c4.jpg",
-        alt: "Product Image",
+        url: "/images/products/Hiking Backpack.jpg",
+        alt: "Hiking Backpack",
       },
     ],
   },
@@ -735,8 +741,8 @@ const products = [
     tags: ["dumbbells", "fitness", "exercise", "strength"],
     images: [
       {
-        url: "/images/products/samsung-galaxy-s24-2-5bb08dcf.jpg",
-        alt: "Product Image",
+        url: "/images/products/Dumbbells Set.jpg",
+        alt: "Dumbbells Set",
       },
     ],
   },
@@ -755,8 +761,8 @@ const products = [
     tags: ["helmet", "cycling", "safety", "bike"],
     images: [
       {
-        url: "/images/products/product-28-0-50cb1ff1.jpg",
-        alt: "Product Image",
+        url: "/images/products/Bike Helmet.jpg",
+        alt: "Bike Helmet",
       },
     ],
   },
@@ -774,8 +780,8 @@ const products = [
     tags: ["tennis", "racket", "sports", "professional"],
     images: [
       {
-        url: "/images/products/product-20-2-f4c95f39.jpg",
-        alt: "Product Image",
+        url: "/images/products/Tennis Racket.jpg",
+        alt: "Tennis Racket",
       },
     ],
   },
@@ -794,8 +800,8 @@ const products = [
     tags: ["water-bottle", "insulated", "hydration", "outdoor"],
     images: [
       {
-        url: "/images/products/product-19-0-5bc5dc6c.jpg",
-        alt: "Product Image",
+        url: "/images/products/Water Bottle.jpg",
+        alt: "Water Bottle",
       },
     ],
   },
@@ -814,8 +820,8 @@ const products = [
     tags: ["skateboard", "sports", "recreation", "youth"],
     images: [
       {
-        url: "/images/products/product-15-2-0ac1050c.jpg",
-        alt: "Product Image",
+        url: "/images/products/Skateboard.jpg",
+        alt: "Skateboard",
       },
     ],
   },
@@ -834,8 +840,8 @@ const products = [
     tags: ["golf", "clubs", "sports", "beginner"],
     images: [
       {
-        url: "/images/products/product-15-1-4b599c9d.jpg",
-        alt: "Product Image",
+        url: "/images/products/Golf Club Set.jpg",
+        alt: "Golf Club Set",
       },
     ],
   },
@@ -854,8 +860,8 @@ const products = [
     tags: ["soccer", "ball", "sports", "fifa"],
     images: [
       {
-        url: "/images/products/product-10-2-bc9e730d.jpg",
-        alt: "Product Image",
+        url: "/images/products/Soccer Ball.jpg",
+        alt: "Soccer Ball",
       },
     ],
   },
@@ -874,8 +880,8 @@ const products = [
     tags: ["resistance-bands", "fitness", "exercise", "portable"],
     images: [
       {
-        url: "/images/products/product-10-0-a0362aae.jpg",
-        alt: "Product Image",
+        url: "/images/products/Resistance Bands.jpg",
+        alt: "Resistance Bands",
       },
     ],
   },
@@ -893,8 +899,8 @@ const products = [
     tags: ["badminton", "sports", "outdoor", "recreation"],
     images: [
       {
-        url: "/images/products/product-8-1-d469817f.jpg",
-        alt: "Product Image",
+        url: "/images/products/Badminton Set.jpg",
+        alt: "Badminton Set",
       },
     ],
   },
@@ -921,6 +927,38 @@ async function seedDatabase() {
       Cart.deleteMany({}),
     ]);
 
+    // Helper function to get random product images
+    const getRandomProductImages = () => {
+      const fs = require("fs");
+      const path = require("path");
+      const imagesDir = path.join(__dirname, "../public/images/products");
+
+      try {
+        const allFiles = fs.readdirSync(imagesDir);
+        const productFiles = allFiles.filter((file) =>
+          file.startsWith("product-")
+        );
+
+        // Randomly select 2 images
+        const randomImages = [];
+        const shuffled = productFiles.sort(() => 0.5 - Math.random());
+        const selected = shuffled.slice(0, 2);
+
+        return selected.map((filename) => ({
+          url: `/images/products/${filename}`,
+          alt: `Product Image ${filename.split("-")[1]}`,
+        }));
+      } catch (error) {
+        console.log(
+          "Could not read product images directory, using placeholders"
+        );
+        return [
+          { url: "/images/products/placeholder.jpg", alt: "Product Image 1" },
+          { url: "/images/products/placeholder.jpg", alt: "Product Image 2" },
+        ];
+      }
+    };
+
     // Create categories
     console.log("Creating categories...");
     const createdCategories = await Category.create(categories);
@@ -934,11 +972,18 @@ async function seedDatabase() {
     // Create products
     console.log("Creating products...");
     const sellers = createdUsers.filter((user) => user.role === "seller");
-    const productsWithSellers = products.map((product, index) => ({
-      ...product,
-      seller: sellers[index % sellers.length]._id,
-      category: createdCategories[index % createdCategories.length]._id,
-    }));
+    const productsWithSellers = products.map((product, index) => {
+      // Add 2 additional random product images to each product
+      const additionalImages = getRandomProductImages();
+      const updatedImages = [...product.images, ...additionalImages];
+
+      return {
+        ...product,
+        images: updatedImages,
+        seller: sellers[index % sellers.length]._id,
+        category: createdCategories[index % createdCategories.length]._id,
+      };
+    });
 
     const createdProducts = await Product.create(productsWithSellers);
     console.log(`Created ${createdProducts.length} products`);
@@ -1010,7 +1055,7 @@ async function seedDatabase() {
     const createdOrders = await Order.create(orders);
     console.log(`Created ${createdOrders.length} orders`);
 
-    // Create some reviews
+    // Create some reviews - 3 reviews per product
     console.log("Creating sample reviews...");
     const completedOrders = createdOrders.filter(
       (order) =>
@@ -1018,50 +1063,63 @@ async function seedDatabase() {
     );
 
     const reviews = [];
-    const minReviews = 25;
-    const maxReviews = Math.max(
-      minReviews,
-      Math.min(75, completedOrders.length * 2)
-    );
+    const reviewTitles = [
+      "Great product!",
+      "Excellent quality",
+      "Highly recommended",
+      "Perfect purchase",
+      "Amazing value",
+      "Love it!",
+      "Fantastic item",
+      "Very satisfied",
+      "Outstanding product",
+      "Wonderful experience",
+      "Good value for money",
+      "Works as expected",
+      "Nice quality",
+      "Solid product",
+      "Happy with purchase",
+    ];
 
-    for (let i = 0; i < maxReviews; i++) {
-      const order =
-        completedOrders[Math.floor(Math.random() * completedOrders.length)];
-      const item = order.items[Math.floor(Math.random() * order.items.length)];
+    const reviewComments = [
+      "This product exceeded my expectations. Highly recommended!",
+      "Excellent quality and fast shipping. Will buy again!",
+      "Perfect for what I needed. Great value for money.",
+      "Amazing product! Exactly as described.",
+      "Very happy with this purchase. Top quality!",
+      "Fantastic item, works perfectly. 5 stars!",
+      "Great customer service and product quality.",
+      "Exceeded expectations. Highly recommend to others.",
+      "Perfect condition and fast delivery. Thank you!",
+      "Outstanding product quality. Will definitely order again.",
+      "Good build quality and arrived quickly.",
+      "Works well and looks great.",
+      "Solid construction and fair price.",
+      "Does exactly what it's supposed to do.",
+      "Nice addition to my collection.",
+    ];
 
-      // Check if review already exists
-      const existingReview = reviews.find(
-        (r) =>
-          r.product.toString() === item.product.toString() &&
-          r.buyer.toString() === order.buyer.toString()
-      );
+    // Generate exactly 3 reviews per product with unique buyers
+    for (
+      let productIndex = 0;
+      productIndex < createdProducts.length;
+      productIndex++
+    ) {
+      const product = createdProducts[productIndex];
 
-      if (!existingReview) {
-        const reviewTitles = [
-          "Great product!",
-          "Excellent quality",
-          "Highly recommended",
-          "Perfect purchase",
-          "Amazing value",
-          "Love it!",
-          "Fantastic item",
-          "Very satisfied",
-          "Outstanding product",
-          "Wonderful experience",
-        ];
+      for (let reviewIndex = 0; reviewIndex < 3; reviewIndex++) {
+        // Get a unique buyer for each review (cycle through buyers to ensure uniqueness)
+        const buyerIndex = (productIndex * 3 + reviewIndex) % buyers.length;
+        const buyer = buyers[buyerIndex];
 
-        const reviewComments = [
-          "This product exceeded my expectations. Highly recommended!",
-          "Excellent quality and fast shipping. Will buy again!",
-          "Perfect for what I needed. Great value for money.",
-          "Amazing product! Exactly as described.",
-          "Very happy with this purchase. Top quality!",
-          "Fantastic item, works perfectly. 5 stars!",
-          "Great customer service and product quality.",
-          "Exceeded expectations. Highly recommend to others.",
-          "Perfect condition and fast delivery. Thank you!",
-          "Outstanding product quality. Will definitely order again.",
-        ];
+        // Find a completed order from this buyer (or create a fictional one)
+        let order = completedOrders.find(
+          (o) => o.buyer.toString() === buyer._id.toString()
+        );
+        if (!order && completedOrders.length > 0) {
+          order =
+            completedOrders[Math.floor(Math.random() * completedOrders.length)];
+        }
 
         const rating =
           Math.random() > 0.8
@@ -1069,16 +1127,16 @@ async function seedDatabase() {
             : Math.floor(Math.random() * 2) + 4; // Mostly 4-5 stars
 
         reviews.push({
-          product: item.product,
-          buyer: order.buyer,
-          order: order._id,
+          product: product._id,
+          buyer: buyer._id,
+          order: order ? order._id : null,
           rating: rating,
           title: reviewTitles[Math.floor(Math.random() * reviewTitles.length)],
           comment:
             reviewComments[Math.floor(Math.random() * reviewComments.length)],
-          verified: true,
+          verified: order ? true : false,
           createdAt: new Date(
-            order.createdAt.getTime() + Math.random() * 7 * 24 * 60 * 60 * 1000
+            Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000
           ),
         });
       }

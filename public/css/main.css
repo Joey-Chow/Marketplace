@@ -537,6 +537,16 @@ body {
   color: white;
 }
 
+.badge.in-stock {
+  background: #28a745;
+  color: white;
+}
+
+.badge.low-stock {
+  background: #ffc107;
+  color: black;
+}
+
 /* Modal Styles */
 .modal-overlay {
   position: fixed;
@@ -1225,9 +1235,9 @@ body {
 }
 
 .product-main-image {
-  width: 300px;
-  height: 300px;
-  object-fit: cover;
+  width: 400px;
+  height: 400px;
+  object-fit: contain;
   border-radius: 0;
   border: none;
   transition: border-color 0.2s ease;
@@ -1235,6 +1245,7 @@ body {
 
 .product-main-image:hover {
   opacity: 0.9;
+  scale: 1.02;
 }
 
 .product-name {
@@ -1259,7 +1270,7 @@ body {
   display: flex;
   align-items: center;
   width: 100%;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .product-price-display {
@@ -2216,7 +2227,6 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: 40px;
   justify-items: center;
-  border: 2px solid #e0e0e0;
 }
 
 .product-reviews-section {
@@ -2266,8 +2276,9 @@ body {
 }
 
 .product-image-large {
-  width: 100%;
-  height: auto;
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
@@ -2283,10 +2294,10 @@ body {
 }
 
 .product-image-section {
+  max-width: 900px;
+  max-height: 900px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   margin-top: 20px;
 }
 
@@ -2435,6 +2446,7 @@ body {
   display: flex;
   align-items: center;
   gap: 15px;
+  margin-bottom: 10px;
 }
 
 .quantity-select-dropdown {

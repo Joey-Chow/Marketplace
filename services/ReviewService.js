@@ -5,7 +5,7 @@ const logger = require("../utils/logger");
 class ReviewService {
   /**
    * Get all reviews with pagination and filtering
-   * @param {Object} options - Query options (page, limit, sortBy, sortOrder, rating)
+   * @param {Object} options - Query options (page, limit, sortBy, sortOrder, rating, productId)
    * @returns {Promise<Object>} All reviews with pagination
    */
   async getAllReviews(options = {}) {
@@ -16,12 +16,16 @@ class ReviewService {
         sortBy = "createdAt",
         sortOrder = "desc",
         rating = null,
+        productId = null,
       } = options;
 
       // Build filter object
       const filter = {};
       if (rating) {
         filter.rating = rating;
+      }
+      if (productId) {
+        filter.product = productId;
       }
 
       const reviews = await Review.find(filter)
