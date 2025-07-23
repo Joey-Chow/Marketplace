@@ -8,9 +8,9 @@ This document provides comprehensive documentation for the ACID-compliant checko
 
 ### Core Implementation File
 
-- **File**: `services/CheckoutService.js`
-- **Purpose**: Implements ACID transactions for checkout processing
-- **Dependencies**: MongoDB replica set, Mongoose ODM
+- File: `services/CheckoutService.js`
+- Purpose: Implements ACID transactions for checkout processing
+- Dependencies: MongoDB replica set, Mongoose ODM
 
 ### Key Components
 
@@ -29,7 +29,7 @@ session.startTransaction({
 
 The implementation follows the required pattern:
 
-**Phase 1: Read/Check Preconditions**
+Phase 1: Read/Check Preconditions
 
 ```javascript
 // 1. Read or check preconditions
@@ -40,14 +40,14 @@ const preconditions = await this._checkPreconditions(
 );
 ```
 
-**Phase 2: Update Stock**
+Phase 2: Update Stock
 
 ```javascript
 // 2. Update stock
 await this._updateStock(preconditions.productUpdates, session);
 ```
 
-**Phase 3: Create Order**
+Phase 3: Create Order
 
 ```javascript
 // 3. Create order
@@ -85,7 +85,7 @@ while (retryCount < maxRetries) {
   // Transaction logic with retry on transient errors
   if (this._isRetryableError(error) && retryCount < maxRetries - 1) {
     retryCount++;
-    await new Promise((resolve) => setTimeout(resolve, 100 * retryCount));
+    await new Promise((resolve) => setTimeout(resolve, 100  retryCount));
     continue;
   }
 }
@@ -93,10 +93,10 @@ while (retryCount < maxRetries) {
 
 ### 1.5 Database Models Involved
 
-- **Cart**: User shopping cart with selected items
-- **Product**: Product inventory and details
-- **Order**: Order creation and status tracking
-- **User**: User order history updates
+- Cart: User shopping cart with selected items
+- Product: Product inventory and details
+- Order: Order creation and status tracking
+- User: User order history updates
 
 ## 2. Transaction Boundaries and Error Handling Strategies
 
@@ -129,24 +129,24 @@ session.endSession();
 
 #### Read Operations (with session)
 
-- **Cart**: `Cart.findOne({ user: userId }).session(session)`
-- **Product**: `Product.findById(cartItem.product).session(session)`
+- Cart: `Cart.findOne({ user: userId }).session(session)`
+- Product: `Product.findById(cartItem.product).session(session)`
 
 #### Write Operations (with session)
 
-- **Product**: Update inventory quantities
-- **Order**: Create new order document
-- **Cart**: Remove selected items
-- **User**: Update order history
+- Product: Update inventory quantities
+- Order: Create new order document
+- Cart: Remove selected items
+- User: Update order history
 
 ### 2.3 Rollback Mechanisms
 
 #### Automatic Rollback Triggers
 
-1. **Insufficient Stock**: When `product.inventory.quantity < cartItem.quantity`
-2. **Payment Failure**: When `paymentResult.success === false`
-3. **Database Errors**: Connection issues, constraint violations
-4. **Validation Errors**: Empty cart, invalid items
+1. Insufficient Stock: When `product.inventory.quantity < cartItem.quantity`
+2. Payment Failure: When `paymentResult.success === false`
+3. Database Errors: Connection issues, constraint violations
+4. Validation Errors: Empty cart, invalid items
 
 #### Error Handling Strategy
 
@@ -182,13 +182,13 @@ try {
 
 #### Read Consistency
 
-- **Snapshot Isolation**: All reads see consistent data snapshot
-- **Read Concern**: `"snapshot"` level ensures consistent reads
+- Snapshot Isolation: All reads see consistent data snapshot
+- Read Concern: `"snapshot"` level ensures consistent reads
 
 #### Write Consistency
 
-- **Write Concern**: `"majority"` ensures writes are acknowledged by majority of replica set members
-- **Atomicity**: All writes succeed or all fail
+- Write Concern: `"majority"` ensures writes are acknowledged by majority of replica set members
+- Atomicity: All writes succeed or all fail
 
 ## 3. Test Cases Demonstrating Transaction Success and Failure Scenarios
 
@@ -266,9 +266,9 @@ ERROR: Checkout transaction failed (attempt 1) {
 
 #### Transaction Behavior
 
-- **Rollback**: All changes reverted (no stock updates, no order creation)
-- **Error Thrown**: "Insufficient stock for iPhone 15 Pro. Available: 1, Requested: 5"
-- **Database State**: Unchanged (atomicity preserved)
+- Rollback: All changes reverted (no stock updates, no order creation)
+- Error Thrown: "Insufficient stock for iPhone 15 Pro. Available: 1, Requested: 5"
+- Database State: Unchanged (atomicity preserved)
 
 ### 3.3 Payment Failure Scenario
 
@@ -302,9 +302,9 @@ ERROR: Checkout transaction failed (attempt 1) {
 
 #### Transaction Behavior
 
-- **Rollback**: Stock updates reverted, order not created
-- **Error Thrown**: "Payment failed: Payment processing failed"
-- **Database State**: Restored to pre-transaction state
+- Rollback: Stock updates reverted, order not created
+- Error Thrown: "Payment failed: Payment processing failed"
+- Database State: Restored to pre-transaction state
 
 ### 3.4 Transient Error Retry Scenario
 
@@ -336,9 +336,9 @@ INFO: Checkout transaction completed successfully {
 
 #### Transaction Behavior
 
-- **Retry Logic**: Exponential backoff (100ms, 200ms, 300ms)
-- **Max Retries**: 3 attempts
-- **Success**: Transaction succeeds on retry
+- Retry Logic: Exponential backoff (100ms, 200ms, 300ms)
+- Max Retries: 3 attempts
+- Success: Transaction succeeds on retry
 
 ### 3.5 Database Connection Failure Scenario
 
@@ -362,9 +362,9 @@ ERROR: Checkout transaction failed (attempt 1) {
 
 #### Transaction Behavior
 
-- **No Retry**: Non-transient error, immediate failure
-- **Rollback**: Transaction aborted automatically
-- **Error Propagation**: Original error thrown to caller
+- No Retry: Non-transient error, immediate failure
+- Rollback: Transaction aborted automatically
+- Error Propagation: Original error thrown to caller
 
 ### 3.6 Testing Built-in Scenarios
 
@@ -463,15 +463,15 @@ MONGODB_URI=mongodb://127.0.0.1:27017/marketplace?replicaSet=rs0
 
 This implementation ensures full ACID compliance while maintaining high performance and reliability in the checkout process.
 
-- **Connection Lost**: Transaction aborts, session closed gracefully
-- **Write Conflicts**: Transaction retries up to 3 times before failing
-- **Constraint Violations**: Transaction aborts with specific error message
+- Connection Lost: Transaction aborts, session closed gracefully
+- Write Conflicts: Transaction retries up to 3 times before failing
+- Constraint Violations: Transaction aborts with specific error message
 
 ## Rollback Mechanisms
 
 ### Automatic Rollback Scenarios
 
-1. **Stock Validation Failure**
+1. Stock Validation Failure
 
    ```javascript
    // Product stock insufficient
@@ -480,7 +480,7 @@ This implementation ensures full ACID compliance while maintaining high performa
    }
    ```
 
-2. **Payment Processing Failure**
+2. Payment Processing Failure
 
    ```javascript
    // Payment simulation failure
@@ -489,7 +489,7 @@ This implementation ensures full ACID compliance while maintaining high performa
    }
    ```
 
-3. **Database Operation Failure**
+3. Database Operation Failure
    ```javascript
    // Any database operation failure triggers rollback
    await session.abortTransaction();
@@ -506,10 +506,10 @@ The system includes test endpoints to simulate various failure scenarios:
 
 ### 1. Successful Checkout Test
 
-**Scenario**: User selects 2 items, provides valid payment info
-**Expected Result**: Order created, stock updated, selected items removed from cart
+Scenario: User selects 2 items, provides valid payment info
+Expected Result: Order created, stock updated, selected items removed from cart
 
-**Test Log**:
+Test Log:
 
 ```
 INFO: Starting checkout transaction for user: 64a1b2c3d4e5f6789012345
@@ -522,10 +522,10 @@ INFO: Checkout transaction completed successfully
 
 ### 2. Insufficient Stock Test
 
-**Scenario**: User selects item with quantity > available stock
-**Expected Result**: Transaction aborts, no changes made
+Scenario: User selects item with quantity > available stock
+Expected Result: Transaction aborts, no changes made
 
-**Test Log**:
+Test Log:
 
 ```
 INFO: Starting checkout transaction for user: 64a1b2c3d4e5f6789012345
@@ -536,10 +536,10 @@ INFO: Transaction aborted - no changes made
 
 ### 3. Payment Failure Test
 
-**Scenario**: Payment processing fails after order creation
-**Expected Result**: Complete rollback including order deletion
+Scenario: Payment processing fails after order creation
+Expected Result: Complete rollback including order deletion
 
-**Test Log**:
+Test Log:
 
 ```
 INFO: Starting checkout transaction for user: 64a1b2c3d4e5f6789012345
