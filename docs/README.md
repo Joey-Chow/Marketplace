@@ -96,4 +96,11 @@ It also includes MongoDB database setup.
    - Main App: http://localhost:3000
    - Dashboard: http://localhost:3000/dashboard.html
 
-## The one page of project description and all the documentations navigations can be found in docs/'Report.md', additionally, and the description of this project architecture is in docs/'architeure.md'.
+## DEliverable for assignment:
+ 1, Project Description is in docs/'Project_Description.md'
+ 2, All task based documentations are in docs/'Report.PDF'
+
+ Note: For our own convenience and future reference, we have sepratedly add the task-based documentations in corresponding file. Specifically:
+ all the documentations navigations can be found in docs/'Report.md',
+
+ The description of this project architecture is in docs/'architeure.md'.
