@@ -12,7 +12,7 @@
   In docs/Tasks_Doc/'ACID_Transaction_Documentation.md'
   ####Task 4: Role based Access Control
   In docs/Tasks_Doc/'RBAC.md'
-  ####Task 5: Advanced Queries(undone)
+  ####Task 5: Advanced Queries
   In docs/Tasks_Doc/'Aggregation.md'
   ####Task 6: Query Optimization
   In docs/Tasks_Doc/'RBAC.md'
