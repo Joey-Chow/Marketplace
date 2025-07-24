@@ -91,15 +91,15 @@ This document provides a comprehensive overview of the marketplace application a
 
 ### 1. Frontend (Client-Side)
 
-**Technology Stack:** HTML5, CSS3, React 18 (via CDN), Vanilla JavaScript
+Technology Stack: HTML5, CSS3, React 18 (via CDN), Vanilla JavaScript
 
-**Components:**
+Components:
 
-- **HTML Pages**: Entry points for different sections (`index.html`, `Users.html`, `Orders.html`, `Reviews.html`)
-- **React Components**: UI components for data display and user interaction
-- **JavaScript Modules**: Hooks, utilities, and business logic for client-side operations
+- HTML Pages: Entry points for different sections (`index.html`, `Users.html`, `Orders.html`, `Reviews.html`)
+- React Components: UI components for data display and user interaction
+- JavaScript Modules: Hooks, utilities, and business logic for client-side operations
 
-**Key Files:**
+Key Files:
 
 ```
 public/
@@ -114,7 +114,7 @@ public/
 └── js/utils/ (DataUtils)
 ```
 
-**Responsibilities:**
+Responsibilities:
 
 - User interface rendering
 - Form handling and validation
@@ -124,19 +124,19 @@ public/
 
 ### 2. Backend (Server-Side)
 
-**Technology Stack:** Node.js, Express.js, MongoDB, Mongoose
+Technology Stack: Node.js, Express.js, MongoDB, Mongoose
 
 The backend is divided into two main layers:
 
 #### Server Layer (Express.js Application)
 
-**Components:**
+Components:
 
-- **Routes**: HTTP endpoint definitions
-- **Middleware**: Authentication, authorization, error handling
-- **Controllers**: Request/response handling logic
+- Routes: HTTP endpoint definitions
+- Middleware: Authentication, authorization, error handling
+- Controllers: Request/response handling logic
 
-**Key Files:**
+Key Files:
 
 ```
 routes/
@@ -154,7 +154,7 @@ middleware/
 └── asyncHandler.js # Error handling wrapper
 ```
 
-**Route Example (products.js):**
+Route Example (products.js):
 
 ```javascript
 // @route   POST /api/products
@@ -178,13 +178,13 @@ router.post(
 
 #### Service Layer (Business Logic)
 
-**Components:**
+Components:
 
-- **Services**: Business logic and data processing
-- **Models**: Database schema definitions
-- **Utilities**: Helper functions and common operations
+- Services: Business logic and data processing
+- Models: Database schema definitions
+- Utilities: Helper functions and common operations
 
-**Key Files:**
+Key Files:
 
 ```
 services/
@@ -204,7 +204,7 @@ models/
 └── Cart.js       # Cart schema
 ```
 
-**Service Example (ProductService.js):**
+Service Example (ProductService.js):
 
 ```javascript
 class ProductService {
@@ -229,18 +229,18 @@ class ProductService {
 
 ### 3. Database (MongoDB)
 
-**Technology Stack:** MongoDB, Mongoose ODM
+Technology Stack: MongoDB, Mongoose ODM
 
-**Collections:**
+Collections:
 
-- **products**: Product listings with seller information
-- **users**: User accounts (buyers, sellers, admins)
-- **orders**: Purchase transactions
-- **reviews**: Product reviews and ratings
-- **categories**: Product categorization
-- **carts**: Shopping cart data
+- products: Product listings with seller information
+- users: User accounts (buyers, sellers, admins)
+- orders: Purchase transactions
+- reviews: Product reviews and ratings
+- categories: Product categorization
+- carts: Shopping cart data
 
-**Model Relationships:**
+Model Relationships:
 
 ```javascript
 // Product belongs to User (seller) and Category
@@ -284,7 +284,7 @@ Review: {
                                                                   └─────────────┘
 ```
 
-**Step-by-Step Flow:**
+Step-by-Step Flow:
 
 1. User fills out product form in `ProductForm` component
 2. Form data sent via `useProductCRUD` hook to `/api/products`
@@ -317,7 +317,7 @@ Review: {
                                                                   └─────────────┘
 ```
 
-**Step-by-Step Flow:**
+Step-by-Step Flow:
 
 1. `Users.html` page loads and initializes
 2. Authentication check verifies admin role

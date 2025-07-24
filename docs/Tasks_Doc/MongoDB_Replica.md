@@ -6,24 +6,24 @@ This document explains MongoDB replication setup and its benefits for the Market
 
 ## What is MongoDB Replication?
 
-MongoDB replication is a process of synchronizing data across multiple MongoDB servers. A **replica set** is a group of MongoDB instances that maintain the same dataset, providing redundancy and increasing data availability.
+MongoDB replication is a process of synchronizing data across multiple MongoDB servers. A replica set is a group of MongoDB instances that maintain the same dataset, providing redundancy and increasing data availability.
 
 ### Key Components
 
-- **Primary Node**: Accepts all write operations and replicates changes to secondary nodes
-- **Secondary Node(s)**: Maintain copies of the primary's data and can serve read operations
-- **Arbiter** (optional): Votes in elections but doesn't store data
+- Primary Node: Accepts all write operations and replicates changes to secondary nodes
+- Secondary Node(s): Maintain copies of the primary's data and can serve read operations
+- Arbiter (optional): Votes in elections but doesn't store data
 
 ## Why Replication is Required for This Project
 
-### 1. **ACID Transactions Support**
+### 1. ACID Transactions Support
 
 The marketplace's checkout system requires ACID transactions to ensure:
 
-- **Atomicity**: All checkout operations (inventory update, order creation, payment) succeed or fail together
-- **Consistency**: Database remains in a valid state throughout the transaction
-- **Isolation**: Concurrent transactions don't interfere with each other
-- **Durability**: Committed transactions survive system failures
+- Atomicity: All checkout operations (inventory update, order creation, payment) succeed or fail together
+- Consistency: Database remains in a valid state throughout the transaction
+- Isolation: Concurrent transactions don't interfere with each other
+- Durability: Committed transactions survive system failures
 
 ```javascript
 // Example from CheckoutService.js
@@ -34,14 +34,14 @@ session.startTransaction({
 });
 ```
 
-### 2. **E-commerce Data Integrity**
+### 2. E-commerce Data Integrity
 
 Critical operations that require transactional guarantees:
 
-- **Order Processing**: Ensure inventory is decremented when orders are placed
-- **Payment Processing**: Prevent double charging or lost payments
-- **Cart Operations**: Maintain consistency between cart and inventory
-- **User Account Updates**: Ensure profile and order history consistency
+- Order Processing: Ensure inventory is decremented when orders are placed
+- Payment Processing: Prevent double charging or lost payments
+- Cart Operations: Maintain consistency between cart and inventory
+- User Account Updates: Ensure profile and order history consistency
 
 ## Setup Instructions
 
@@ -131,32 +131,32 @@ MONGODB_URI=mongodb://server1:27017,server2:27018,server3:27019/marketplace?repl
 
 ## Benefits of MongoDB Replication
 
-### 1. **Data Redundancy & Backup**
+### 1. Data Redundancy & Backup
 
-- **Automatic Backups**: Secondary nodes serve as live backups
-- **Point-in-Time Recovery**: Can recover data from any point in time
-- **Disaster Recovery**: System continues operating if primary fails
+- Automatic Backups: Secondary nodes serve as live backups
+- Point-in-Time Recovery: Can recover data from any point in time
+- Disaster Recovery: System continues operating if primary fails
 
-### 2. **High Availability**
+### 2. High Availability
 
-- **Automatic Failover**: Secondary becomes primary if primary fails
-- **Zero Downtime**: Applications continue running during failover
-- **Load Distribution**: Read operations can be distributed across secondaries
+- Automatic Failover: Secondary becomes primary if primary fails
+- Zero Downtime: Applications continue running during failover
+- Load Distribution: Read operations can be distributed across secondaries
 
-### 3. **ACID Transaction Support**
+### 3. ACID Transaction Support
 
-- **Multi-Document Transactions**: Essential for e-commerce operations
-- **Consistency Guarantees**: Ensures data integrity across related documents
-- **Isolation Levels**: Prevents dirty reads and write conflicts
+- Multi-Document Transactions: Essential for e-commerce operations
+- Consistency Guarantees: Ensures data integrity across related documents
+- Isolation Levels: Prevents dirty reads and write conflicts
 
-### 4. **Performance Benefits**
+### 4. Performance Benefits
 
-- **Read Scaling**: Distribute read load across multiple nodes
-- **Write Concern Options**: Balance between speed and durability
-- **Reduced Latency**: Geographically distributed secondaries
+- Read Scaling: Distribute read load across multiple nodes
+- Write Concern Options: Balance between speed and durability
+- Reduced Latency: Geographically distributed secondaries
 
-### 5. **Operational Benefits**
+### 5. Operational Benefits
 
-- **Maintenance Windows**: Perform maintenance without downtime
-- **Backup Operations**: Run backups on secondary without affecting primary
-- **Monitoring**: Better observability across multiple nodes
+- Maintenance Windows: Perform maintenance without downtime
+- Backup Operations: Run backups on secondary without affecting primary
+- Monitoring: Better observability across multiple nodes
