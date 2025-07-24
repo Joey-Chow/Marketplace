@@ -152,16 +152,16 @@ const productSchema = new mongoose.Schema(
 );
 
 // Indexes for performance
-productSchema.index({ name: "text", description: "text", tags: "text" });
-productSchema.index({ seller: 1 });
-productSchema.index({ category: 1 });
-productSchema.index({ price: 1 });
-productSchema.index({ "ratings.average": -1 });
-productSchema.index({ totalSales: -1 });
-productSchema.index({ createdAt: -1 });
-productSchema.index({ status: 1 });
-productSchema.index({ featured: 1 });
-productSchema.index({ "inventory.quantity": 1 });
+productSchema.index({ name: "text", description: "text", tags: "text" }); // Full-text search across product name, description, and tags for search functionality
+productSchema.index({ seller: 1 }); // Find all products by a specific seller for seller dashboard and product management
+productSchema.index({ category: 1 }); // Filter products by category for category browsing and product listing pages
+productSchema.index({ price: 1 }); // Sort and filter products by price for price range queries and price-based sorting
+productSchema.index({ "ratings.average": -1 }); // Sort products by highest ratings first for "top-rated" product displays
+productSchema.index({ totalSales: -1 }); // Sort products by sales performance for "best-selling" product displays and analytics
+productSchema.index({ createdAt: -1 }); // Sort products by newest first for "recently added" product listings
+productSchema.index({ status: 1 }); // Filter products by status (active, inactive, out_of_stock) for inventory management
+productSchema.index({ featured: 1 }); // Quickly find featured products for homepage and promotional displays
+productSchema.index({ "inventory.quantity": 1 }); // Filter products by stock availability and find low-stock items for inventory alerts
 
 // Virtual for discounted price
 productSchema.virtual("finalPrice").get(function () {

@@ -1217,10 +1217,11 @@ body {
 
 /* Products Grid Styles */
 .products-grid {
+  max-width: 1800px;
+  justify-self: center;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
-  padding: 20px;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
 }
 
 .product-card {
@@ -1236,8 +1237,8 @@ body {
 }
 
 .product-main-image {
-  width: 400px;
-  height: 400px;
+  max-width: 280px;
+  height: 280px;
   object-fit: contain;
   border-radius: 0;
   border: none;
